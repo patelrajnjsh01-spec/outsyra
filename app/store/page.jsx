@@ -1,74 +1,341 @@
 "use client";
-import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import React, { useState } from "react";
-import { Sparkles, Plus, Eye, Check, Package, GraduationCap, Calendar, Mail, Users, Link as LinkIcon, Video, } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import {
+    Sparkles,
+    Plus,
+    Eye,
+    Check,
+    Package,
+    GraduationCap,
+    Calendar,
+    Mail,
+    Users,
+    Link as LinkIcon,
+    Video,
+    Trash2,
+    Save,
+} from "lucide-react";
 import { DashboardHeader } from "@/components/layout/DashboardHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { initialStoreBlocks, initialWorkspace } from "@/lib/supabase/mock-db";
+import {
+    getStoreBlocks,
+    addStoreBlock,
+    updateStoreBlock,
+    deleteStoreBlock,
+    reorderStoreBlocks,
+    getWorkspace,
+    updateWorkspace,
+} from "@/lib/supabase/db";
+
 export default function StoreCustomizerPage() {
-    const [blocks, setBlocks] = useState(initialStoreBlocks);
-    const [theme, setTheme] = useState(initialWorkspace.theme_config);
+    const [blocks, setBlocks] = useState([]);
+    const [theme, setTheme] = useState({
+        primaryColor: "#6366f1",
+        backgroundColor: "#09090b",
+        cardStyle: "glass",
+        fontFamily: "Inter",
+        buttonShape: "rounded-xl",
+        layout: "classic",
+    });
     const [activeTab, setActiveTab] = useState("blocks");
     const [newBlockModal, setNewBlockModal] = useState(false);
     const [savedNotice, setSavedNotice] = useState(false);
-    const toggleBlockVisibility = (id) => {
-        setBlocks(blocks.map((b) => (b.id === id ? { ...b, is_visible: !b.is_visible } : b)));
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function loadStoreData() {
+            try {
+                const [blocksData, wsData] = await Promise.all([
+                    getStoreBlocks("ws-rajnish-001"),
+                    getWorkspace("rajnish"),
+                ]);
+                setBlocks(blocksData || []);
+                if (wsData?.theme_config) {
+                    setTheme(wsData.theme_config);
+                }
+            } catch (err) {
+                console.error("Failed to load store data", err);
+            } finally {
+                setLoading(false);
+            }
+        }
+        loadStoreData();
+    }, []);
+
+    const toggleBlockVisibility = async (id) => {
+        const target = blocks.find((b) => b.id === id);
+        if (!target) return;
+        const updatedVisibility = !target.is_visible;
+        setBlocks(blocks.map((b) => (b.id === id ? { ...b, is_visible: updatedVisibility } : b)));
+        await updateStoreBlock(id, { is_visible: updatedVisibility });
     };
-    const moveBlock = (index, direction) => {
+
+    const handleDeleteBlock = async (id) => {
+        setBlocks(blocks.filter((b) => b.id !== id));
+        await deleteStoreBlock(id);
+    };
+
+    const moveBlock = async (index, direction) => {
         const targetIndex = direction === "up" ? index - 1 : index + 1;
-        if (targetIndex < 0 || targetIndex >= blocks.length)
-            return;
+        if (targetIndex < 0 || targetIndex >= blocks.length) return;
         const newBlocks = [...blocks];
         const temp = newBlocks[index];
         newBlocks[index] = newBlocks[targetIndex];
         newBlocks[targetIndex] = temp;
         setBlocks(newBlocks);
+        await reorderStoreBlocks("ws-rajnish-001", newBlocks);
     };
-    const addBlock = (type, title, subtitle) => {
-        const newBlock = {
-            id: `block-${Date.now()}`,
-            workspace_id: initialWorkspace.id,
+
+    const handleAddBlock = async (type, title, subtitle) => {
+        const newBlock = await addStoreBlock("ws-rajnish-001", {
             type,
             title,
             subtitle,
-            order_index: blocks.length,
-            is_visible: true,
-        };
+        });
         setBlocks([...blocks, newBlock]);
         setNewBlockModal(false);
     };
-    const handleSave = () => {
+
+    const handleSave = async () => {
+        await updateWorkspace("ws-rajnish-001", { theme_config: theme });
         setSavedNotice(true);
         setTimeout(() => setSavedNotice(false), 2500);
     };
-    return (_jsxs("div", { className: "flex-1 flex flex-col", children: [_jsx(DashboardHeader, { title: "Link-in-Bio Store Customizer", subtitle: "Design your public creator page, reorder monetization blocks, and preview in real-time." }), _jsxs("div", { className: "flex-1 flex flex-col lg:flex-row min-h-0", children: [_jsxs("div", { className: "flex-1 p-6 md:p-8 space-y-6 overflow-y-auto max-w-3xl border-r border-white/5", children: [_jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { className: "flex bg-zinc-900 p-1 rounded-xl border border-white/5", children: [_jsx("button", { onClick: () => setActiveTab("blocks"), className: `px-4 py-2 text-xs font-semibold rounded-lg transition-all ${activeTab === "blocks" ? "bg-indigo-600 text-white shadow-md" : "text-zinc-400 hover:text-white"}`, children: "Store Blocks" }), _jsx("button", { onClick: () => setActiveTab("design"), className: `px-4 py-2 text-xs font-semibold rounded-lg transition-all ${activeTab === "design" ? "bg-indigo-600 text-white shadow-md" : "text-zinc-400 hover:text-white"}`, children: "Themes & Design" })] }), _jsxs("div", { className: "flex items-center gap-3", children: [savedNotice && (_jsxs("span", { className: "text-xs text-emerald-400 font-medium flex items-center gap-1", children: [_jsx(Check, { className: "h-3.5 w-3.5" }), " Saved & Live!"] })), _jsx(Button, { variant: "gradient", size: "sm", onClick: handleSave, children: "Publish Changes" })] })] }), activeTab === "blocks" && (_jsxs("div", { className: "space-y-4", children: [_jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsx("h3", { className: "text-sm font-semibold text-white", children: "Active Store Blocks" }), _jsx("p", { className: "text-xs text-zinc-400", children: "Reorder or toggle blocks on your public link." })] }), _jsxs(Button, { variant: "outline", size: "sm", onClick: () => setNewBlockModal(true), className: "gap-1.5 text-xs text-indigo-300 border-indigo-500/20", children: [_jsx(Plus, { className: "h-3.5 w-3.5" }), "Add Block"] })] }), _jsx("div", { className: "space-y-3", children: blocks.map((block, idx) => (_jsxs("div", { className: `flex items-center justify-between p-4 rounded-2xl border transition-all ${block.is_visible
+
+    return (
+        <div className="flex-1 flex flex-col">
+            <DashboardHeader
+                title="Link-in-Bio Store Customizer"
+                subtitle="Design your public creator page, reorder monetization blocks, and save live to Supabase PostgreSQL."
+            />
+            <div className="flex-1 flex flex-col lg:flex-row min-h-0">
+                {/* Left controls pane */}
+                <div className="flex-1 p-6 md:p-8 space-y-6 overflow-y-auto max-w-3xl border-r border-white/5">
+                    <div className="flex items-center justify-between">
+                        <div className="flex bg-zinc-900 p-1 rounded-xl border border-white/5">
+                            <button
+                                onClick={() => setActiveTab("blocks")}
+                                className={`px-4 py-2 text-xs font-semibold rounded-lg transition-all ${
+                                    activeTab === "blocks"
+                                        ? "bg-indigo-600 text-white shadow-md"
+                                        : "text-zinc-400 hover:text-white"
+                                }`}
+                            >
+                                Store Blocks
+                            </button>
+                            <button
+                                onClick={() => setActiveTab("design")}
+                                className={`px-4 py-2 text-xs font-semibold rounded-lg transition-all ${
+                                    activeTab === "design"
+                                        ? "bg-indigo-600 text-white shadow-md"
+                                        : "text-zinc-400 hover:text-white"
+                                }`}
+                            >
+                                Themes & Design
+                            </button>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            {savedNotice && (
+                                <span className="text-xs text-emerald-400 font-medium flex items-center gap-1">
+                                    <Check className="h-3.5 w-3.5" /> Saved & Live!
+                                </span>
+                            )}
+                            <Button variant="gradient" size="sm" onClick={handleSave} className="gap-1.5 text-xs">
+                                <Save className="h-3.5 w-3.5" />
+                                Save to Database
+                            </Button>
+                        </div>
+                    </div>
+
+                    {activeTab === "blocks" && (
+                        <div className="space-y-4">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <h3 className="text-sm font-semibold text-white">Active Store Blocks</h3>
+                                    <p className="text-xs text-zinc-400">
+                                        Reorder, edit, or toggle blocks live in Supabase.
+                                    </p>
+                                </div>
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => setNewBlockModal(true)}
+                                    className="gap-1.5 text-xs text-indigo-300 border-indigo-500/20"
+                                >
+                                    <Plus className="h-3.5 w-3.5" />
+                                    Add Block
+                                </Button>
+                            </div>
+
+                            <div className="space-y-3">
+                                {blocks.map((block, idx) => (
+                                    <div
+                                        key={block.id}
+                                        className={`flex items-center justify-between p-4 rounded-2xl border transition-all ${
+                                            block.is_visible
                                                 ? "glass-panel border-white/5"
-                                                : "bg-zinc-950/40 border-white/5 opacity-50"}`, children: [_jsxs("div", { className: "flex items-center gap-3 min-w-0 flex-1", children: [_jsxs("div", { className: "flex flex-col gap-1 text-zinc-600", children: [_jsx("button", { onClick: () => moveBlock(idx, "up"), disabled: idx === 0, className: "hover:text-zinc-300 disabled:opacity-20 text-[10px]", children: "\u25B2" }), _jsx("button", { onClick: () => moveBlock(idx, "down"), disabled: idx === blocks.length - 1, className: "hover:text-zinc-300 disabled:opacity-20 text-[10px]", children: "\u25BC" })] }), _jsxs("div", { className: "h-8 w-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 flex-shrink-0", children: [block.type === "product" && _jsx(Package, { className: "h-4 w-4" }), block.type === "course" && _jsx(GraduationCap, { className: "h-4 w-4" }), block.type === "booking" && _jsx(Calendar, { className: "h-4 w-4" }), block.type === "coaching" && _jsx(Video, { className: "h-4 w-4" }), block.type === "newsletter" && _jsx(Mail, { className: "h-4 w-4" }), block.type === "community" && _jsx(Users, { className: "h-4 w-4" }), block.type === "header" && _jsx(Sparkles, { className: "h-4 w-4" }), block.type === "socials" && _jsx(LinkIcon, { className: "h-4 w-4" })] }), _jsxs("div", { className: "min-w-0 flex-1", children: [_jsx("p", { className: "text-xs font-semibold text-white truncate", children: block.title }), block.subtitle && (_jsx("p", { className: "text-[11px] text-zinc-400 truncate", children: block.subtitle }))] })] }), _jsxs("div", { className: "flex items-center gap-2", children: [_jsx(Badge, { variant: "outline", className: "text-[10px] capitalize", children: block.type }), _jsx("button", { onClick: () => toggleBlockVisibility(block.id), className: `text-xs px-2 py-1 rounded-lg border transition-all ${block.is_visible
-                                                                ? "border-emerald-500/20 text-emerald-400 bg-emerald-500/10"
-                                                                : "border-zinc-700 text-zinc-500"}`, children: block.is_visible ? "Visible" : "Hidden" })] })] }, block.id))) })] })), activeTab === "design" && (_jsxs("div", { className: "space-y-6", children: [_jsxs("div", { children: [_jsx("h3", { className: "text-sm font-semibold text-white", children: "Theme Presets" }), _jsx("p", { className: "text-xs text-zinc-400", children: "Choose a high-converting aesthetic." }), _jsx("div", { className: "grid grid-cols-2 sm:grid-cols-3 gap-3 mt-3", children: [
-                                                    { name: "Dark Neon", color: "#6366f1", bg: "#09090b", style: "glass" },
-                                                    { name: "Cyber Purple", color: "#a855f7", bg: "#0f0728", style: "neon" },
-                                                    { name: "Emerald Pro", color: "#10b981", bg: "#061a14", style: "glass" },
-                                                    { name: "Sunset Gold", color: "#f59e0b", bg: "#180e05", style: "solid" },
-                                                    { name: "Minimal Mono", color: "#ffffff", bg: "#000000", style: "minimal" },
-                                                ].map((preset, idx) => (_jsxs("button", { onClick: () => setTheme({
-                                                        ...theme,
-                                                        primaryColor: preset.color,
-                                                        backgroundColor: preset.bg,
-                                                        cardStyle: preset.style,
-                                                    }), className: "p-3 rounded-2xl border border-white/5 bg-zinc-900/60 hover:border-indigo-500/40 text-left transition-all", children: [_jsxs("div", { className: "flex items-center gap-2 mb-2", children: [_jsx("div", { className: "h-4 w-4 rounded-full", style: { backgroundColor: preset.color } }), _jsx("div", { className: "h-4 w-4 rounded-full border border-white/20", style: { backgroundColor: preset.bg } })] }), _jsx("span", { className: "text-xs font-medium text-white", children: preset.name })] }, idx))) })] }), _jsxs("div", { className: "grid grid-cols-2 gap-4", children: [_jsxs("div", { children: [_jsx("label", { className: "block text-xs font-medium text-zinc-300 mb-1.5", children: "Accent Color" }), _jsxs("div", { className: "flex items-center gap-2", children: [_jsx("input", { type: "color", value: theme.primaryColor, onChange: (e) => setTheme({ ...theme, primaryColor: e.target.value }), className: "h-10 w-12 rounded-xl bg-transparent cursor-pointer border border-white/10" }), _jsx(Input, { value: theme.primaryColor, onChange: (e) => setTheme({ ...theme, primaryColor: e.target.value }), className: "text-xs font-mono" })] })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-xs font-medium text-zinc-300 mb-1.5", children: "Card Button Shape" }), _jsxs("select", { value: theme.buttonShape, onChange: (e) => setTheme({ ...theme, buttonShape: e.target.value }), className: "w-full h-11 rounded-xl border border-white/10 bg-zinc-900/60 px-3 text-xs text-white", children: [_jsx("option", { value: "rounded-xl", children: "Rounded Medium" }), _jsx("option", { value: "rounded-full", children: "Pill (Rounded Full)" }), _jsx("option", { value: "rounded-none", children: "Sharp Corners" })] })] })] })] }))] }), _jsxs("div", { className: "w-full lg:w-[420px] p-6 md:p-8 bg-zinc-950 flex flex-col items-center justify-center", children: [_jsx("div", { className: "text-center mb-3", children: _jsxs("span", { className: "text-xs text-zinc-500 font-medium flex items-center justify-center gap-1.5", children: [_jsx(Eye, { className: "h-3.5 w-3.5 text-indigo-400" }), " Live Mobile View"] }) }), _jsx("div", { className: "w-[320px] h-[640px] rounded-[42px] border-[6px] border-zinc-800 bg-zinc-950 shadow-2xl p-4 overflow-y-auto relative flex flex-col text-center", children: _jsxs("div", { className: "pt-4 pb-6 space-y-4", children: [_jsx("img", { src: initialWorkspace.avatar_url, alt: "Avatar", className: "h-20 w-20 rounded-full mx-auto object-cover ring-2 ring-indigo-500 shadow-xl" }), _jsxs("div", { children: [_jsx("h4", { className: "text-base font-bold text-white", children: initialWorkspace.display_name }), _jsx("p", { className: "text-[11px] text-zinc-400 px-4 mt-1 leading-tight", children: initialWorkspace.bio })] }), _jsx("div", { className: "space-y-2.5 pt-2", children: blocks
-                                                .filter((b) => b.is_visible && b.type !== "header")
-                                                .map((b) => (_jsxs("div", { className: "p-3.5 rounded-2xl bg-zinc-900/80 border border-white/10 text-left hover:border-indigo-500/40 transition-all cursor-pointer shadow-sm group", style: { borderRadius: theme.buttonShape === "rounded-full" ? "9999px" : "16px" }, children: [_jsx("p", { className: "text-xs font-semibold text-white group-hover:text-indigo-300", children: b.title }), b.subtitle && (_jsx("p", { className: "text-[10px] text-zinc-400 truncate mt-0.5", children: b.subtitle }))] }, b.id))) }), _jsxs("div", { className: "pt-4 text-[10px] text-zinc-600", children: ["Powered by ", _jsx("span", { className: "font-semibold text-zinc-400", children: "Outsyra" })] })] }) })] })] }), newBlockModal && (_jsx("div", { className: "fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4", children: _jsxs("div", { className: "glass-panel p-6 rounded-3xl border border-white/10 max-w-md w-full space-y-4 animate-in fade-in zoom-in-95", children: [_jsx("h3", { className: "text-base font-bold text-white", children: "Add New Store Block" }), _jsx("div", { className: "grid grid-cols-2 gap-3", children: [
-                                { type: "product", title: "Digital Product", desc: "Sell PDF, ZIP, Ebook", icon: Package },
-                                { type: "course", title: "Video Course", desc: "Enroll in LMS masterclass", icon: GraduationCap },
-                                { type: "booking", title: "1:1 Booking", desc: "Consultation appointment", icon: Calendar },
-                                { type: "coaching", title: "Coaching Offer", desc: "Recurring mentorship", icon: Video },
-                                { type: "newsletter", title: "Email Newsletter", desc: "Lead capture box", icon: Mail },
-                                { type: "community", title: "Community", desc: "Private circle access", icon: Users },
-                            ].map((item) => {
-                                const Icon = item.icon;
-                                return (_jsxs("button", { onClick: () => addBlock(item.type, item.title, item.desc), className: "p-3 rounded-2xl bg-zinc-900 border border-white/5 hover:border-indigo-500 text-left transition-all", children: [_jsx(Icon, { className: "h-5 w-5 text-indigo-400 mb-1.5" }), _jsx("p", { className: "text-xs font-semibold text-white", children: item.title }), _jsx("p", { className: "text-[10px] text-zinc-500", children: item.desc })] }, item.type));
-                            }) }), _jsx(Button, { variant: "ghost", className: "w-full text-xs", onClick: () => setNewBlockModal(false), children: "Cancel" })] }) }))] }));
+                                                : "bg-zinc-950/40 border-white/5 opacity-50"
+                                        }`}
+                                    >
+                                        <div className="flex items-center gap-3 min-w-0 flex-1">
+                                            <div className="flex flex-col gap-1 text-zinc-600">
+                                                <button
+                                                    onClick={() => moveBlock(idx, "up")}
+                                                    disabled={idx === 0}
+                                                    className="hover:text-zinc-300 disabled:opacity-20 text-[10px]"
+                                                >
+                                                    ▲
+                                                </button>
+                                                <button
+                                                    onClick={() => moveBlock(idx, "down")}
+                                                    disabled={idx === blocks.length - 1}
+                                                    className="hover:text-zinc-300 disabled:opacity-20 text-[10px]"
+                                                >
+                                                    ▼
+                                                </button>
+                                            </div>
+                                            <div className="h-8 w-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 flex-shrink-0">
+                                                {block.type === "product" && <Package className="h-4 w-4" />}
+                                                {block.type === "course" && <GraduationCap className="h-4 w-4" />}
+                                                {block.type === "booking" && <Calendar className="h-4 w-4" />}
+                                                {block.type === "coaching" && <Video className="h-4 w-4" />}
+                                                {block.type === "newsletter" && <Mail className="h-4 w-4" />}
+                                                {block.type === "community" && <Users className="h-4 w-4" />}
+                                                {block.type === "header" && <Sparkles className="h-4 w-4" />}
+                                                {block.type === "socials" && <LinkIcon className="h-4 w-4" />}
+                                            </div>
+                                            <div className="min-w-0 flex-1">
+                                                <p className="text-xs font-semibold text-white truncate">{block.title}</p>
+                                                {block.subtitle && (
+                                                    <p className="text-[11px] text-zinc-400 truncate">{block.subtitle}</p>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-center gap-2">
+                                            <Badge variant="outline" className="text-[10px] capitalize">
+                                                {block.type}
+                                            </Badge>
+                                            <button
+                                                onClick={() => toggleBlockVisibility(block.id)}
+                                                className={`text-xs px-2 py-1 rounded-lg border transition-all ${
+                                                    block.is_visible
+                                                        ? "border-emerald-500/20 text-emerald-400 bg-emerald-500/10"
+                                                        : "border-zinc-700 text-zinc-500"
+                                                }`}
+                                            >
+                                                {block.is_visible ? "Visible" : "Hidden"}
+                                            </button>
+                                            <button
+                                                onClick={() => handleDeleteBlock(block.id)}
+                                                className="text-zinc-600 hover:text-red-400 p-1"
+                                                title="Delete Block"
+                                            >
+                                                <Trash2 className="h-3.5 w-3.5" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {activeTab === "design" && (
+                        <div className="space-y-6">
+                            <div>
+                                <h3 className="text-sm font-semibold text-white">Theme Presets</h3>
+                                <p className="text-xs text-zinc-400">Choose a high-converting aesthetic.</p>
+                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-3">
+                                    {[
+                                        { name: "Dark Neon", color: "#6366f1", bg: "#09090b", style: "glass" },
+                                        { name: "Cyber Purple", color: "#a855f7", bg: "#0f0728", style: "neon" },
+                                        { name: "Emerald Pro", color: "#10b981", bg: "#061a14", style: "glass" },
+                                        { name: "Sunset Gold", color: "#f59e0b", bg: "#180e05", style: "solid" },
+                                        { name: "Minimal Mono", color: "#ffffff", bg: "#000000", style: "minimal" },
+                                    ].map((preset, idx) => (
+                                        <button
+                                            key={idx}
+                                            onClick={() =>
+                                                setTheme({
+                                                    ...theme,
+                                                    primaryColor: preset.color,
+                                                    backgroundColor: preset.bg,
+                                                    cardStyle: preset.style,
+                                                })
+                                            }
+                                            className="p-3 rounded-2xl border border-white/5 bg-zinc-900/60 flex flex-col items-center gap-2 hover:border-indigo-500/30 transition-all text-left"
+                                        >
+                                            <div className="flex items-center gap-1.5 w-full">
+                                                <div className="h-4 w-4 rounded-full" style={{ backgroundColor: preset.color }} />
+                                                <div className="h-4 w-4 rounded-full border border-white/20" style={{ backgroundColor: preset.bg }} />
+                                            </div>
+                                            <span className="text-xs font-semibold text-zinc-200">{preset.name}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                {/* Right live mobile preview */}
+                <div className="flex-1 p-6 flex flex-col items-center justify-center bg-zinc-950/40">
+                    <div className="w-[320px] rounded-[40px] border-4 border-zinc-800 bg-zinc-950 p-4 shadow-2xl overflow-hidden min-h-[580px] flex flex-col">
+                        <div className="text-center py-4 space-y-1 border-b border-white/5">
+                            <div className="h-14 w-14 rounded-full mx-auto bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-lg font-bold text-white shadow-lg">
+                                RS
+                            </div>
+                            <h4 className="text-sm font-bold text-white">Rajnish Sharma</h4>
+                            <p className="text-[10px] text-zinc-400">Creator & Growth Strategist 🚀</p>
+                        </div>
+                        <div className="space-y-2 py-4 flex-1 overflow-y-auto">
+                            {blocks
+                                .filter((b) => b.is_visible && b.type !== "header")
+                                .map((b) => (
+                                    <div
+                                        key={b.id}
+                                        className="p-3 rounded-xl border border-white/10 bg-white/5 text-center text-xs font-medium text-white shadow-sm hover:border-indigo-500/40 transition-all"
+                                    >
+                                        {b.title}
+                                    </div>
+                                ))}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Modal: Add Block */}
+            {newBlockModal && (
+                <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div className="glass-panel p-6 rounded-3xl border border-white/10 max-w-md w-full space-y-4 animate-in fade-in zoom-in-95">
+                        <h3 className="text-base font-bold text-white">Add New Storefront Block</h3>
+                        <div className="grid grid-cols-2 gap-2 text-xs">
+                            {[
+                                { type: "product", label: "Digital Product", desc: "Sell PDF, Ebook, Zip" },
+                                { type: "course", label: "Video Course", desc: "Sell LMS Access" },
+                                { type: "booking", label: "Call Booking", desc: "1:1 Google Meet / Jitsi" },
+                                { type: "newsletter", label: "Email Opt-in", desc: "Collect Lead Emails" },
+                                { type: "link", label: "Custom Link", desc: "Any External URL" },
+                                { type: "socials", label: "Social Links", desc: "IG, YouTube, Twitter" },
+                            ].map((item) => (
+                                <button
+                                    key={item.type}
+                                    onClick={() => handleAddBlock(item.type, `New ${item.label}`, item.desc)}
+                                    className="p-3 rounded-2xl bg-zinc-900 border border-white/5 text-left hover:border-indigo-500/40 hover:bg-indigo-950/20 transition-all space-y-1"
+                                >
+                                    <p className="font-semibold text-white">{item.label}</p>
+                                    <p className="text-[10px] text-zinc-400">{item.desc}</p>
+                                </button>
+                            ))}
+                        </div>
+                        <Button variant="ghost" className="w-full text-xs text-zinc-400" onClick={() => setNewBlockModal(false)}>
+                            Cancel
+                        </Button>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
 }

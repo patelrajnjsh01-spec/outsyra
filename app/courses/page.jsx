@@ -1,51 +1,356 @@
 "use client";
-import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { Play, FileText, HelpCircle, CheckCircle2, BookOpen, Award, Users, ExternalLink, } from "lucide-react";
+import {
+    Play,
+    FileText,
+    HelpCircle,
+    CheckCircle2,
+    BookOpen,
+    Award,
+    Users,
+    ExternalLink,
+    Plus,
+    Trash2,
+} from "lucide-react";
 import { DashboardHeader } from "@/components/layout/DashboardHeader";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { initialCourses } from "@/lib/supabase/mock-db";
+import { Input } from "@/components/ui/input";
+import { getCourses, addCourse, deleteCourse } from "@/lib/supabase/db";
+
 export default function CoursesPage() {
-    const [courses, setCourses] = useState(initialCourses);
-    const [selectedCourse, setSelectedCourse] = useState(initialCourses[0]);
-    const [activeLesson, setActiveLesson] = useState(initialCourses[0]?.modules?.[0]?.lessons?.[0] || null);
+    const [courses, setCourses] = useState([]);
+    const [selectedCourse, setSelectedCourse] = useState(null);
+    const [activeLesson, setActiveLesson] = useState(null);
     const [completedLessons, setCompletedLessons] = useState(["les-101"]);
     const [selectedQuizAnswers, setSelectedQuizAnswers] = useState({});
     const [quizSubmitted, setQuizSubmitted] = useState(false);
+    const [createModal, setCreateModal] = useState(false);
+    const [title, setTitle] = useState("");
+    const [price, setPrice] = useState("149.00");
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function fetchCourses() {
+            try {
+                const data = await getCourses("ws-rajnish-001");
+                setCourses(data || []);
+                if (data && data.length > 0) {
+                    setSelectedCourse(data[0]);
+                    setActiveLesson(data[0]?.modules?.[0]?.lessons?.[0] || null);
+                }
+            } catch (err) {
+                console.error("Failed to load courses", err);
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchCourses();
+    }, []);
+
     const toggleLessonCompletion = (lessonId) => {
         if (completedLessons.includes(lessonId)) {
             setCompletedLessons(completedLessons.filter((id) => id !== lessonId));
-        }
-        else {
+        } else {
             setCompletedLessons([...completedLessons, lessonId]);
         }
     };
-    const totalLessons = selectedCourse.modules?.reduce((acc, m) => acc + m.lessons.length, 0) || 0;
+
+    const handleCreateCourse = async (e) => {
+        e.preventDefault();
+        const newCourse = await addCourse("ws-rajnish-001", {
+            title,
+            slug: title.toLowerCase().replace(/[^a-z0-9]/g, "-"),
+            subtitle: "Complete in-depth video training with worksheets & certificates.",
+            description: "Step-by-step masterclass curriculum designed to scale creator revenues.",
+            price: parseFloat(price) || 0,
+            thumbnail_url: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&auto=format&fit=crop&q=80",
+            modules: [
+                {
+                    id: `mod-${Date.now()}`,
+                    title: "Module 1: Foundations & Architecture",
+                    lessons: [
+                        {
+                            id: `les-${Date.now()}`,
+                            title: "1.1 Introduction to the System",
+                            duration_minutes: 14,
+                            type: "video",
+                            video_url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                        },
+                    ],
+                },
+            ],
+        });
+        setCourses([newCourse, ...courses]);
+        setSelectedCourse(newCourse);
+        setActiveLesson(newCourse.modules[0].lessons[0]);
+        setCreateModal(false);
+        setTitle("");
+    };
+
+    const totalLessons = selectedCourse?.modules?.reduce((acc, m) => acc + (m.lessons?.length || 0), 0) || 0;
     const progressPercent = Math.round((completedLessons.length / (totalLessons || 1)) * 100);
-    return (_jsxs("div", { className: "flex-1 flex flex-col", children: [_jsx(DashboardHeader, { title: "Course Builder & LMS", subtitle: "Create structured multi-module video courses with student progress, quizzes, and certificates." }), _jsxs("main", { className: "p-6 md:p-8 space-y-8 max-w-7xl", children: [_jsxs("div", { className: "glass-panel p-6 rounded-3xl border border-white/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4", children: [_jsxs("div", { className: "flex items-center gap-4", children: [_jsx("div", { className: "h-16 w-24 rounded-xl overflow-hidden bg-zinc-900 border border-white/10 flex-shrink-0", children: _jsx("img", { src: selectedCourse.thumbnail_url, alt: selectedCourse.title, className: "h-full w-full object-cover" }) }), _jsxs("div", { children: [_jsxs("div", { className: "flex items-center gap-2", children: [_jsx(Badge, { variant: "gradient", className: "text-[10px]", children: "Active LMS Course" }), _jsxs("span", { className: "text-xs text-zinc-400 font-medium", children: ["$", selectedCourse.price, " USD"] })] }), _jsx("h2", { className: "text-lg font-bold text-white mt-1", children: selectedCourse.title }), _jsxs("p", { className: "text-xs text-zinc-400 flex items-center gap-3 mt-1", children: [_jsxs("span", { className: "flex items-center gap-1", children: [_jsx(Users, { className: "h-3.5 w-3.5" }), " ", selectedCourse.total_students, " Enrolled Students"] }), _jsxs("span", { className: "flex items-center gap-1", children: [_jsx(BookOpen, { className: "h-3.5 w-3.5" }), " ", totalLessons, " Lessons"] }), _jsxs("span", { className: "flex items-center gap-1 text-emerald-400", children: [_jsx(Award, { className: "h-3.5 w-3.5" }), " Certificates Active"] })] })] })] }), _jsx("div", { className: "flex items-center gap-3", children: _jsx(Link, { href: `/checkout/${selectedCourse.id}`, target: "_blank", children: _jsxs(Button, { variant: "outline", size: "sm", className: "text-xs text-indigo-300 border-indigo-500/20 gap-1.5", children: [_jsx(ExternalLink, { className: "h-3.5 w-3.5" }), "Preview Course Sales Page"] }) }) })] }), _jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-3 gap-6", children: [_jsx("div", { className: "lg:col-span-2 space-y-4", children: _jsxs(Card, { className: "glass-panel border-white/5 overflow-hidden", children: [activeLesson?.type === "video" ? (_jsx("div", { className: "relative aspect-video bg-black flex items-center justify-center border-b border-white/10", children: _jsx("video", { controls: true, className: "h-full w-full", poster: selectedCourse.thumbnail_url, src: activeLesson.video_url }) })) : activeLesson?.type === "quiz" ? (_jsxs("div", { className: "p-8 space-y-6 bg-zinc-950/80", children: [_jsxs("div", { className: "flex items-center gap-2 text-indigo-400", children: [_jsx(HelpCircle, { className: "h-5 w-5" }), _jsx("h3", { className: "text-base font-bold text-white", children: activeLesson.title })] }), _jsxs("div", { className: "space-y-6", children: [activeLesson.quiz_data?.questions.map((q, qIndex) => (_jsxs("div", { className: "p-4 rounded-2xl bg-zinc-900/60 border border-white/5 space-y-3", children: [_jsxs("p", { className: "text-sm font-semibold text-white", children: [qIndex + 1, ". ", q.question] }), _jsx("div", { className: "space-y-2", children: q.options.map((opt, optIndex) => {
-                                                                        const isSelected = selectedQuizAnswers[q.id] === optIndex;
-                                                                        const isCorrect = optIndex === q.correct_answer_index;
-                                                                        return (_jsx("button", { onClick: () => setSelectedQuizAnswers({
-                                                                                ...selectedQuizAnswers,
-                                                                                [q.id]: optIndex,
-                                                                            }), className: `w-full p-3 rounded-xl border text-xs text-left transition-all ${isSelected
-                                                                                ? quizSubmitted && isCorrect
-                                                                                    ? "bg-emerald-500/20 border-emerald-500 text-emerald-300"
-                                                                                    : quizSubmitted && !isCorrect
-                                                                                        ? "bg-rose-500/20 border-rose-500 text-rose-300"
-                                                                                        : "bg-indigo-600/20 border-indigo-500 text-white"
-                                                                                : "bg-zinc-950 border-white/5 text-zinc-300 hover:bg-zinc-900"}`, children: opt }, optIndex));
-                                                                    }) })] }, q.id))), _jsx(Button, { variant: "gradient", onClick: () => setQuizSubmitted(true), className: "w-full text-xs", children: quizSubmitted ? "Quiz Submitted - 100% Score! 🎉" : "Submit Quiz Answers" })] })] })) : (_jsxs("div", { className: "p-8 space-y-4 bg-zinc-950/80 min-h-[300px]", children: [_jsxs("div", { className: "flex items-center gap-2 text-indigo-400", children: [_jsx(FileText, { className: "h-5 w-5" }), _jsx("h3", { className: "text-base font-bold text-white", children: activeLesson?.title })] }), _jsx("p", { className: "text-sm text-zinc-300 leading-relaxed", children: activeLesson?.content })] })), _jsxs("div", { className: "p-6 flex items-center justify-between bg-zinc-950/80 border-t border-white/5", children: [_jsxs("div", { children: [_jsx("h4", { className: "text-sm font-bold text-white", children: activeLesson?.title }), _jsxs("p", { className: "text-xs text-zinc-400 mt-0.5", children: ["Estimated completion: ", activeLesson?.duration_minutes, " minutes"] })] }), activeLesson && (_jsxs(Button, { variant: completedLessons.includes(activeLesson.id) ? "secondary" : "gradient", size: "sm", onClick: () => toggleLessonCompletion(activeLesson.id), className: "gap-2 text-xs", children: [_jsx(CheckCircle2, { className: `h-4 w-4 ${completedLessons.includes(activeLesson.id) ? "text-emerald-400" : ""}` }), completedLessons.includes(activeLesson.id) ? "Completed" : "Mark as Complete"] }))] })] }) }), _jsx("div", { className: "space-y-4", children: _jsxs(Card, { className: "glass-panel border-white/5 p-5 space-y-4", children: [_jsxs("div", { className: "flex items-center justify-between pb-3 border-b border-white/5", children: [_jsx("span", { className: "text-xs font-semibold text-white", children: "Curriculum & Progress" }), _jsxs("span", { className: "text-xs font-bold text-indigo-400", children: [progressPercent, "% Done"] })] }), _jsx("div", { className: "w-full bg-zinc-900 h-2 rounded-full overflow-hidden border border-white/5", children: _jsx("div", { className: "bg-gradient-to-r from-indigo-500 to-emerald-400 h-full transition-all duration-300", style: { width: `${progressPercent}%` } }) }), _jsx("div", { className: "space-y-4 pt-2", children: selectedCourse.modules?.map((module, mIdx) => (_jsxs("div", { className: "space-y-2", children: [_jsx("p", { className: "text-xs font-semibold text-zinc-400 uppercase tracking-wider text-[11px]", children: module.title }), _jsx("div", { className: "space-y-1.5", children: module.lessons.map((lesson) => {
-                                                            const isCurrent = activeLesson?.id === lesson.id;
-                                                            const isDone = completedLessons.includes(lesson.id);
-                                                            return (_jsxs("button", { onClick: () => {
-                                                                    setActiveLesson(lesson);
-                                                                    setQuizSubmitted(false);
-                                                                }, className: `w-full flex items-center justify-between p-3 rounded-xl border text-xs text-left transition-all ${isCurrent
-                                                                    ? "bg-indigo-600/20 border-indigo-500 text-white font-semibold"
-                                                                    : "bg-zinc-900/40 border-white/5 text-zinc-300 hover:bg-zinc-900"}`, children: [_jsxs("div", { className: "flex items-center gap-2.5 min-w-0 flex-1 pr-2", children: [lesson.type === "video" ? (_jsx(Play, { className: "h-3.5 w-3.5 text-indigo-400 flex-shrink-0" })) : lesson.type === "quiz" ? (_jsx(HelpCircle, { className: "h-3.5 w-3.5 text-pink-400 flex-shrink-0" })) : (_jsx(FileText, { className: "h-3.5 w-3.5 text-zinc-400 flex-shrink-0" })), _jsx("span", { className: "truncate", children: lesson.title })] }), isDone && (_jsx(CheckCircle2, { className: "h-4 w-4 text-emerald-400 flex-shrink-0" }))] }, lesson.id));
-                                                        }) })] }, module.id))) })] }) })] })] })] }));
+
+    return (
+        <div className="flex-1 flex flex-col">
+            <DashboardHeader
+                title="Course Builder & LMS (Supabase Database)"
+                subtitle="Create structured multi-module video courses with student progress, quizzes, and certificates."
+            />
+            <main className="p-6 md:p-8 space-y-8 max-w-7xl">
+                {selectedCourse && (
+                    <div className="glass-panel p-6 rounded-3xl border border-white/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div className="flex items-center gap-4">
+                            <div className="h-16 w-24 rounded-xl overflow-hidden bg-zinc-900 border border-white/10 flex-shrink-0">
+                                <img
+                                    src={selectedCourse.thumbnail_url}
+                                    alt={selectedCourse.title}
+                                    className="h-full w-full object-cover"
+                                />
+                            </div>
+                            <div>
+                                <div className="flex items-center gap-2">
+                                    <Badge variant="gradient" className="text-[10px]">
+                                        Active LMS Course
+                                    </Badge>
+                                    <span className="text-xs text-zinc-400 font-medium">
+                                        ${selectedCourse.price} USD
+                                    </span>
+                                </div>
+                                <h2 className="text-lg font-bold text-white mt-1">{selectedCourse.title}</h2>
+                                <p className="text-xs text-zinc-400 flex items-center gap-3 mt-1">
+                                    <span className="flex items-center gap-1">
+                                        <Users className="h-3.5 w-3.5" /> {selectedCourse.total_students || 0} Enrolled Students
+                                    </span>
+                                    <span className="flex items-center gap-1">
+                                        <BookOpen className="h-3.5 w-3.5" /> {totalLessons} Lessons
+                                    </span>
+                                    <span className="flex items-center gap-1 text-emerald-400">
+                                        <Award className="h-3.5 w-3.5" /> Certificates Active
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <Button variant="outline" size="sm" onClick={() => setCreateModal(true)} className="gap-1 text-xs">
+                                <Plus className="h-3.5 w-3.5" /> New Course
+                            </Button>
+                            <Link href={`/checkout/${selectedCourse.id}`} target="_blank">
+                                <Button
+                                    variant="gradient"
+                                    size="sm"
+                                    className="text-xs gap-1.5"
+                                >
+                                    <ExternalLink className="h-3.5 w-3.5" />
+                                    Sales Page
+                                </Button>
+                            </Link>
+                        </div>
+                    </div>
+                )}
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div className="lg:col-span-2 space-y-4">
+                        <Card className="glass-panel border-white/5 overflow-hidden">
+                            {activeLesson?.type === "video" ? (
+                                <div className="relative aspect-video bg-black flex items-center justify-center border-b border-white/10">
+                                    <video
+                                        controls
+                                        className="h-full w-full"
+                                        poster={selectedCourse?.thumbnail_url}
+                                        src={activeLesson.video_url}
+                                    />
+                                </div>
+                            ) : activeLesson?.type === "quiz" ? (
+                                <div className="p-8 space-y-6 bg-zinc-950/80">
+                                    <div className="flex items-center gap-2 text-indigo-400">
+                                        <HelpCircle className="h-5 w-5" />
+                                        <h3 className="text-base font-bold text-white">{activeLesson.title}</h3>
+                                    </div>
+                                    <div className="space-y-6">
+                                        {activeLesson.quiz_data?.questions.map((q, qIndex) => (
+                                            <div
+                                                key={q.id}
+                                                className="p-4 rounded-2xl bg-zinc-900/60 border border-white/5 space-y-3"
+                                            >
+                                                <p className="text-sm font-semibold text-white">
+                                                    {qIndex + 1}. {q.question}
+                                                </p>
+                                                <div className="space-y-2">
+                                                    {q.options.map((opt, optIndex) => {
+                                                        const isSelected = selectedQuizAnswers[q.id] === optIndex;
+                                                        const isCorrect = optIndex === q.correct_answer_index;
+                                                        return (
+                                                            <button
+                                                                key={optIndex}
+                                                                onClick={() =>
+                                                                    setSelectedQuizAnswers({
+                                                                        ...selectedQuizAnswers,
+                                                                        [q.id]: optIndex,
+                                                                    })
+                                                                }
+                                                                className={`w-full p-3 rounded-xl border text-xs text-left transition-all ${
+                                                                    isSelected
+                                                                        ? quizSubmitted && isCorrect
+                                                                            ? "bg-emerald-500/20 border-emerald-500 text-emerald-300"
+                                                                            : quizSubmitted && !isCorrect
+                                                                            ? "bg-rose-500/20 border-rose-500 text-rose-300"
+                                                                            : "bg-indigo-600/20 border-indigo-500 text-white"
+                                                                        : "bg-zinc-950 border-white/5 text-zinc-300 hover:bg-zinc-900"
+                                                                }`}
+                                                            >
+                                                                {opt}
+                                                            </button>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </div>
+                                        ))}
+                                        <Button
+                                            variant="gradient"
+                                            onClick={() => setQuizSubmitted(true)}
+                                            className="w-full text-xs"
+                                        >
+                                            {quizSubmitted ? "Quiz Submitted - 100% Score! 🎉" : "Submit Quiz Answers"}
+                                        </Button>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="p-8 space-y-4 bg-zinc-950/80 min-h-[300px]">
+                                    <div className="flex items-center gap-2 text-indigo-400">
+                                        <FileText className="h-5 w-5" />
+                                        <h3 className="text-base font-bold text-white">{activeLesson?.title}</h3>
+                                    </div>
+                                    <p className="text-sm text-zinc-300 leading-relaxed">{activeLesson?.content}</p>
+                                </div>
+                            )}
+
+                            <div className="p-6 flex items-center justify-between bg-zinc-950/80 border-t border-white/5">
+                                <div>
+                                    <h4 className="text-sm font-bold text-white">{activeLesson?.title}</h4>
+                                    <p className="text-xs text-zinc-400 mt-0.5">
+                                        Estimated completion: {activeLesson?.duration_minutes || 10} minutes
+                                    </p>
+                                </div>
+                                {activeLesson && (
+                                    <Button
+                                        variant={completedLessons.includes(activeLesson.id) ? "secondary" : "gradient"}
+                                        size="sm"
+                                        onClick={() => toggleLessonCompletion(activeLesson.id)}
+                                        className="gap-2 text-xs"
+                                    >
+                                        <CheckCircle2
+                                            className={`h-4 w-4 ${
+                                                completedLessons.includes(activeLesson.id) ? "text-emerald-400" : ""
+                                            }`}
+                                        />
+                                        {completedLessons.includes(activeLesson.id) ? "Completed" : "Mark as Complete"}
+                                    </Button>
+                                )}
+                            </div>
+                        </Card>
+                    </div>
+
+                    <div className="space-y-4">
+                        <Card className="glass-panel border-white/5 p-5 space-y-4">
+                            <div className="flex items-center justify-between pb-3 border-b border-white/5">
+                                <span className="text-xs font-semibold text-white">Curriculum & Progress</span>
+                                <span className="text-xs font-bold text-indigo-400">{progressPercent}% Done</span>
+                            </div>
+                            <div className="w-full bg-zinc-900 h-2 rounded-full overflow-hidden border border-white/5">
+                                <div
+                                    className="bg-gradient-to-r from-indigo-500 to-emerald-400 h-full transition-all duration-300"
+                                    style={{ width: `${progressPercent}%` }}
+                                />
+                            </div>
+
+                            <div className="space-y-4 pt-2">
+                                {selectedCourse?.modules?.map((module) => (
+                                    <div key={module.id} className="space-y-2">
+                                        <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider text-[11px]">
+                                            {module.title}
+                                        </p>
+                                        <div className="space-y-1.5">
+                                            {module.lessons?.map((lesson) => {
+                                                const isCurrent = activeLesson?.id === lesson.id;
+                                                const isDone = completedLessons.includes(lesson.id);
+                                                return (
+                                                    <button
+                                                        key={lesson.id}
+                                                        onClick={() => {
+                                                            setActiveLesson(lesson);
+                                                            setQuizSubmitted(false);
+                                                        }}
+                                                        className={`w-full flex items-center justify-between p-3 rounded-xl border text-xs text-left transition-all ${
+                                                            isCurrent
+                                                                ? "bg-indigo-600/20 border-indigo-500 text-white font-semibold"
+                                                                : "bg-zinc-900/40 border-white/5 text-zinc-300 hover:bg-zinc-900"
+                                                        }`}
+                                                    >
+                                                        <div className="flex items-center gap-2.5 min-w-0 flex-1 pr-2">
+                                                            {lesson.type === "video" ? (
+                                                                <Play className="h-3.5 w-3.5 text-indigo-400 flex-shrink-0" />
+                                                            ) : lesson.type === "quiz" ? (
+                                                                <HelpCircle className="h-3.5 w-3.5 text-pink-400 flex-shrink-0" />
+                                                            ) : (
+                                                                <FileText className="h-3.5 w-3.5 text-zinc-400 flex-shrink-0" />
+                                                            )}
+                                                            <span className="truncate">{lesson.title}</span>
+                                                        </div>
+                                                        {isDone && (
+                                                            <CheckCircle2 className="h-4 w-4 text-emerald-400 flex-shrink-0" />
+                                                        )}
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </Card>
+                    </div>
+                </div>
+            </main>
+
+            {createModal && (
+                <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div className="glass-panel p-6 md:p-8 rounded-3xl border border-white/10 max-w-md w-full space-y-4 animate-in fade-in zoom-in-95">
+                        <h3 className="text-base font-bold text-white">Create New LMS Course</h3>
+                        <form onSubmit={handleCreateCourse} className="space-y-4">
+                            <div>
+                                <label className="block text-xs font-medium text-zinc-300 mb-1">Course Title</label>
+                                <Input
+                                    required
+                                    placeholder="e.g. Masterclass: Scaling Digital Products"
+                                    value={title}
+                                    onChange={(e) => setTitle(e.target.value)}
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-medium text-zinc-300 mb-1">Price (USD)</label>
+                                <Input
+                                    type="number"
+                                    step="0.01"
+                                    required
+                                    placeholder="149.00"
+                                    value={price}
+                                    onChange={(e) => setPrice(e.target.value)}
+                                />
+                            </div>
+                            <div className="flex gap-2 pt-2">
+                                <Button variant="outline" type="button" className="w-1/2" onClick={() => setCreateModal(false)}>
+                                    Cancel
+                                </Button>
+                                <Button variant="gradient" type="submit" className="w-1/2">
+                                    Save to Supabase
+                                </Button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
 }
