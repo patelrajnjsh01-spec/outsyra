@@ -17,7 +17,7 @@ export default function BookingsListPage() {
             start_time: new Date(Date.now() + 86400000).toISOString(),
             duration: "30 mins",
             google_meet_url: "https://meet.google.com/new",
-            jitsi_url: "https://meet.jit.si/outsyra-growth-call-liam-38492",
+            jitsi_url: "https://meet.jit.si/outsyra-growth-call-liam-38492#config.prejoinPageEnabled=false&config.prejoinConfig.enabled=false&config.requireDisplayName=false&userInfo.displayName=%22Rajnish%20Sharma%22",
             status: "confirmed",
             answers: {
                 "Main creator handle": "@liamgrowth",
@@ -32,7 +32,7 @@ export default function BookingsListPage() {
             start_time: new Date(Date.now() + 2 * 86400000).toISOString(),
             duration: "60 mins",
             google_meet_url: "https://meet.google.com/new",
-            jitsi_url: "https://meet.jit.si/outsyra-offer-audit-marcus-94821",
+            jitsi_url: "https://meet.jit.si/outsyra-offer-audit-marcus-94821#config.prejoinPageEnabled=false&config.prejoinConfig.enabled=false&config.requireDisplayName=false&userInfo.displayName=%22Rajnish%20Sharma%22",
             status: "confirmed",
             answers: {
                 "Main creator handle": "@marcus_sterling",
