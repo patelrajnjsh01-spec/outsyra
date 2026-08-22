@@ -1,10 +1,10 @@
 "use client";
-import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import React, { useState } from "react";
-import { TrendingUp, Globe, } from "lucide-react";
+import { TrendingUp, Globe, BarChart3, ShieldCheck, Zap } from "lucide-react";
 import { DashboardHeader } from "@/components/layout/DashboardHeader";
 import { Card, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+
 export default function AnalyticsDashboardPage() {
     const [range, setRange] = useState("30d");
     const funnelSteps = [
@@ -20,5 +20,100 @@ export default function AnalyticsDashboardPage() {
         { source: "Twitter / X", visitors: "1,110", share: "6.0%", rev: "$520" },
         { source: "Direct & Others", visitors: "500", share: "2.8%", rev: "$130" },
     ];
-    return (_jsxs("div", { className: "flex-1 flex flex-col", children: [_jsx(DashboardHeader, { title: "Audience & Revenue Analytics", subtitle: "Track real-time traffic, conversion funnels, and revenue metrics powered by PostHog & Supabase." }), _jsxs("main", { className: "p-6 md:p-8 space-y-8 max-w-7xl", children: [_jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5", children: [_jsxs(Card, { className: "glass-panel border-white/5 p-6 space-y-2", children: [_jsx("span", { className: "text-xs text-zinc-400", children: "Total Store Views" }), _jsx("p", { className: "text-3xl font-bold text-white", children: "18,450" }), _jsxs("span", { className: "text-xs text-emerald-400 flex items-center font-medium", children: [_jsx(TrendingUp, { className: "h-3.5 w-3.5 mr-1" }), " +34.2% this month"] })] }), _jsxs(Card, { className: "glass-panel border-white/5 p-6 space-y-2", children: [_jsx("span", { className: "text-xs text-zinc-400", children: "Checkout Conversion" }), _jsx("p", { className: "text-3xl font-bold text-white", children: "4.2%" }), _jsx("span", { className: "text-xs text-indigo-400 font-medium", children: "Above industry average (2.1%)" })] }), _jsxs(Card, { className: "glass-panel border-white/5 p-6 space-y-2", children: [_jsx("span", { className: "text-xs text-zinc-400", children: "Average Order Value" }), _jsx("p", { className: "text-3xl font-bold text-white", children: "$56.80" }), _jsx("span", { className: "text-xs text-emerald-400 font-medium", children: "+$8.40 vs last month" })] }), _jsxs(Card, { className: "glass-panel border-white/5 p-6 space-y-2", children: [_jsx("span", { className: "text-xs text-zinc-400", children: "PostHog Status" }), _jsxs("p", { className: "text-xl font-bold text-emerald-400 flex items-center gap-1.5 mt-1", children: [_jsx("span", { className: "h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse" }), "Active"] }), _jsx("span", { className: "text-xs text-zinc-500", children: "18.4k events recorded" })] })] }), _jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-2 gap-6", children: [_jsxs(Card, { className: "glass-panel border-white/5 p-6 space-y-5", children: [_jsxs("div", { className: "flex items-center justify-between pb-3 border-b border-white/5", children: [_jsxs("div", { children: [_jsx(CardTitle, { className: "text-base", children: "E-Commerce Conversion Funnel" }), _jsx("p", { className: "text-xs text-zinc-400", children: "Step-by-step visitor drop-off" })] }), _jsx(Badge, { variant: "gradient", className: "text-[10px]", children: "Funnel" })] }), _jsx("div", { className: "space-y-4", children: funnelSteps.map((step, idx) => (_jsxs("div", { className: "space-y-1.5", children: [_jsxs("div", { className: "flex items-center justify-between text-xs", children: [_jsx("span", { className: "font-semibold text-zinc-200", children: step.label }), _jsxs("span", { className: "font-mono text-zinc-400", children: [step.count, " (", step.percent, ")"] })] }), _jsx("div", { className: "w-full bg-zinc-900 h-3 rounded-full overflow-hidden border border-white/5", children: _jsx("div", { className: "bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 h-full transition-all", style: { width: step.percent } }) })] }, idx))) })] }), _jsxs(Card, { className: "glass-panel border-white/5 p-6 space-y-5", children: [_jsxs("div", { className: "flex items-center justify-between pb-3 border-b border-white/5", children: [_jsxs("div", { children: [_jsx(CardTitle, { className: "text-base", children: "Top Traffic Channels" }), _jsx("p", { className: "text-xs text-zinc-400", children: "Where your paying customers originate" })] }), _jsx(Badge, { variant: "outline", className: "text-[10px]", children: "Sources" })] }), _jsx("div", { className: "divide-y divide-white/5 text-xs", children: trafficSources.map((src, i) => (_jsxs("div", { className: "py-3 flex items-center justify-between", children: [_jsxs("div", { className: "flex items-center gap-2.5", children: [_jsx(Globe, { className: "h-4 w-4 text-indigo-400" }), _jsxs("div", { children: [_jsx("p", { className: "font-semibold text-white", children: src.source }), _jsxs("p", { className: "text-[11px] text-zinc-500", children: [src.visitors, " visitors"] })] })] }), _jsxs("div", { className: "text-right", children: [_jsx("p", { className: "font-bold text-emerald-400", children: src.rev }), _jsxs("span", { className: "text-[10px] text-zinc-500", children: [src.share, " traffic"] })] })] }, i))) })] })] })] })] }));
+
+    return (
+        <div className="flex-1 flex flex-col">
+            <DashboardHeader
+                title="Audience & Revenue Analytics"
+                subtitle="Track real-time traffic, conversion funnels, and revenue metrics powered by Google Analytics (GA4) & PostHog."
+            />
+            <main className="p-6 md:p-8 space-y-8 max-w-7xl">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                    <Card className="glass-panel border-white/5 p-6 space-y-2">
+                        <span className="text-xs text-zinc-400">Total Store Views</span>
+                        <p className="text-3xl font-bold text-white">18,450</p>
+                        <span className="text-xs text-emerald-400 flex items-center font-medium">
+                            <TrendingUp className="h-3.5 w-3.5 mr-1" /> +34.2% this month
+                        </span>
+                    </Card>
+                    <Card className="glass-panel border-white/5 p-6 space-y-2">
+                        <span className="text-xs text-zinc-400">Checkout Conversion</span>
+                        <p className="text-3xl font-bold text-white">4.2%</p>
+                        <span className="text-xs text-indigo-400 font-medium">Above industry average (2.1%)</span>
+                    </Card>
+                    <Card className="glass-panel border-white/5 p-6 space-y-2">
+                        <span className="text-xs text-zinc-400">Average Order Value</span>
+                        <p className="text-3xl font-bold text-white">$56.80</p>
+                        <span className="text-xs text-emerald-400 font-medium">+$8.40 vs last month</span>
+                    </Card>
+                    <Card className="glass-panel border-white/5 p-6 space-y-2">
+                        <div className="flex items-center justify-between">
+                            <span className="text-xs text-zinc-400">Google Analytics (GA4)</span>
+                            <Badge variant="success" className="text-[10px]">Free Tier</Badge>
+                        </div>
+                        <p className="text-xl font-bold text-emerald-400 flex items-center gap-1.5 mt-1">
+                            <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse" />
+                            Live Connected
+                        </p>
+                        <span className="text-xs text-zinc-500">Events & conversions tracked</span>
+                    </Card>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <Card className="glass-panel border-white/5 p-6 space-y-5">
+                        <div className="flex items-center justify-between pb-3 border-b border-white/5">
+                            <div>
+                                <CardTitle className="text-base">E-Commerce Conversion Funnel</CardTitle>
+                                <p className="text-xs text-zinc-400">Step-by-step visitor drop-off tracked via GA4 & PostHog</p>
+                            </div>
+                            <Badge variant="gradient" className="text-[10px]">Funnel</Badge>
+                        </div>
+                        <div className="space-y-4">
+                            {funnelSteps.map((step, idx) => (
+                                <div key={idx} className="space-y-1.5">
+                                    <div className="flex items-center justify-between text-xs">
+                                        <span className="font-semibold text-zinc-200">{step.label}</span>
+                                        <span className="font-mono text-zinc-400">{step.count} ({step.percent})</span>
+                                    </div>
+                                    <div className="w-full bg-zinc-900 h-3 rounded-full overflow-hidden border border-white/5">
+                                        <div
+                                            className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 h-full transition-all"
+                                            style={{ width: step.percent }}
+                                        />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </Card>
+
+                    <Card className="glass-panel border-white/5 p-6 space-y-5">
+                        <div className="flex items-center justify-between pb-3 border-b border-white/5">
+                            <div>
+                                <CardTitle className="text-base">Top Traffic Channels</CardTitle>
+                                <p className="text-xs text-zinc-400">Where your paying customers originate</p>
+                            </div>
+                            <Badge variant="outline" className="text-[10px]">Sources</Badge>
+                        </div>
+                        <div className="divide-y divide-white/5 text-xs">
+                            {trafficSources.map((src, i) => (
+                                <div key={i} className="py-3 flex items-center justify-between">
+                                    <div className="flex items-center gap-2.5">
+                                        <Globe className="h-4 w-4 text-indigo-400" />
+                                        <div>
+                                            <p className="font-semibold text-white">{src.source}</p>
+                                            <p className="text-[11px] text-zinc-500">{src.visitors} visitors</p>
+                                        </div>
+                                    </div>
+                                    <div className="text-right">
+                                        <p className="font-bold text-emerald-400">{src.rev}</p>
+                                        <span className="text-[10px] text-zinc-500">{src.share} traffic</span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </Card>
+                </div>
+            </main>
+        </div>
+    );
 }
