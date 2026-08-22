@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Video, User, ExternalLink, Calendar, Plus, CheckCircle2, Clock } from "lucide-react";
+import { Video, User, ExternalLink, Calendar, Plus, CheckCircle2, Clock, Sparkles } from "lucide-react";
 import { DashboardHeader } from "@/components/layout/DashboardHeader";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -16,8 +16,8 @@ export default function BookingsListPage() {
             service_title: "30-Minute Growth Strategy Call",
             start_time: new Date(Date.now() + 86400000).toISOString(),
             duration: "30 mins",
-            meeting_url: "https://meet.google.com/new",
-            platform: "Google Meet (Free)",
+            google_meet_url: "https://meet.google.com/new",
+            jitsi_url: "https://meet.jit.si/outsyra-growth-call-liam-38492",
             status: "confirmed",
             answers: {
                 "Main creator handle": "@liamgrowth",
@@ -31,8 +31,8 @@ export default function BookingsListPage() {
             service_title: "60-Minute Intensive Offer Audit",
             start_time: new Date(Date.now() + 2 * 86400000).toISOString(),
             duration: "60 mins",
-            meeting_url: "https://meet.google.com/new",
-            platform: "Google Meet (Free)",
+            google_meet_url: "https://meet.google.com/new",
+            jitsi_url: "https://meet.jit.si/outsyra-offer-audit-marcus-94821",
             status: "confirmed",
             answers: {
                 "Main creator handle": "@marcus_sterling",
@@ -41,34 +41,53 @@ export default function BookingsListPage() {
         },
     ]);
 
-    function createInstantMeet() {
+    function launchMeeting(platform) {
         const videoService = VideoService.getInstance();
-        const url = videoService.createMeeting("instant-call", "google_meet");
+        const url = videoService.createMeeting("instant-call", platform);
         window.open(url, "_blank");
     }
 
     return (
         <div className="flex-1 flex flex-col">
             <DashboardHeader
-                title="Scheduled Bookings & Google Meet"
-                subtitle="Manage client consultation calls, questionnaires, and launch instant Google Meet video rooms."
+                title="Scheduled Bookings & Video Calling"
+                subtitle="Manage client consultations with instant 1-click Google Meet and Jitsi Meet video rooms."
             />
             <main className="p-6 md:p-8 space-y-6 max-w-7xl">
-                {/* Instant Google Meet Launcher Bar */}
-                <div className="glass-panel p-6 rounded-3xl border border-indigo-500/20 bg-gradient-to-r from-indigo-950/40 via-purple-950/20 to-zinc-950 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                {/* Instant Dual Video Meeting Launcher */}
+                <div className="glass-panel p-6 rounded-3xl border border-indigo-500/20 bg-gradient-to-r from-indigo-950/40 via-purple-950/20 to-zinc-950 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                     <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                        <div className="h-11 w-11 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
                             <Video className="h-5 w-5" />
                         </div>
                         <div>
-                            <h3 className="text-sm font-bold text-white">Instant Google Meet Room</h3>
-                            <p className="text-xs text-zinc-400">Launch a free, zero-setup Google Meet video room for any unscheduled call.</p>
+                            <div className="flex items-center gap-2">
+                                <h3 className="text-sm font-bold text-white">Instant Video Call Generator</h3>
+                                <Badge variant="success" className="text-[10px]">Google Meet & Jitsi</Badge>
+                            </div>
+                            <p className="text-xs text-zinc-400 mt-0.5">
+                                Launch a private video room instantly using either Google Meet or Jitsi (zero login required).
+                            </p>
                         </div>
                     </div>
-                    <Button variant="gradient" className="gap-2 text-xs" onClick={createInstantMeet}>
-                        <Video className="h-4 w-4" />
-                        Launch Google Meet Now
-                    </Button>
+                    <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
+                        <Button
+                            variant="gradient"
+                            className="gap-2 text-xs flex-1 md:flex-initial"
+                            onClick={() => launchMeeting("google_meet")}
+                        >
+                            <Video className="h-4 w-4 text-emerald-300" />
+                            Launch Google Meet
+                        </Button>
+                        <Button
+                            variant="outline"
+                            className="gap-2 text-xs border-indigo-500/30 bg-indigo-500/10 text-indigo-200 hover:bg-indigo-500/20 flex-1 md:flex-initial"
+                            onClick={() => launchMeeting("jitsi")}
+                        >
+                            <Sparkles className="h-4 w-4 text-indigo-400" />
+                            Launch Jitsi Room
+                        </Button>
+                    </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -107,27 +126,46 @@ export default function BookingsListPage() {
                                     ))}
                                 </div>
                             </div>
-                            <div className="pt-4 border-t border-white/5 flex flex-col sm:flex-row gap-2">
-                                <a
-                                    href={appt.meeting_url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="flex-1"
-                                >
-                                    <Button variant="gradient" size="sm" className="w-full gap-2 text-xs">
-                                        <Video className="h-4 w-4" />
-                                        Join Google Meet Room
-                                        <ExternalLink className="h-3 w-3" />
-                                    </Button>
-                                </a>
+                            <div className="pt-4 border-t border-white/5 space-y-2">
+                                <div className="grid grid-cols-2 gap-2">
+                                    <a
+                                        href={appt.google_meet_url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="w-full"
+                                    >
+                                        <Button variant="gradient" size="sm" className="w-full gap-1.5 text-xs">
+                                            <Video className="h-3.5 w-3.5 text-emerald-300" />
+                                            Google Meet
+                                            <ExternalLink className="h-3 w-3 opacity-60" />
+                                        </Button>
+                                    </a>
+                                    <a
+                                        href={appt.jitsi_url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="w-full"
+                                    >
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            className="w-full gap-1.5 text-xs border-indigo-500/20 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20"
+                                        >
+                                            <Sparkles className="h-3.5 w-3.5 text-indigo-400" />
+                                            Jitsi Room
+                                            <ExternalLink className="h-3 w-3 opacity-60" />
+                                        </Button>
+                                    </a>
+                                </div>
                                 <a
                                     href={`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(appt.service_title)}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
+                                    className="block"
                                 >
-                                    <Button variant="outline" size="sm" className="w-full gap-2 text-xs border-white/10">
+                                    <Button variant="ghost" size="sm" className="w-full gap-2 text-[11px] text-zinc-400 hover:text-white">
                                         <Calendar className="h-3.5 w-3.5" />
-                                        Add to G-Calendar
+                                        Add Appointment to Google Calendar
                                     </Button>
                                 </a>
                             </div>

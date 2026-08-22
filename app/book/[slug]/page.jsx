@@ -204,18 +204,31 @@ export default function StandaloneBookPage({ params }) {
                                 </strong>{" "}
                                 link has been generated!
                             </p>
-                            <div className="pt-2 flex flex-col gap-2 max-w-sm mx-auto">
-                                <a
-                                    href={generatedMeetLink || "https://meet.google.com/new"}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="w-full"
-                                >
-                                    <Button variant="gradient" className="w-full gap-2 text-xs">
-                                        <Video className="h-4 w-4" />
-                                        Open {videoPlatform === "google_meet" ? "Google Meet" : "Video"} Room
-                                    </Button>
-                                </a>
+                            <div className="pt-2 flex flex-col gap-2.5 max-w-sm mx-auto">
+                                <div className="grid grid-cols-2 gap-2">
+                                    <a
+                                        href="https://meet.google.com/new"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="w-full"
+                                    >
+                                        <Button variant="gradient" className="w-full gap-1.5 text-xs">
+                                            <Video className="h-4 w-4 text-emerald-300" />
+                                            Google Meet
+                                        </Button>
+                                    </a>
+                                    <a
+                                        href="https://meet.jit.si/outsyra-coaching-room-38492"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="w-full"
+                                    >
+                                        <Button variant="outline" className="w-full gap-1.5 text-xs border-indigo-500/30 bg-indigo-500/10 text-indigo-200 hover:bg-indigo-500/20">
+                                            <Sparkles className="h-4 w-4 text-indigo-400" />
+                                            Jitsi Room
+                                        </Button>
+                                    </a>
+                                </div>
                                 <Link href="/public/rajnish">
                                     <Button variant="ghost" className="w-full text-xs text-zinc-400">
                                         Return to Store
