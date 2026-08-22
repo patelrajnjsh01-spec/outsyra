@@ -1,13 +1,28 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { Plus, Search, Download, Eye, Trash2, UploadCloud, Check } from "lucide-react";
+import {
+    Plus,
+    Search,
+    Download,
+    Eye,
+    Trash2,
+    UploadCloud,
+    Check,
+    CheckCircle2,
+    FileText,
+    FileArchive,
+    Video,
+    Music,
+    X,
+    Loader2,
+} from "lucide-react";
 import { DashboardHeader } from "@/components/layout/DashboardHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { getProducts, addProduct, deleteProduct } from "@/lib/supabase/db";
+import { getProducts, addProduct, deleteProduct, uploadAssetFile } from "@/lib/supabase/db";
 
 export default function ProductsPage() {
     const [products, setProducts] = useState([]);
@@ -20,7 +35,15 @@ export default function ProductsPage() {
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState("29.00");
     const [category, setCategory] = useState("ebook");
+    const [selectedFile, setSelectedFile] = useState(null);
     const [fileName, setFileName] = useState("exclusive_guide_2026.pdf");
+    const [fileSize, setFileSize] = useState(12500000);
+    const [fileUrl, setFileUrl] = useState("");
+    const [isDragging, setIsDragging] = useState(false);
+    const [isUploading, setIsUploading] = useState(false);
+    const [uploadSuccess, setUploadSuccess] = useState(false);
+
+    const fileInputRef = useRef(null);
 
     useEffect(() => {
         async function fetchProducts() {
@@ -40,6 +63,71 @@ export default function ProductsPage() {
         p.name?.toLowerCase().includes(search.toLowerCase())
     );
 
+    function formatBytes(bytes, decimals = 1) {
+        if (!bytes) return "0 Bytes";
+        const k = 1024;
+        const dm = decimals < 0 ? 0 : decimals;
+        const sizes = ["Bytes", "KB", "MB", "GB"];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
+    }
+
+    async function processFile(file) {
+        if (!file) return;
+        setIsUploading(true);
+        setSelectedFile(file);
+        setFileName(file.name);
+        setFileSize(file.size);
+
+        // Auto-detect category from file extension
+        const ext = file.name.split(".").pop().toLowerCase();
+        if (["pdf", "epub", "mobi"].includes(ext)) {
+            setCategory("ebook");
+        } else if (["zip", "rar", "tar", "7z"].includes(ext)) {
+            setCategory("template");
+        } else if (["mp4", "mov", "avi", "mkv"].includes(ext)) {
+            setCategory("video");
+        } else if (["mp3", "wav", "aac", "ogg"].includes(ext)) {
+            setCategory("audio");
+        }
+
+        try {
+            const uploaded = await uploadAssetFile(file);
+            if (uploaded?.fileUrl) {
+                setFileUrl(uploaded.fileUrl);
+            }
+            setUploadSuccess(true);
+        } catch (err) {
+            console.error("File upload error", err);
+        } finally {
+            setIsUploading(false);
+        }
+    }
+
+    const handleFileInputChange = (e) => {
+        if (e.target.files && e.target.files[0]) {
+            processFile(e.target.files[0]);
+        }
+    };
+
+    const handleDragOver = (e) => {
+        e.preventDefault();
+        setIsDragging(true);
+    };
+
+    const handleDragLeave = (e) => {
+        e.preventDefault();
+        setIsDragging(false);
+    };
+
+    const handleDrop = (e) => {
+        e.preventDefault();
+        setIsDragging(false);
+        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+            processFile(e.dataTransfer.files[0]);
+        }
+    };
+
     const handleCreateProduct = async (e) => {
         e.preventDefault();
         const newProd = await addProduct("ws-rajnish-001", {
@@ -51,7 +139,8 @@ export default function ProductsPage() {
             category,
             status: "published",
             file_name: fileName,
-            file_size: 12500000,
+            file_size: fileSize,
+            file_url: fileUrl,
             total_sales: 0,
             cover_image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&auto=format&fit=crop&q=80",
         });
@@ -59,6 +148,8 @@ export default function ProductsPage() {
         setCreateModal(false);
         setName("");
         setDescription("");
+        setSelectedFile(null);
+        setUploadSuccess(false);
     };
 
     const handleDeleteProduct = async (id) => {
@@ -169,14 +260,20 @@ export default function ProductsPage() {
 
             {createModal && (
                 <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-                    <div className="glass-panel p-6 md:p-8 rounded-3xl border border-white/10 max-w-xl w-full space-y-5 animate-in fade-in zoom-in-95">
+                    <div className="glass-panel p-6 md:p-8 rounded-3xl border border-white/10 max-w-xl w-full space-y-5 animate-in fade-in zoom-in-95 max-h-[90vh] overflow-y-auto">
                         <div className="flex items-center justify-between border-b border-white/5 pb-4">
                             <div>
                                 <h3 className="text-lg font-bold text-white">Create Digital Product</h3>
                                 <p className="text-xs text-zinc-400">
-                                    Saved directly to your Supabase PostgreSQL products table.
+                                    Upload your asset file to Supabase Storage with protected download links.
                                 </p>
                             </div>
+                            <button
+                                onClick={() => setCreateModal(false)}
+                                className="text-zinc-500 hover:text-white text-xs"
+                            >
+                                ✕
+                            </button>
                         </div>
                         <form onSubmit={handleCreateProduct} className="space-y-4">
                             <div>
@@ -226,26 +323,83 @@ export default function ProductsPage() {
                                     onChange={(e) => setDescription(e.target.value)}
                                 />
                             </div>
-                            <div className="rounded-2xl border-2 border-dashed border-white/10 p-4 text-center bg-zinc-900/40 hover:border-indigo-500/40 transition-colors">
-                                <UploadCloud className="h-6 w-6 text-indigo-400 mx-auto mb-1.5" />
-                                <p className="text-xs font-medium text-white">Upload Protected Asset File</p>
-                                <p className="text-[11px] text-zinc-500 mt-0.5">
-                                    Files are stored securely with signed URL generation.
-                                </p>
-                                <Input
-                                    type="text"
-                                    value={fileName}
-                                    onChange={(e) => setFileName(e.target.value)}
-                                    className="mt-3 text-xs font-mono h-9 text-center bg-zinc-950/80"
-                                    placeholder="Attached File Name"
+
+                            {/* Real Clickable / Drag & Drop File Uploader */}
+                            <div className="space-y-1.5">
+                                <label className="block text-xs font-medium text-zinc-300">
+                                    Protected Asset File
+                                </label>
+                                <input
+                                    type="file"
+                                    ref={fileInputRef}
+                                    onChange={handleFileInputChange}
+                                    className="hidden"
                                 />
+                                <div
+                                    onClick={() => fileInputRef.current?.click()}
+                                    onDragOver={handleDragOver}
+                                    onDragLeave={handleDragLeave}
+                                    onDrop={handleDrop}
+                                    className={`rounded-2xl border-2 border-dashed p-6 text-center cursor-pointer transition-all ${
+                                        isDragging
+                                            ? "border-indigo-400 bg-indigo-500/10 scale-[1.01]"
+                                            : selectedFile || uploadSuccess
+                                            ? "border-emerald-500/40 bg-emerald-500/5 hover:border-emerald-500/60"
+                                            : "border-white/15 bg-zinc-900/40 hover:border-indigo-500/50 hover:bg-zinc-900/70"
+                                    }`}
+                                >
+                                    {isUploading ? (
+                                        <div className="py-3 flex flex-col items-center gap-2">
+                                            <Loader2 className="h-7 w-7 text-indigo-400 animate-spin" />
+                                            <p className="text-xs font-semibold text-white">
+                                                Uploading & Encrypting File...
+                                            </p>
+                                        </div>
+                                    ) : selectedFile || uploadSuccess ? (
+                                        <div className="flex items-center justify-between p-3 rounded-xl bg-zinc-900/80 border border-white/5">
+                                            <div className="flex items-center gap-3 text-left min-w-0 flex-1">
+                                                <div className="h-10 w-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 flex-shrink-0">
+                                                    {category === "ebook" && <FileText className="h-5 w-5" />}
+                                                    {category === "template" && <FileArchive className="h-5 w-5" />}
+                                                    {category === "video" && <Video className="h-5 w-5" />}
+                                                    {category === "audio" && <Music className="h-5 w-5" />}
+                                                    {!["ebook", "template", "video", "audio"].includes(category) && (
+                                                        <Check className="h-5 w-5" />
+                                                    )}
+                                                </div>
+                                                <div className="min-w-0 flex-1">
+                                                    <p className="text-xs font-bold text-white truncate">{fileName}</p>
+                                                    <p className="text-[11px] text-zinc-400 font-mono mt-0.5">
+                                                        {formatBytes(fileSize)} • Ready for Download
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <Badge variant="success" className="text-[10px] ml-2 shrink-0">
+                                                File Attached ✓
+                                            </Badge>
+                                        </div>
+                                    ) : (
+                                        <div className="py-2 space-y-1.5">
+                                            <div className="h-12 w-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center mx-auto">
+                                                <UploadCloud className="h-6 w-6" />
+                                            </div>
+                                            <p className="text-xs font-bold text-white">
+                                                Click to browse or drag & drop file
+                                            </p>
+                                            <p className="text-[11px] text-zinc-400">
+                                                Supports PDF, ZIP, MP4, MP3, Notion templates up to 500MB
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
+
                             <div className="flex gap-3 pt-2">
                                 <Button variant="outline" type="button" className="w-1/3" onClick={() => setCreateModal(false)}>
                                     Cancel
                                 </Button>
                                 <Button variant="gradient" type="submit" className="w-2/3">
-                                    Save to Supabase
+                                    Save Product to Supabase
                                 </Button>
                             </div>
                         </form>
