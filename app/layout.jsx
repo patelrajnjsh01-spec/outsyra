@@ -1,4 +1,5 @@
 import "./globals.css";
+import Script from "next/script";
 
 export const metadata = {
   title: "Outsyra - The All-in-One Creator Business OS",
@@ -8,7 +9,7 @@ export const metadata = {
     title: "Outsyra - Complete Creator SaaS Platform",
     description:
       "All-in-one creator business platform replacing Linktree, Stan, Kajabi, Calendly, and ManyChat.",
-    url: "https://outsyra.com",
+    url: "https://outsyra.vercel.app",
     siteName: "Outsyra",
     images: [
       {
@@ -23,16 +24,18 @@ export const metadata = {
   },
 };
 
-import Script from "next/script";
-
-export default function RootLayout({
-  children,
-}) {
+export default function RootLayout({ children }) {
   const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className="dark" suppressHydrationWarning>
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
+          rel="stylesheet"
+        />
         {gaId && (
           <>
             <Script
@@ -52,7 +55,7 @@ export default function RootLayout({
           </>
         )}
       </head>
-      <body className="min-h-screen bg-background font-sans antialiased text-foreground selection:bg-primary selection:text-primary-foreground">
+      <body className="min-h-screen bg-[#090e15] font-sans antialiased text-[#f1f5f9] selection:bg-[#00f0ff] selection:text-[#090e15]">
         {children}
       </body>
     </html>

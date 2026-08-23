@@ -1,82 +1,340 @@
 "use client";
-import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
 import React, { useState } from "react";
 import Link from "next/link";
-import { Sparkles, ArrowRight, CheckCircle2, Zap, Store, GraduationCap, Calendar, Instagram, Mail, BarChart3, Play, ChevronDown, Globe, } from "lucide-react";
+import {
+    Sparkles,
+    ArrowRight,
+    CheckCircle2,
+    Zap,
+    Store,
+    GraduationCap,
+    Calendar,
+    Instagram,
+    Mail,
+    BarChart3,
+    Play,
+    ChevronDown,
+    Globe,
+    ShieldCheck,
+    Coins,
+    TrendingUp,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Navbar } from "@/components/layout/Navbar";
+
 export default function LandingPage() {
     const [billingCycle, setBillingCycle] = useState("monthly");
     const [activeFaq, setActiveFaq] = useState(null);
+
     const features = [
         {
             icon: Store,
-            title: "Link-in-Bio & Digital Store",
-            description: "Sell ebooks, presets, templates, PDFs, and video courses directly inside your custom branded bio link with instant 1-click checkout.",
+            title: "Link-in-Bio Storefront",
+            description: "Sell ebooks, templates, audio files, and Notion presets directly with 1-click checkout.",
             badge: "Replaces Stan & Linktree",
+            color: "text-[#00f0ff]",
+            border: "hover:border-[#00f0ff]/40",
         },
         {
             icon: GraduationCap,
             title: "Full Course LMS Builder",
-            description: "Create structured multi-module video courses with student progress tracking, quizzes, and certificates without needing Kajabi.",
-            badge: "Replaces Kajabi & Teachable",
+            description: "Host multi-module video masterclasses with student progress tracking and quizzes.",
+            badge: "Replaces Kajabi",
+            color: "text-[#8b5cf6]",
+            border: "hover:border-[#8b5cf6]/40",
         },
         {
             icon: Calendar,
-            title: "Calendly-Style Bookings & 1:1 Coaching",
-            description: "Set working hours, buffers, and paid consultation slots with Google Calendar OAuth sync and instant Jitsi/Google Meet video links.",
+            title: "1:1 Coaching & Bookings",
+            description: "Paid consultation calendar with instant Google Meet and Jitsi video conference links.",
             badge: "Replaces Calendly",
+            color: "text-[#00e676]",
+            border: "hover:border-[#00e676]/40",
         },
         {
             icon: Instagram,
-            title: "Official Meta Instagram Automation",
-            description: "Turn comments into revenue. Auto-send digital product links and course invites when followers comment specific keywords on your posts.",
+            title: "Instagram Comment Auto-DM",
+            description: "Turn comments into sales. Automatically send product links when followers comment keywords.",
             badge: "Replaces ManyChat",
+            color: "text-[#ec4899]",
+            border: "hover:border-[#ec4899]/40",
         },
         {
             icon: Mail,
-            title: "Email Marketing & Newsletters",
-            description: "Collect high-converting leads, segment subscribers by purchase history, and broadcast beautiful newsletters with Resend API.",
-            badge: "Replaces Mailchimp & ConvertKit",
+            title: "Email Newsletters & Broadcasts",
+            description: "Capture leads from your bio link and broadcast newsletters with full segmentation.",
+            badge: "Replaces ConvertKit",
+            color: "text-[#fbbf24]",
+            border: "hover:border-[#fbbf24]/40",
         },
         {
             icon: BarChart3,
-            title: "Audience & Revenue Analytics",
-            description: "Track page views, checkout drop-offs, top traffic sources, and gross earnings with built-in database metrics + PostHog product tracking.",
-            badge: "Replaces Google Analytics",
+            title: "Creator Revenue Analytics",
+            description: "Track live page views, checkout conversions, top traffic sources, and gross earnings.",
+            badge: "Real-Time DB",
+            color: "text-[#38bdf8]",
+            border: "hover:border-[#38bdf8]/40",
         },
     ];
+
+    const liveWins = [
+        { creator: "Alex River", item: "Ebook Masterclass", amount: "+$199.00", time: "Just now", icon: "📘" },
+        { creator: "Sophia Chen", item: "1:1 Coaching (60 Min)", amount: "+$250.00", time: "2m ago", icon: "🎥" },
+        { creator: "Liam Vance", item: "Notion OS Bundle", amount: "+$79.00", time: "4m ago", icon: "⚡" },
+        { creator: "Elena Rostova", item: "Creator Academy", amount: "+$499.00", time: "7m ago", icon: "🎓" },
+        { creator: "Marcus Brody", item: "Canva Template Pack", amount: "+$49.00", time: "11m ago", icon: "🎨" },
+    ];
+
     const comparison = [
         { feature: "Link-in-Bio Storefront", outsyra: true, others: "$29/mo (Stan)" },
         { feature: "Course LMS & Student Tracking", outsyra: true, others: "$149/mo (Kajabi)" },
         { feature: "Calendar & 1:1 Coaching Booking", outsyra: true, others: "$16/mo (Calendly)" },
         { feature: "Official Instagram Comment Auto-DM", outsyra: true, others: "$25/mo (ManyChat)" },
         { feature: "Email Newsletters & Broadcasts", outsyra: true, others: "$29/mo (ConvertKit)" },
-        { feature: "Social Media Template Studio", outsyra: true, others: "$13/mo (Canva Pro)" },
         { feature: "Creator Community & Channels", outsyra: true, others: "$99/mo (Circle)" },
-        { feature: "Total Monthly Cost", outsyra: "$19 - $49/mo", others: "$360+/mo", isTotal: true },
+        { feature: "Total Monthly Cost", outsyra: "$19 - $49/mo", others: "$347+/mo", isTotal: true },
     ];
+
     const faqs = [
         {
-            q: "How does Outsyra replace all 8 separate creator tools?",
-            a: "Outsyra unites your storefront, course delivery, appointment scheduler, email broadcast engine, Instagram Meta Graph API triggers, and paid community under a single unified PostgreSQL database and creator workspace. No Zapier or messy third-party duct tape required.",
+            q: "How does Outsyra replace Stan, Kajabi, and Calendly?",
+            a: "Outsyra combines your link-in-bio storefront, digital file delivery, course LMS, calendar scheduling, 1:1 video calls, Instagram auto-DMs, and email newsletters into a single unified database with zero commission fees.",
         },
         {
-            q: "Do I need technical skills or coding knowledge?",
-            a: "None at all. You get an intuitive visual builder for your bio storefront, a drag-and-drop course creator, and 1-click integrations for Stripe, Google Calendar, and Meta Instagram.",
+            q: "Can I connect custom domains and Stripe / Razorpay?",
+            a: "Yes! You can connect your custom domain (e.g., yourname.com) and link Stripe or Razorpay to receive 100% of your earnings directly into your bank account.",
         },
         {
-            q: "Can I connect custom domains (e.g. creatorname.com)?",
-            a: "Yes! On the Creator and Pro plans, you can map your own custom domain or use our sleek outsyra.com/[username] slug with instant SSL.",
-        },
-        {
-            q: "How do payouts and transaction fees work?",
-            a: "Outsyra connects directly to your own Stripe or Razorpay accounts. Payments hit your bank account directly without holding periods. Outsyra charges 0% transaction fees on paid plans.",
+            q: "How does the Instagram Auto-DM work?",
+            a: "Connect your Instagram professional account in 1 click via Meta OAuth. Set keyword triggers like 'COURSE' or 'EBOOK' to automatically reply to comments and send private DMs with your product checkout link.",
         },
     ];
-    return (_jsxs("div", { className: "min-h-screen bg-zinc-950 text-zinc-100 selection:bg-indigo-500 selection:text-white", children: [_jsx(Navbar, {}), _jsxs("section", { className: "relative overflow-hidden pt-20 pb-24 md:pt-28 md:pb-36 grid-bg", children: [_jsx("div", { className: "absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-indigo-500/20 blur-[120px] rounded-full pointer-events-none" }), _jsx("div", { className: "absolute top-1/3 right-1/4 w-[400px] h-[250px] bg-pink-500/15 blur-[120px] rounded-full pointer-events-none" }), _jsxs("div", { className: "relative mx-auto max-w-7xl px-6 text-center", children: [_jsxs("div", { className: "inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-4 py-1.5 text-xs font-semibold text-indigo-300 backdrop-blur-md mb-8 animate-pulse", children: [_jsx(Sparkles, { className: "h-3.5 w-3.5 text-indigo-400" }), _jsx("span", { children: "The All-in-One Creator Business Operating System" })] }), _jsxs("h1", { className: "mx-auto max-w-4xl text-4xl font-extrabold tracking-tight sm:text-6xl md:text-7xl leading-[1.1]", children: ["Everything You Need to", " ", _jsx("span", { className: "gradient-text", children: "Build, Sell & Grow" }), " Your Creator Business."] }), _jsx("p", { className: "mx-auto mt-6 max-w-2xl text-lg text-zinc-400 leading-relaxed", children: "Your store, courses, bookings, email, Instagram automation, analytics, and community \u2014 all in one place." }), _jsxs("div", { className: "mt-10 flex flex-wrap items-center justify-center gap-4", children: [_jsx(Link, { href: "/dashboard", children: _jsxs(Button, { size: "lg", variant: "gradient", className: "gap-2 text-base px-8 h-13 shadow-xl shadow-indigo-500/20", children: ["Launch Free Studio", _jsx(ArrowRight, { className: "h-5 w-5" })] }) }), _jsx(Link, { href: "/public/rajnish", target: "_blank", children: _jsxs(Button, { size: "lg", variant: "outline", className: "gap-2 text-base px-8 h-13", children: [_jsx(Play, { className: "h-4 w-4 text-indigo-400 fill-indigo-400" }), "Explore Demo Store"] }) })] }), _jsxs("div", { className: "mt-6 flex items-center justify-center gap-6 text-xs text-zinc-500", children: [_jsxs("span", { className: "flex items-center gap-1.5", children: [_jsx(CheckCircle2, { className: "h-4 w-4 text-emerald-400" }), " 0% Transaction Fees on Pro"] }), _jsxs("span", { className: "flex items-center gap-1.5", children: [_jsx(CheckCircle2, { className: "h-4 w-4 text-emerald-400" }), " Instant Setup in 2 Mins"] }), _jsxs("span", { className: "flex items-center gap-1.5", children: [_jsx(CheckCircle2, { className: "h-4 w-4 text-emerald-400" }), " Stripe & Razorpay"] })] }), _jsx("div", { className: "mt-16 relative mx-auto max-w-5xl rounded-3xl border border-white/10 bg-zinc-900/40 p-3 shadow-2xl backdrop-blur-2xl", children: _jsxs("div", { className: "overflow-hidden rounded-2xl border border-white/10 bg-zinc-950", children: [_jsxs("div", { className: "flex items-center justify-between border-b border-white/5 bg-zinc-900/80 px-4 py-3", children: [_jsxs("div", { className: "flex items-center gap-2", children: [_jsx("div", { className: "h-3 w-3 rounded-full bg-rose-500/80" }), _jsx("div", { className: "h-3 w-3 rounded-full bg-amber-500/80" }), _jsx("div", { className: "h-3 w-3 rounded-full bg-emerald-500/80" })] }), _jsxs("div", { className: "flex items-center gap-2 rounded-lg bg-zinc-950/80 px-4 py-1 text-xs text-zinc-400 border border-white/5", children: [_jsx(Globe, { className: "h-3.5 w-3.5 text-indigo-400" }), _jsx("span", { children: "outsyra.com/dashboard" })] }), _jsx(Badge, { variant: "success", className: "text-[10px]", children: "Live System Active" })] }), _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-6 p-6 text-left", children: [_jsxs("div", { className: "glass-panel p-5 rounded-2xl border border-white/5 space-y-3", children: [_jsxs("div", { className: "flex items-center justify-between", children: [_jsx("span", { className: "text-xs text-zinc-400", children: "Total Monthly Revenue" }), _jsx(Badge, { variant: "gradient", children: "+34%" })] }), _jsx("p", { className: "text-3xl font-bold text-white", children: "$18,420.00" }), _jsxs("p", { className: "text-xs text-emerald-400 flex items-center gap-1", children: [_jsx(Zap, { className: "h-3 w-3" }), " 324 orders this month"] })] }), _jsxs("div", { className: "glass-panel p-5 rounded-2xl border border-white/5 space-y-3", children: [_jsxs("div", { className: "flex items-center justify-between", children: [_jsx("span", { className: "text-xs text-zinc-400", children: "Instagram Auto-DMs" }), _jsx(Badge, { variant: "default", children: "Meta Graph API" })] }), _jsx("p", { className: "text-3xl font-bold text-white", children: "1,842 Sent" }), _jsx("p", { className: "text-xs text-indigo-400", children: "42.8% checkout conversion" })] }), _jsxs("div", { className: "glass-panel p-5 rounded-2xl border border-white/5 space-y-3", children: [_jsxs("div", { className: "flex items-center justify-between", children: [_jsx("span", { className: "text-xs text-zinc-400", children: "Active Students & Calls" }), _jsx(Badge, { variant: "secondary", children: "LMS & Calendar" })] }), _jsx("p", { className: "text-3xl font-bold text-white", children: "412 Active" }), _jsx("p", { className: "text-xs text-purple-400", children: "18 coaching calls scheduled" })] })] })] }) })] })] }), _jsx("section", { className: "py-24 border-t border-white/5 bg-zinc-950/60", children: _jsxs("div", { className: "mx-auto max-w-7xl px-6", children: [_jsxs("div", { className: "text-center max-w-3xl mx-auto mb-16", children: [_jsx("h2", { className: "text-3xl font-bold tracking-tight sm:text-4xl text-white", children: "One Unified OS Replacing 8 Expensive Subscriptions" }), _jsx("p", { className: "mt-4 text-zinc-400 text-base", children: "Stop juggling disjointed tools. Run your storefront, LMS, schedule, email marketing, and automated funnels under one unified dashboard." })] }), _jsx("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6", children: features.map((feat, idx) => {
-                                const Icon = feat.icon;
-                                return (_jsx("div", { className: "glass-panel glass-panel-hover p-8 rounded-3xl border border-white/5 flex flex-col justify-between", children: _jsxs("div", { children: [_jsxs("div", { className: "flex items-center justify-between mb-6", children: [_jsx("div", { className: "h-12 w-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400", children: _jsx(Icon, { className: "h-6 w-6" }) }), _jsx(Badge, { variant: "outline", className: "text-[11px] text-zinc-400 bg-white/5", children: feat.badge })] }), _jsx("h3", { className: "text-xl font-semibold text-white mb-2", children: feat.title }), _jsx("p", { className: "text-sm text-zinc-400 leading-relaxed", children: feat.description })] }) }, idx));
-                            }) })] }) }), _jsx("section", { className: "py-24 border-t border-white/5 bg-zinc-900/20", children: _jsxs("div", { className: "mx-auto max-w-5xl px-6", children: [_jsxs("div", { className: "text-center max-w-3xl mx-auto mb-16", children: [_jsx("h2", { className: "text-3xl font-bold tracking-tight sm:text-4xl text-white", children: "Why Creators are Switching to Outsyra" }), _jsx("p", { className: "mt-4 text-zinc-400 text-base", children: "Save thousands each year and eliminate data fragmentation." })] }), _jsxs("div", { className: "overflow-hidden rounded-3xl border border-white/10 bg-zinc-950/70 backdrop-blur-xl shadow-2xl", children: [_jsxs("div", { className: "grid grid-cols-3 border-b border-white/10 bg-zinc-900/60 p-5 font-semibold text-sm", children: [_jsx("span", { className: "text-zinc-400", children: "Capability / Feature" }), _jsxs("span", { className: "text-indigo-400 flex items-center gap-1.5", children: [_jsx(Sparkles, { className: "h-4 w-4" }), " Outsyra All-in-One"] }), _jsx("span", { className: "text-zinc-400", children: "Traditional Multi-Tool Stack" })] }), _jsx("div", { className: "divide-y divide-white/5 text-sm", children: comparison.map((item, i) => (_jsxs("div", { className: `grid grid-cols-3 p-5 items-center ${item.isTotal ? "bg-indigo-950/30 font-bold text-base" : ""}`, children: [_jsx("span", { className: item.isTotal ? "text-white" : "text-zinc-300", children: item.feature }), _jsx("span", { className: "text-emerald-400 flex items-center gap-1.5", children: item.isTotal ? (_jsx("span", { className: "text-indigo-300", children: item.outsyra })) : (_jsxs(_Fragment, { children: [_jsx(CheckCircle2, { className: "h-4 w-4 text-emerald-400" }), " Included"] })) }), _jsx("span", { className: item.isTotal ? "text-rose-400 font-bold" : "text-zinc-500", children: item.others })] }, i))) })] })] }) }), _jsx("section", { className: "py-24 border-t border-white/5 bg-zinc-950", id: "pricing", children: _jsxs("div", { className: "mx-auto max-w-7xl px-6", children: [_jsxs("div", { className: "text-center max-w-3xl mx-auto mb-12", children: [_jsx("h2", { className: "text-3xl font-bold tracking-tight sm:text-4xl text-white", children: "Simple, Transparent Pricing" }), _jsx("p", { className: "mt-4 text-zinc-400 text-base", children: "Start free, scale as your revenue grows. No surprise charges." }), _jsxs("div", { className: "mt-8 inline-flex items-center rounded-xl bg-zinc-900 p-1 border border-white/5", children: [_jsx("button", { onClick: () => setBillingCycle("monthly"), className: `rounded-lg px-4 py-1.5 text-xs font-semibold transition-all ${billingCycle === "monthly" ? "bg-indigo-600 text-white shadow-md" : "text-zinc-400 hover:text-white"}`, children: "Monthly Billing" }), _jsxs("button", { onClick: () => setBillingCycle("yearly"), className: `rounded-lg px-4 py-1.5 text-xs font-semibold transition-all flex items-center gap-1.5 ${billingCycle === "yearly" ? "bg-indigo-600 text-white shadow-md" : "text-zinc-400 hover:text-white"}`, children: ["Yearly Billing", _jsx("span", { className: "bg-emerald-500/20 text-emerald-300 text-[10px] px-1.5 py-0.2 rounded-full border border-emerald-500/30", children: "Save 20%" })] })] })] }), _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto", children: [_jsxs("div", { className: "glass-panel p-8 rounded-3xl border border-white/5 flex flex-col justify-between", children: [_jsxs("div", { children: [_jsx("h3", { className: "text-xl font-bold text-white", children: "Free Starter" }), _jsx("p", { className: "text-xs text-zinc-400 mt-1", children: "Perfect for new creators getting started." }), _jsxs("div", { className: "mt-6 mb-6", children: [_jsx("span", { className: "text-4xl font-extrabold text-white", children: "$0" }), _jsx("span", { className: "text-zinc-500 text-xs", children: " / forever" })] }), _jsxs("ul", { className: "space-y-3 text-xs text-zinc-300", children: [_jsxs("li", { className: "flex items-center gap-2", children: [_jsx(CheckCircle2, { className: "h-4 w-4 text-indigo-400" }), " 1 Link-in-Bio Creator Page"] }), _jsxs("li", { className: "flex items-center gap-2", children: [_jsx(CheckCircle2, { className: "h-4 w-4 text-indigo-400" }), " 3 Digital Products"] }), _jsxs("li", { className: "flex items-center gap-2", children: [_jsx(CheckCircle2, { className: "h-4 w-4 text-indigo-400" }), " 1 Video Course (LMS)"] }), _jsxs("li", { className: "flex items-center gap-2", children: [_jsx(CheckCircle2, { className: "h-4 w-4 text-indigo-400" }), " 100 Email Subscribers"] }), _jsxs("li", { className: "flex items-center gap-2", children: [_jsx(CheckCircle2, { className: "h-4 w-4 text-indigo-400" }), " Basic Booking Calendar"] })] })] }), _jsx(Link, { href: "/signup", className: "mt-8", children: _jsx(Button, { variant: "outline", className: "w-full", children: "Get Started Free" }) })] }), _jsxs("div", { className: "glass-panel p-8 rounded-3xl border-2 border-indigo-500 bg-indigo-950/20 relative flex flex-col justify-between shadow-2xl shadow-indigo-500/10", children: [_jsx("div", { className: "absolute -top-3.5 left-1/2 -translate-x-1/2", children: _jsx(Badge, { variant: "gradient", className: "px-3 py-1 shadow-lg text-[11px]", children: "MOST POPULAR" }) }), _jsxs("div", { children: [_jsx("h3", { className: "text-xl font-bold text-white", children: "Creator Pro" }), _jsx("p", { className: "text-xs text-indigo-200/70 mt-1", children: "For full-time creators scaling revenue." }), _jsxs("div", { className: "mt-6 mb-6", children: [_jsx("span", { className: "text-4xl font-extrabold text-white", children: billingCycle === "yearly" ? "$39" : "$49" }), _jsx("span", { className: "text-zinc-400 text-xs", children: " / month" })] }), _jsxs("ul", { className: "space-y-3 text-xs text-zinc-200", children: [_jsxs("li", { className: "flex items-center gap-2", children: [_jsx(CheckCircle2, { className: "h-4 w-4 text-emerald-400" }), " Unlimited Products & Files"] }), _jsxs("li", { className: "flex items-center gap-2", children: [_jsx(CheckCircle2, { className: "h-4 w-4 text-emerald-400" }), " Unlimited Courses & Students"] }), _jsxs("li", { className: "flex items-center gap-2", children: [_jsx(CheckCircle2, { className: "h-4 w-4 text-emerald-400" }), " Meta Instagram Auto-DM Workflows"] }), _jsxs("li", { className: "flex items-center gap-2", children: [_jsx(CheckCircle2, { className: "h-4 w-4 text-emerald-400" }), " Google Calendar OAuth Sync"] }), _jsxs("li", { className: "flex items-center gap-2", children: [_jsx(CheckCircle2, { className: "h-4 w-4 text-emerald-400" }), " 10,000 Email Subscribers"] }), _jsxs("li", { className: "flex items-center gap-2", children: [_jsx(CheckCircle2, { className: "h-4 w-4 text-emerald-400" }), " 0% Transaction Fees"] })] })] }), _jsx(Link, { href: "/signup?plan=creator", className: "mt-8", children: _jsx(Button, { variant: "gradient", className: "w-full shadow-lg", children: "Start 14-Day Free Trial" }) })] }), _jsxs("div", { className: "glass-panel p-8 rounded-3xl border border-white/5 flex flex-col justify-between", children: [_jsxs("div", { children: [_jsx("h3", { className: "text-xl font-bold text-white", children: "Business & Agency" }), _jsx("p", { className: "text-xs text-zinc-400 mt-1", children: "For creator teams, agencies & multi-brands." }), _jsxs("div", { className: "mt-6 mb-6", children: [_jsx("span", { className: "text-4xl font-extrabold text-white", children: billingCycle === "yearly" ? "$79" : "$99" }), _jsx("span", { className: "text-zinc-500 text-xs", children: " / month" })] }), _jsxs("ul", { className: "space-y-3 text-xs text-zinc-300", children: [_jsxs("li", { className: "flex items-center gap-2", children: [_jsx(CheckCircle2, { className: "h-4 w-4 text-indigo-400" }), " Everything in Creator Pro"] }), _jsxs("li", { className: "flex items-center gap-2", children: [_jsx(CheckCircle2, { className: "h-4 w-4 text-indigo-400" }), " Team Seats & Staff Roles"] }), _jsxs("li", { className: "flex items-center gap-2", children: [_jsx(CheckCircle2, { className: "h-4 w-4 text-indigo-400" }), " Custom Domains (White-Label)"] }), _jsxs("li", { className: "flex items-center gap-2", children: [_jsx(CheckCircle2, { className: "h-4 w-4 text-indigo-400" }), " Dedicated API & Webhook Access"] }), _jsxs("li", { className: "flex items-center gap-2", children: [_jsx(CheckCircle2, { className: "h-4 w-4 text-indigo-400" }), " Priority 24/7 VIP Support"] })] })] }), _jsx(Link, { href: "/signup?plan=business", className: "mt-8", children: _jsx(Button, { variant: "outline", className: "w-full", children: "Upgrade to Business" }) })] })] })] }) }), _jsx("section", { className: "py-24 border-t border-white/5 bg-zinc-950/60", children: _jsxs("div", { className: "mx-auto max-w-4xl px-6", children: [_jsxs("div", { className: "text-center mb-16", children: [_jsx("h2", { className: "text-3xl font-bold text-white", children: "Frequently Asked Questions" }), _jsx("p", { className: "text-zinc-400 text-sm mt-2", children: "Everything you need to know about the Outsyra platform." })] }), _jsx("div", { className: "space-y-4", children: faqs.map((faq, idx) => (_jsxs("div", { className: "rounded-2xl border border-white/10 bg-zinc-900/40 p-6 transition-all", children: [_jsxs("button", { onClick: () => setActiveFaq(activeFaq === idx ? null : idx), className: "flex w-full items-center justify-between text-left font-semibold text-white", children: [_jsx("span", { children: faq.q }), _jsx(ChevronDown, { className: `h-5 w-5 text-zinc-400 transition-transform ${activeFaq === idx ? "rotate-180 text-indigo-400" : ""}` })] }), activeFaq === idx && (_jsx("p", { className: "mt-4 text-sm text-zinc-400 leading-relaxed border-t border-white/5 pt-4", children: faq.a }))] }, idx))) })] }) }), _jsx("footer", { className: "border-t border-white/5 bg-zinc-950 py-12 px-6", children: _jsxs("div", { className: "mx-auto max-w-7xl flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-zinc-500", children: [_jsxs("div", { className: "flex items-center gap-2", children: [_jsx("div", { className: "h-6 w-6 rounded-lg bg-indigo-600 flex items-center justify-center text-white", children: _jsx(Sparkles, { className: "h-3.5 w-3.5" }) }), _jsx("span", { className: "font-semibold text-zinc-300 text-sm", children: "Outsyra" }), _jsxs("span", { children: ["\u00A9 ", new Date().getFullYear(), " Outsyra Inc. All rights reserved."] })] }), _jsxs("div", { className: "flex items-center gap-6", children: [_jsx(Link, { href: "/pricing", className: "hover:text-zinc-300", children: "Pricing" }), _jsx(Link, { href: "/templates", className: "hover:text-zinc-300", children: "Template Studio" }), _jsx(Link, { href: "/settings/integrations", className: "hover:text-zinc-300", children: "Integrations" }), _jsx(Link, { href: "/admin", className: "hover:text-zinc-300", children: "System Health" })] })] }) })] }));
+
+    return (
+        <div className="min-h-screen bg-[#090e15] text-[#f1f5f9] font-sans antialiased selection:bg-[#00f0ff] selection:text-[#090e15]">
+            <Navbar />
+
+            {/* HERO SECTION */}
+            <section className="relative pt-12 pb-20 px-6 max-w-7xl mx-auto overflow-hidden">
+                {/* Background Ambient Neon Glow */}
+                <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-[#00f0ff]/10 blur-[160px] rounded-full pointer-events-none" />
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10">
+                    {/* Left Copy */}
+                    <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
+                        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#00f0ff]/10 border border-[#00f0ff]/30 text-[#00f0ff] text-xs font-bold uppercase tracking-wider shadow-[0_0_15px_rgba(0,240,255,0.2)]">
+                            <span className="h-2 w-2 rounded-full bg-[#00f0ff] animate-pulse" />
+                            Next-Gen Creator Business OS
+                        </div>
+
+                        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.1] uppercase">
+                            Monetize Your Audience <br />
+                            <span className="gradient-text">Without The Bloat</span>
+                        </h1>
+
+                        <p className="text-base sm:text-lg text-slate-300 max-w-xl mx-auto lg:mx-0 leading-relaxed font-normal">
+                            The all-in-one platform replacing Stan Store, Kajabi, Calendly, and ManyChat. Sell digital products, host courses, book 1:1 coaching, and automate Instagram DMs in one place.
+                        </p>
+
+                        <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5 pt-2">
+                            <Link href="/dashboard">
+                                <Button variant="gradient" size="lg" className="h-12 px-8 text-xs sm:text-sm font-black uppercase tracking-wider gap-2 shadow-[0_0_20px_rgba(0,180,219,0.4)]">
+                                    Launch Creator Studio <ArrowRight className="h-4 w-4" />
+                                </Button>
+                            </Link>
+                            <Link href="/public/rajnish">
+                                <Button variant="outline" size="lg" className="h-12 px-6 text-xs sm:text-sm font-bold gap-2">
+                                    <Zap className="h-4 w-4 text-[#00f0ff]" />
+                                    Explore Live Demo Store
+                                </Button>
+                            </Link>
+                        </div>
+
+                        {/* Social proof chips */}
+                        <div className="flex items-center justify-center lg:justify-start gap-4 pt-4 text-xs font-semibold text-slate-400">
+                            <span className="flex items-center gap-1.5">
+                                <CheckCircle2 className="h-4 w-4 text-[#00e676]" /> 0% Transaction Fees
+                            </span>
+                            <span className="flex items-center gap-1.5">
+                                <CheckCircle2 className="h-4 w-4 text-[#00e676]" /> Instant Payouts
+                            </span>
+                            <span className="flex items-center gap-1.5">
+                                <CheckCircle2 className="h-4 w-4 text-[#00e676]" /> Setup in 2 Mins
+                            </span>
+                        </div>
+                    </div>
+
+                    {/* Right 3D Animated Creator Mascot & Card Visual */}
+                    <div className="lg:col-span-5 flex justify-center relative">
+                        <div className="relative w-full max-w-[420px] aspect-square rounded-3xl p-2 glass-panel border border-[#00f0ff]/30 shadow-[0_0_40px_rgba(0,240,255,0.2)] group overflow-hidden">
+                            <img
+                                src="/assets/creator_mascot.jpg"
+                                alt="3D Animated Creator Mascot"
+                                className="w-full h-full object-cover rounded-2xl group-hover:scale-105 transition-transform duration-500"
+                            />
+                            {/* Floating Profit Badge */}
+                            <div className="absolute top-4 right-4 p-3 rounded-2xl bg-[#0f1923]/95 border border-[#00e676]/40 shadow-xl backdrop-blur-md animate-float">
+                                <p className="text-[10px] font-bold text-slate-400 uppercase">Gross Revenue</p>
+                                <p className="text-base font-black text-[#00e676]">+$24,850.00</p>
+                            </div>
+                            {/* Floating Live Orders Badge */}
+                            <div className="absolute bottom-4 left-4 p-3 rounded-2xl bg-[#0f1923]/95 border border-[#00f0ff]/40 shadow-xl backdrop-blur-md">
+                                <div className="flex items-center gap-2">
+                                    <span className="h-2 w-2 rounded-full bg-[#00e676] animate-pulse" />
+                                    <p className="text-xs font-bold text-white">Live Checkout Active</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* LIVE SALES TICKER (CLUTCH STYLE) */}
+            <section className="border-y border-white/[0.08] bg-[#0f1923]/80 py-4 px-6 overflow-hidden">
+                <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-2 shrink-0">
+                        <span className="h-2.5 w-2.5 rounded-full bg-red-500 animate-ping" />
+                        <span className="text-xs font-black uppercase tracking-wider text-white">
+                            LIVE CREATOR SALES
+                        </span>
+                    </div>
+                    <div className="flex items-center gap-3 overflow-x-auto scrollbar-none py-1">
+                        {liveWins.map((win, idx) => (
+                            <div
+                                key={idx}
+                                className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-[#162331] border border-white/5 shrink-0 text-xs shadow-sm hover:border-[#00f0ff]/40 transition-colors"
+                            >
+                                <span>{win.icon}</span>
+                                <span className="font-bold text-white">{win.creator}</span>
+                                <span className="text-slate-400 text-[11px] truncate max-w-[120px]">{win.item}</span>
+                                <span className="font-black text-[#00e676]">{win.amount}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* 6 CORE APPS IN 1 PLATFORM */}
+            <section className="py-20 px-6 max-w-7xl mx-auto">
+                <div className="text-center space-y-3 mb-12">
+                    <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-white">
+                        Replace Your 5 Fragmented Subscriptions
+                    </h2>
+                    <p className="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto">
+                        Everything you need to launch, scale, and automate your online creator business.
+                    </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                    {features.map((f, idx) => {
+                        const Icon = f.icon;
+                        return (
+                            <div
+                                key={idx}
+                                className={`glass-panel glass-panel-hover p-6 rounded-2xl border border-white/[0.08] ${f.border} transition-all duration-300 flex flex-col justify-between min-h-[220px] shadow-lg`}
+                            >
+                                <div className="space-y-3">
+                                    <div className="flex items-center justify-between">
+                                        <div className={`h-11 w-11 rounded-xl bg-[#0f1923] border border-white/10 flex items-center justify-center ${f.color}`}>
+                                            <Icon className="h-5 w-5" />
+                                        </div>
+                                        <Badge variant="default" className="text-[10px] font-bold uppercase">
+                                            {f.badge}
+                                        </Badge>
+                                    </div>
+                                    <h3 className="text-base font-black text-white uppercase tracking-tight">
+                                        {f.title}
+                                    </h3>
+                                    <p className="text-xs text-slate-300 leading-relaxed">
+                                        {f.description}
+                                    </p>
+                                </div>
+                                <div className="pt-4 border-t border-white/5 flex items-center justify-between">
+                                    <Link href="/dashboard" className={`text-xs font-bold ${f.color} flex items-center gap-1 hover:underline`}>
+                                        Open Studio <ArrowRight className="h-3 w-3" />
+                                    </Link>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            </section>
+
+            {/* COMPARISON TABLE */}
+            <section className="py-16 px-6 max-w-4xl mx-auto">
+                <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/[0.08] shadow-2xl">
+                    <div className="text-center space-y-2 mb-8">
+                        <h2 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight">
+                            Outsyra vs Fragmented Tools
+                        </h2>
+                        <p className="text-xs text-slate-400">Save $3,500+ every year on SaaS subscription overhead.</p>
+                    </div>
+
+                    <div className="divide-y divide-white/5 text-xs font-semibold">
+                        {comparison.map((c, idx) => (
+                            <div
+                                key={idx}
+                                className={`flex items-center justify-between py-3.5 px-3 rounded-xl ${
+                                    c.isTotal ? "bg-[#162331] font-black text-sm text-white" : "hover:bg-white/[0.02]"
+                                }`}
+                            >
+                                <span className={c.isTotal ? "text-[#00f0ff] uppercase" : "text-slate-300"}>
+                                    {c.feature}
+                                </span>
+                                <div className="flex items-center gap-8">
+                                    <span className="font-bold text-[#00e676]">
+                                        {typeof c.outsyra === "boolean" ? "Included ✓" : c.outsyra}
+                                    </span>
+                                    <span className={c.isTotal ? "text-rose-400" : "text-slate-500 line-through"}>
+                                        {c.others}
+                                    </span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="mt-8 text-center">
+                        <Link href="/dashboard">
+                            <Button variant="gradient" className="w-full sm:w-auto h-11 px-8 text-xs uppercase font-black tracking-wider">
+                                Switch to Outsyra Today
+                            </Button>
+                        </Link>
+                    </div>
+                </div>
+            </section>
+
+            {/* FAQ SECTION */}
+            <section className="py-16 px-6 max-w-3xl mx-auto">
+                <h2 className="text-xl sm:text-2xl font-black text-center uppercase tracking-tight text-white mb-8">
+                    Frequently Asked Questions
+                </h2>
+                <div className="space-y-3">
+                    {faqs.map((faq, idx) => (
+                        <div
+                            key={idx}
+                            onClick={() => setActiveFaq(activeFaq === idx ? null : idx)}
+                            className="glass-panel p-4 rounded-2xl border border-white/[0.08] cursor-pointer hover:border-[#00f0ff]/30 transition-all"
+                        >
+                            <div className="flex items-center justify-between">
+                                <h4 className="text-xs sm:text-sm font-bold text-white">{faq.q}</h4>
+                                <ChevronDown className={`h-4 w-4 text-slate-400 transition-transform ${activeFaq === idx ? "rotate-180 text-[#00f0ff]" : ""}`} />
+                            </div>
+                            {activeFaq === idx && (
+                                <p className="text-xs text-slate-300 mt-3 pt-3 border-t border-white/5 leading-relaxed">
+                                    {faq.a}
+                                </p>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            {/* FOOTER */}
+            <footer className="border-t border-white/[0.08] py-8 text-center text-xs text-slate-500 space-y-2">
+                <p className="font-bold text-white uppercase tracking-wider">OUTSYRA CREATOR OS</p>
+                <p>© 2026 Outsyra. All rights reserved.</p>
+            </footer>
+        </div>
+    );
 }

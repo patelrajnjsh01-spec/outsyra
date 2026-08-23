@@ -1,12 +1,127 @@
 "use client";
-import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import React, { useState } from "react";
 import Link from "next/link";
-import { Bell, Plus, Zap, ExternalLink, ChevronDown, } from "lucide-react";
+import { Bell, Plus, Zap, ExternalLink, ChevronDown, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+
 export function DashboardHeader({ title, subtitle }) {
     const [quickMenuOpen, setQuickMenuOpen] = useState(false);
     const [notifsOpen, setNotifsOpen] = useState(false);
-    return (_jsxs("header", { className: "sticky top-0 z-40 flex h-16 items-center justify-between border-b border-white/5 bg-zinc-950/80 px-6 backdrop-blur-xl", children: [_jsxs("div", { children: [_jsx("h1", { className: "text-lg font-semibold text-white tracking-tight", children: title }), subtitle && _jsx("p", { className: "text-xs text-zinc-400", children: subtitle })] }), _jsxs("div", { className: "flex items-center gap-3", children: [_jsx(Link, { href: "/public/rajnish", target: "_blank", children: _jsxs(Button, { variant: "outline", size: "sm", className: "hidden sm:flex gap-1.5 text-xs text-indigo-300 border-indigo-500/20 bg-indigo-500/5 hover:bg-indigo-500/10", children: [_jsx(Zap, { className: "h-3.5 w-3.5 text-indigo-400" }), "View Public Store", _jsx(ExternalLink, { className: "h-3 w-3 opacity-60" })] }) }), _jsxs("div", { className: "relative", children: [_jsxs(Button, { variant: "gradient", size: "sm", onClick: () => setQuickMenuOpen(!quickMenuOpen), className: "gap-1.5 text-xs shadow-md", children: [_jsx(Plus, { className: "h-4 w-4" }), _jsx("span", { children: "Create New" }), _jsx(ChevronDown, { className: "h-3 w-3 opacity-70" })] }), quickMenuOpen && (_jsxs("div", { className: "absolute right-0 mt-2 w-52 rounded-2xl border border-white/10 bg-zinc-950/95 p-1.5 shadow-2xl backdrop-blur-xl z-50 animate-in fade-in zoom-in-95", children: [_jsxs(Link, { href: "/products?action=new", onClick: () => setQuickMenuOpen(false), className: "flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-zinc-300 hover:text-white hover:bg-white/5 rounded-xl transition-colors", children: [_jsx("div", { className: "h-2 w-2 rounded-full bg-emerald-400" }), "Digital Product"] }), _jsxs(Link, { href: "/courses?action=new", onClick: () => setQuickMenuOpen(false), className: "flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-zinc-300 hover:text-white hover:bg-white/5 rounded-xl transition-colors", children: [_jsx("div", { className: "h-2 w-2 rounded-full bg-indigo-400" }), "Course / LMS"] }), _jsxs(Link, { href: "/calendar?action=new", onClick: () => setQuickMenuOpen(false), className: "flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-zinc-300 hover:text-white hover:bg-white/5 rounded-xl transition-colors", children: [_jsx("div", { className: "h-2 w-2 rounded-full bg-purple-400" }), "Booking Service"] }), _jsxs(Link, { href: "/email?action=new", onClick: () => setQuickMenuOpen(false), className: "flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-zinc-300 hover:text-white hover:bg-white/5 rounded-xl transition-colors", children: [_jsx("div", { className: "h-2 w-2 rounded-full bg-pink-400" }), "Email Broadcast"] })] }))] }), _jsxs("div", { className: "relative", children: [_jsxs("button", { onClick: () => setNotifsOpen(!notifsOpen), className: "relative flex h-9 w-9 items-center justify-center rounded-xl border border-white/5 bg-zinc-900/60 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors", children: [_jsx(Bell, { className: "h-4 w-4" }), _jsx("span", { className: "absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-indigo-500 ring-2 ring-zinc-950" })] }), notifsOpen && (_jsxs("div", { className: "absolute right-0 mt-2 w-80 rounded-2xl border border-white/10 bg-zinc-950/95 p-4 shadow-2xl backdrop-blur-xl z-50 animate-in fade-in zoom-in-95", children: [_jsxs("div", { className: "flex items-center justify-between pb-3 border-b border-white/5", children: [_jsx("span", { className: "text-xs font-semibold text-white", children: "Recent Activity" }), _jsx(Badge, { variant: "default", className: "text-[10px]", children: "3 New" })] }), _jsxs("div", { className: "py-2 space-y-3", children: [_jsxs("div", { className: "flex items-start gap-2.5 text-xs", children: [_jsx("div", { className: "h-2 w-2 rounded-full bg-emerald-400 mt-1.5" }), _jsxs("div", { children: [_jsx("p", { className: "text-zinc-200 font-medium", children: "New Order: $199.00" }), _jsx("p", { className: "text-[11px] text-zinc-500", children: "Sophia enrolled in Full-Stack Creator Academy" })] })] }), _jsxs("div", { className: "flex items-start gap-2.5 text-xs", children: [_jsx("div", { className: "h-2 w-2 rounded-full bg-indigo-400 mt-1.5" }), _jsxs("div", { children: [_jsx("p", { className: "text-zinc-200 font-medium", children: "New Booking: 30-Min Call" }), _jsx("p", { className: "text-[11px] text-zinc-500", children: "Liam booked for Tomorrow at 3:00 PM" })] })] }), _jsxs("div", { className: "flex items-start gap-2.5 text-xs", children: [_jsx("div", { className: "h-2 w-2 rounded-full bg-pink-400 mt-1.5" }), _jsxs("div", { children: [_jsx("p", { className: "text-zinc-200 font-medium", children: "Instagram Trigger Fired" }), _jsx("p", { className: "text-[11px] text-zinc-500", children: "Auto-DM sent for keyword \"EBOOK\"" })] })] })] })] }))] })] })] }));
+
+    return (
+        <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-white/[0.08] bg-[#0f1923]/90 px-6 backdrop-blur-2xl">
+            <div>
+                <h1 className="text-lg font-bold text-white tracking-tight flex items-center gap-2">
+                    {title}
+                </h1>
+                {subtitle && <p className="text-xs text-slate-400 font-medium">{subtitle}</p>}
+            </div>
+
+            <div className="flex items-center gap-3">
+                <Link href="/public/rajnish" target="_blank">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        className="hidden sm:flex gap-1.5 text-xs text-[#00f0ff] border-[#00f0ff]/20 bg-[#162331] hover:bg-[#1a2c3d]"
+                    >
+                        <Zap className="h-3.5 w-3.5 text-[#00f0ff]" />
+                        View Live Store
+                        <ExternalLink className="h-3 w-3 opacity-60" />
+                    </Button>
+                </Link>
+
+                <div className="relative">
+                    <Button
+                        variant="gradient"
+                        size="sm"
+                        onClick={() => setQuickMenuOpen(!quickMenuOpen)}
+                        className="gap-1.5 text-xs"
+                    >
+                        <Plus className="h-4 w-4" />
+                        <span>Create</span>
+                        <ChevronDown className="h-3 w-3 opacity-70" />
+                    </Button>
+
+                    {quickMenuOpen && (
+                        <div className="absolute right-0 mt-2 w-56 rounded-2xl border border-white/10 bg-[#0f1923]/95 p-2 shadow-2xl backdrop-blur-2xl z-50 animate-in fade-in zoom-in-95 space-y-1">
+                            <Link
+                                href="/products?action=new"
+                                onClick={() => setQuickMenuOpen(false)}
+                                className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-slate-200 hover:text-white hover:bg-[#162331] rounded-xl transition-colors"
+                            >
+                                <div className="h-2 w-2 rounded-full bg-[#00e676]" />
+                                Digital Product
+                            </Link>
+                            <Link
+                                href="/courses?action=new"
+                                onClick={() => setQuickMenuOpen(false)}
+                                className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-slate-200 hover:text-white hover:bg-[#162331] rounded-xl transition-colors"
+                            >
+                                <div className="h-2 w-2 rounded-full bg-[#00f0ff]" />
+                                Course / LMS
+                            </Link>
+                            <Link
+                                href="/calendar?action=new"
+                                onClick={() => setQuickMenuOpen(false)}
+                                className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-slate-200 hover:text-white hover:bg-[#162331] rounded-xl transition-colors"
+                            >
+                                <div className="h-2 w-2 rounded-full bg-[#8b5cf6]" />
+                                Booking Service
+                            </Link>
+                            <Link
+                                href="/email?action=new"
+                                onClick={() => setQuickMenuOpen(false)}
+                                className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-slate-200 hover:text-white hover:bg-[#162331] rounded-xl transition-colors"
+                            >
+                                <div className="h-2 w-2 rounded-full bg-[#fbbf24]" />
+                                Email Broadcast
+                            </Link>
+                        </div>
+                    )}
+                </div>
+
+                <div className="relative">
+                    <button
+                        onClick={() => setNotifsOpen(!notifsOpen)}
+                        className="relative flex h-9 w-9 items-center justify-center rounded-xl border border-white/5 bg-[#162331] text-slate-400 hover:text-white hover:bg-[#1a2c3d] transition-colors"
+                    >
+                        <Bell className="h-4 w-4" />
+                        <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-[#00f0ff] ring-2 ring-[#0f1923]" />
+                    </button>
+
+                    {notifsOpen && (
+                        <div className="absolute right-0 mt-2 w-80 rounded-2xl border border-white/10 bg-[#0f1923]/95 p-4 shadow-2xl backdrop-blur-2xl z-50 animate-in fade-in zoom-in-95">
+                            <div className="flex items-center justify-between pb-3 border-b border-white/5">
+                                <span className="text-xs font-bold text-white">Live Alerts</span>
+                                <Badge variant="default" className="text-[10px]">
+                                    3 New
+                                </Badge>
+                            </div>
+                            <div className="py-2 space-y-3">
+                                <div className="flex items-start gap-2.5 text-xs">
+                                    <div className="h-2 w-2 rounded-full bg-[#00e676] mt-1.5" />
+                                    <div>
+                                        <p className="text-slate-200 font-semibold">New Sale: +$199.00</p>
+                                        <p className="text-[11px] text-slate-400">
+                                            Sophia enrolled in Creator Masterclass
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-2.5 text-xs">
+                                    <div className="h-2 w-2 rounded-full bg-[#00f0ff] mt-1.5" />
+                                    <div>
+                                        <p className="text-slate-200 font-semibold">New Booking: 30-Min Call</p>
+                                        <p className="text-[11px] text-slate-400">
+                                            Liam booked for Tomorrow at 3:00 PM
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </div>
+        </header>
+    );
 }
