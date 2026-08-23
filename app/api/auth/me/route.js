@@ -1,22 +1,22 @@
 import { NextResponse } from "next/server";
-import { verifySessionToken } from "@/lib/auth/security";
-import { findUserByEmail, findUserById } from "@/lib/auth/db-service";
+import { verifySessionToken } from "@/lib/auth/security.js";
+import { findUserByEmail, findUserById } from "@/lib/auth/db-service.js";
 
 export async function GET(request) {
     try {
         const token = request.cookies.get("auth_token")?.value;
         if (!token) {
-            return NextResponse.json({ authenticated: false, user: null }, { status: 401 });
+            return NextResponse.json({ authenticated: false, user: null }, { status: 200 });
         }
 
         const payload = await verifySessionToken(token);
         if (!payload || !payload.email) {
-            return NextResponse.json({ authenticated: false, user: null }, { status: 401 });
+            return NextResponse.json({ authenticated: false, user: null }, { status: 200 });
         }
 
         const user = (await findUserByEmail(payload.email)) || (await findUserById(payload.userId));
         if (!user) {
-            return NextResponse.json({ authenticated: false, user: null }, { status: 401 });
+            return NextResponse.json({ authenticated: false, user: null }, { status: 200 });
         }
 
         return NextResponse.json({
@@ -35,6 +35,6 @@ export async function GET(request) {
         });
     } catch (err) {
         console.error("Auth me check error:", err.message);
-        return NextResponse.json({ authenticated: false, user: null }, { status: 401 });
+        return NextResponse.json({ authenticated: false, user: null }, { status: 200 });
     }
 }
