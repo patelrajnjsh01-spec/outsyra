@@ -1,90 +1,118 @@
 import { NextResponse } from "next/server";
-import { findUserByEmail, createUser, linkGoogleAccount } from "@/lib/auth/db-service";
-import { createSessionToken } from "@/lib/auth/security";
+import { findUserByEmail, createUser, linkGoogleAccount } from "@/lib/auth/db-service.js";
+import { createSessionToken } from "@/lib/auth/security.js";
 
 export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const code = searchParams.get("code");
+    const state = searchParams.get("state");
     const error = searchParams.get("error");
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || new URL(request.url).origin;
 
+    // 1. Handle user cancellation or provider error
     if (error || !code) {
-        return NextResponse.redirect(`${appUrl}/login?error=oauth_cancelled`);
+        console.error("Google OAuth callback returned error:", error);
+        return NextResponse.redirect(`${appUrl}/auth/callback?error=oauth_cancelled`);
+    }
+
+    // 2. CSRF State Verification
+    const savedState = request.cookies.get("oauth_state")?.value;
+    if (!savedState || savedState !== state) {
+        console.error("Google OAuth state mismatch (CSRF protection)");
+        return NextResponse.redirect(`${appUrl}/auth/callback?error=state_mismatch`);
+    }
+
+    const clientId = process.env.GOOGLE_CLIENT_ID;
+    const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+    const redirectUri = `${appUrl}/api/auth/google/callback`;
+
+    if (!clientId || !clientSecret || clientId.includes("your-google-client-id")) {
+        return NextResponse.redirect(`${appUrl}/auth/callback?error=google_oauth_not_configured`);
     }
 
     try {
-        let googleUser = {
-            id: "g_1082938472918374",
-            email: "creator.google@outsyra.com",
-            name: "Verified Google Creator",
-            picture: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=160&auto=format&fit=crop&q=80",
-        };
+        // 3. Exchange Authorization Code for Access & ID Tokens with Google
+        const tokenResponse = await fetch("https://oauth2.googleapis.com/token", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams({
+                code,
+                client_id: clientId,
+                client_secret: clientSecret,
+                redirect_uri: redirectUri,
+                grant_type: "authorization_code",
+            }),
+        });
 
-        const clientId = process.env.GOOGLE_CLIENT_ID;
-        const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+        const tokenData = await tokenResponse.json();
 
-        // Exchange real token if client credentials exist
-        if (clientId && clientSecret && !clientId.includes("your-google-client-id") && code !== "demo_google_auth_code") {
-            const redirectUri = `${appUrl}/api/auth/google/callback`;
-            const tokenRes = await fetch("https://oauth2.googleapis.com/token", {
-                method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: new URLSearchParams({
-                    code,
-                    client_id: clientId,
-                    client_secret: clientSecret,
-                    redirect_uri: redirectUri,
-                    grant_type: "authorization_code",
-                }),
-            });
-
-            const tokenData = await tokenRes.json();
-            if (tokenData.access_token) {
-                const userRes = await fetch("https://www.googleapis.com/oauth2/v2/userinfo", {
-                    headers: { Authorization: `Bearer ${tokenData.access_token}` },
-                });
-                const userData = await userRes.json();
-                if (userData.email) {
-                    googleUser = {
-                        id: userData.id,
-                        email: userData.email,
-                        name: userData.name || "Google Creator",
-                        picture: userData.picture || "",
-                    };
-                }
-            }
+        if (!tokenResponse.ok || !tokenData.access_token) {
+            console.error("Failed to exchange code with Google:", tokenData);
+            return NextResponse.redirect(`${appUrl}/auth/callback?error=token_exchange_failed`);
         }
 
-        // Account linking / lookup
-        let user = await findUserByEmail(googleUser.email);
+        // 4. Fetch Verified User Identity from Google
+        const userInfoResponse = await fetch("https://www.googleapis.com/oauth2/v2/userinfo", {
+            headers: { Authorization: `Bearer ${tokenData.access_token}` },
+        });
+
+        const googleUser = await userInfoResponse.json();
+
+        if (!userInfoResponse.ok || !googleUser.email || !googleUser.id) {
+            console.error("Failed to fetch verified user info from Google:", googleUser);
+            return NextResponse.redirect(`${appUrl}/auth/callback?error=userinfo_failed`);
+        }
+
+        const verifiedEmail = googleUser.email.toLowerCase().trim();
+        const verifiedName = googleUser.name || googleUser.given_name || "Google Creator";
+        const verifiedAvatar = googleUser.picture || "";
+        const googleId = String(googleUser.id);
+
+        // 5. Database Find or Create User
+        let user = await findUserByEmail(verifiedEmail);
+
         if (user) {
-            user = await linkGoogleAccount(user.email, googleUser.id, googleUser.picture);
+            // Link Google account to existing user
+            user = await linkGoogleAccount(verifiedEmail, googleId, verifiedAvatar);
         } else {
+            // Create new verified user record
             user = await createUser({
-                name: googleUser.name,
-                email: googleUser.email,
-                password_hash: "", // OAuth user
+                name: verifiedName,
+                email: verifiedEmail,
+                password_hash: "", // OAuth accounts do not use passwords
                 email_verified: true,
-                avatar: googleUser.picture,
+                avatar: verifiedAvatar,
                 auth_provider: "google",
-                google_id: googleUser.id,
+                google_id: googleId,
             });
         }
 
-        // Generate JWT session token & set HTTP-only cookie
-        const token = await createSessionToken(user);
-        const response = NextResponse.redirect(`${appUrl}/dashboard`);
-        response.cookies.set("auth_token", token, {
+        // 6. Create Secure JWT Session Token
+        const sessionToken = await createSessionToken(user);
+
+        // 7. Redirect to Frontend Callback & Set HTTP-Only Session Cookie
+        const response = NextResponse.redirect(`${appUrl}/auth/callback`);
+
+        response.cookies.set("auth_token", sessionToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "lax",
-            maxAge: 7 * 24 * 60 * 60,
+            maxAge: 7 * 24 * 60 * 60, // 7 days
+            path: "/",
+        });
+
+        // Clear temporary CSRF state cookie
+        response.cookies.set("oauth_state", "", {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+            maxAge: 0,
             path: "/",
         });
 
         return response;
     } catch (err) {
-        console.error("Google OAuth callback error:", err.message);
-        return NextResponse.redirect(`${appUrl}/login?error=oauth_failed`);
+        console.error("Google OAuth processing error:", err);
+        return NextResponse.redirect(`${appUrl}/auth/callback?error=oauth_processing_failed`);
     }
 }

@@ -1,6 +1,7 @@
 import "./globals.css";
 import Script from "next/script";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import { AuthProvider } from "@/components/providers/AuthProvider";
 
 export const metadata = {
   title: "Outsyra — The Operating System for Creator Businesses",
@@ -83,7 +84,9 @@ export default function RootLayout({ children }) {
         )}
       </head>
       <body className="min-h-screen bg-background text-foreground font-sans antialiased selection:bg-indigo-500 selection:text-white transition-colors duration-200">
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
