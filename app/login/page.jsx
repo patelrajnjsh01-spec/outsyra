@@ -99,25 +99,6 @@ function LoginForm() {
                 <div className="border-t border-zinc-200 dark:border-white/10 w-full" />
             </div>
 
-            <div className="p-3 rounded-2xl bg-indigo-500/5 dark:bg-indigo-500/10 border border-indigo-500/20 text-xs flex items-center justify-between gap-3">
-                <div className="space-y-0.5 text-left">
-                    <p className="font-bold text-zinc-900 dark:text-zinc-100 text-[11px]">Demo Studio Access</p>
-                    <p className="text-[11px] text-zinc-500 dark:text-zinc-400">
-                        rajnish@outsyra.com • Password@123
-                    </p>
-                </div>
-                <button
-                    type="button"
-                    onClick={() => {
-                        setEmail("rajnish@outsyra.com");
-                        setPassword("Password@123");
-                    }}
-                    className="px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-bold shrink-0 transition-colors shadow-sm"
-                >
-                    Auto-Fill
-                </button>
-            </div>
-
             {error && (
                 <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-xs font-semibold flex items-center gap-2 animate-in fade-in">
                     <AlertCircle className="h-4 w-4 shrink-0" />

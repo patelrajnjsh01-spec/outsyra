@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { findUserByEmail, createUser, linkGoogleAccount } from "@/lib/auth/db-service.js";
+import { findOrCreateGoogleUser } from "@/lib/auth/db-service.js";
 import { createSessionToken } from "@/lib/auth/security.js";
 
 export async function GET(request) {
@@ -24,7 +24,7 @@ export async function GET(request) {
 
     const clientId = process.env.GOOGLE_CLIENT_ID;
     const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
-    const redirectUri = `${appUrl}/api/auth/google/callback`;
+    const redirectUri = process.env.GOOGLE_CALLBACK_URL || `${appUrl}/api/auth/google/callback`;
 
     if (!clientId || !clientSecret || clientId.includes("your-google-client-id")) {
         return NextResponse.redirect(`${appUrl}/auth/callback?error=google_oauth_not_configured`);
@@ -58,7 +58,7 @@ export async function GET(request) {
 
         const googleUser = await userInfoResponse.json();
 
-        if (!userInfoResponse.ok || !googleUser.email || !googleUser.id) {
+        if (!userInfoResponse.ok || !googleUser.email || !googleUser.id || googleUser.verified_email !== true) {
             console.error("Failed to fetch verified user info from Google:", googleUser);
             return NextResponse.redirect(`${appUrl}/auth/callback?error=userinfo_failed`);
         }
@@ -68,24 +68,13 @@ export async function GET(request) {
         const verifiedAvatar = googleUser.picture || "";
         const googleId = String(googleUser.id);
 
-        // 5. Database Find or Create User
-        let user = await findUserByEmail(verifiedEmail);
-
-        if (user) {
-            // Link Google account to existing user
-            user = await linkGoogleAccount(verifiedEmail, googleId, verifiedAvatar);
-        } else {
-            // Create new verified user record
-            user = await createUser({
-                name: verifiedName,
-                email: verifiedEmail,
-                password_hash: "", // OAuth accounts do not use passwords
-                email_verified: true,
-                avatar: verifiedAvatar,
-                auth_provider: "google",
-                google_id: googleId,
-            });
-        }
+        // 5. Persist the verified identity before creating a session.
+        const user = await findOrCreateGoogleUser({
+            googleId,
+            email: verifiedEmail,
+            name: verifiedName,
+            avatar: verifiedAvatar,
+        });
 
         // 6. Create Secure JWT Session Token
         const sessionToken = await createSessionToken(user);

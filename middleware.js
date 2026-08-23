@@ -24,7 +24,6 @@ const authOnlyPrefixes = ["/login", "/signup", "/verify-otp", "/forgot-password"
 export async function middleware(request) {
     const { pathname } = request.nextUrl;
     const token = request.cookies.get("auth_token")?.value;
-    const supabaseToken = request.cookies.get("sb-access-token")?.value || request.cookies.get("sb-refresh-token")?.value;
 
     const isProtected = protectedPrefixes.some((prefix) => pathname.startsWith(prefix));
     const isAuthOnly = authOnlyPrefixes.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`));
@@ -36,8 +35,6 @@ export async function middleware(request) {
         if (payload) {
             isAuthenticated = true;
         }
-    } else if (supabaseToken) {
-        isAuthenticated = true;
     }
 
     // 1. Redirect unauthenticated user trying to access protected routes

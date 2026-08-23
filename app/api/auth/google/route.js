@@ -5,7 +5,7 @@ export async function GET(request) {
     const clientId = process.env.GOOGLE_CLIENT_ID;
     const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || new URL(request.url).origin;
-    const redirectUri = `${appUrl}/api/auth/google/callback`;
+    const redirectUri = process.env.GOOGLE_CALLBACK_URL || `${appUrl}/api/auth/google/callback`;
 
     // Strict validation: Do not fake or bypass if credentials are not configured
     if (!clientId || !clientSecret || clientId.includes("your-google-client-id") || clientSecret.includes("your-google-client-secret")) {
