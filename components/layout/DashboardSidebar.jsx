@@ -161,16 +161,31 @@ export function DashboardSidebar() {
                     <ExternalLink className="h-3.5 w-3.5 opacity-70 group-hover:opacity-100" />
                 </Link>
 
-                <div className="flex items-center gap-2.5 px-1">
-                    <img
-                        src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&auto=format&fit=crop&q=80"
-                        alt="Rajnish Sharma"
-                        className="h-8 w-8 rounded-full object-cover ring-2 ring-indigo-500/30"
-                    />
-                    <div className="flex-1 min-w-0">
-                        <p className="text-xs font-bold text-zinc-900 dark:text-white truncate">Rajnish Sharma</p>
-                        <p className="text-[10px] text-zinc-500 truncate">rajnish@outsyra.com</p>
+                <div className="flex items-center justify-between gap-2 px-1">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                        <img
+                            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&auto=format&fit=crop&q=80"
+                            alt="Rajnish Sharma"
+                            className="h-8 w-8 rounded-full object-cover ring-2 ring-indigo-500/30"
+                        />
+                        <div className="flex-1 min-w-0">
+                            <p className="text-xs font-bold text-zinc-900 dark:text-white truncate">Rajnish Sharma</p>
+                            <p className="text-[10px] text-zinc-500 truncate">rajnish@outsyra.com</p>
+                        </div>
                     </div>
+                    <button
+                        onClick={async () => {
+                            await fetch("/api/auth/logout", { method: "POST" });
+                            window.location.href = "/login";
+                        }}
+                        title="Sign Out"
+                        className="p-1.5 rounded-lg text-zinc-400 hover:text-rose-500 hover:bg-rose-500/10 transition-colors"
+                        aria-label="Sign Out"
+                    >
+                        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                    </button>
                 </div>
             </div>
         </aside>

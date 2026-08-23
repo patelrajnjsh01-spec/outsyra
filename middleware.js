@@ -1,45 +1,60 @@
-import { createServerClient } from "@supabase/ssr";
 import { NextResponse } from "next/server";
+import { verifySessionTokenEdge } from "@/lib/auth/edge-jwt";
 
-const protectedPrefixes = ["/dashboard", "/admin", "/analytics", "/billing", "/bookings", "/calendar", "/coaching", "/community", "/courses", "/email", "/instagram", "/products", "/settings", "/store", "/templates"];
+const protectedPrefixes = [
+    "/dashboard",
+    "/admin",
+    "/analytics",
+    "/billing",
+    "/bookings",
+    "/calendar",
+    "/coaching",
+    "/community",
+    "/courses",
+    "/email",
+    "/instagram",
+    "/products",
+    "/settings",
+    "/store",
+    "/templates",
+];
+
+const authOnlyPrefixes = ["/login", "/signup", "/verify-otp", "/forgot-password", "/reset-password"];
 
 export async function middleware(request) {
-  const isProtected = protectedPrefixes.some((prefix) => request.nextUrl.pathname.startsWith(prefix));
-  if (!isProtected) return NextResponse.next();
+    const { pathname } = request.nextUrl;
+    const token = request.cookies.get("auth_token")?.value;
+    const supabaseToken = request.cookies.get("sb-access-token")?.value || request.cookies.get("sb-refresh-token")?.value;
 
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  const isConfigured = url && key && !url.includes("your-project-id") && !key.includes("your-supabase");
+    const isProtected = protectedPrefixes.some((prefix) => pathname.startsWith(prefix));
+    const isAuthOnly = authOnlyPrefixes.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`));
 
-  if (!isConfigured) {
-    // In preview / demo mode without active Supabase credentials, allow full access to explore the app
-    return NextResponse.next();
-  }
-
-  let response = NextResponse.next({ request });
-  try {
-    const supabase = createServerClient(url, key, {
-      cookies: {
-        getAll: () => request.cookies.getAll(),
-        setAll: (cookiesToSet) => {
-          cookiesToSet.forEach(({ name, value, options }) => {
-            request.cookies.set(name, value);
-            response.cookies.set(name, value, options);
-          });
-        },
-      },
-    });
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-      const loginUrl = new URL("/login", request.url);
-      loginUrl.searchParams.set("next", request.nextUrl.pathname);
-      return NextResponse.redirect(loginUrl);
+    // Verify session
+    let isAuthenticated = false;
+    if (token) {
+        const payload = await verifySessionTokenEdge(token);
+        if (payload) {
+            isAuthenticated = true;
+        }
+    } else if (supabaseToken) {
+        isAuthenticated = true;
     }
-  } catch (err) {
-    // Network or fetch failure with Supabase - allow proceed in demo mode
+
+    // 1. Redirect unauthenticated user trying to access protected routes
+    if (isProtected && !isAuthenticated) {
+        const loginUrl = new URL("/login", request.url);
+        loginUrl.searchParams.set("next", pathname);
+        return NextResponse.redirect(loginUrl);
+    }
+
+    // 2. Redirect already authenticated user away from login/signup pages
+    if (isAuthOnly && isAuthenticated && pathname !== "/verify-otp") {
+        return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
+
     return NextResponse.next();
-  }
-  return response;
 }
 
-export const config = { matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"] };
+export const config = {
+    matcher: ["/((?!_next/static|_next/image|favicon.ico|assets|api/auth).*)"],
+};
