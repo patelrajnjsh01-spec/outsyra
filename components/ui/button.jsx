@@ -3,26 +3,30 @@ import { cva } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-    "inline-flex items-center justify-center whitespace-nowrap rounded-xl text-sm font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00f0ff] disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]",
+    "inline-flex items-center justify-center whitespace-nowrap rounded-xl text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]",
     {
         variants: {
             variant: {
                 default:
-                    "bg-[#00f0ff] text-[#090e15] font-bold shadow-lg shadow-[#00f0ff]/20 hover:bg-[#38f4ff] hover:shadow-[#00f0ff]/35",
+                    "bg-indigo-600 hover:bg-indigo-500 text-white shadow-md shadow-indigo-600/25 hover:shadow-indigo-600/35",
                 gradient:
-                    "bg-gradient-to-r from-[#00b4db] to-[#0083b0] hover:from-[#00c6ff] hover:to-[#0072ff] text-white font-bold shadow-lg shadow-[#00b4db]/30 hover:shadow-[#00c6ff]/45",
-                destructive: "bg-rose-600 text-white shadow-sm hover:bg-rose-500",
+                    "bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:opacity-95 text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/35",
                 outline:
-                    "border border-white/10 bg-[#162331]/80 hover:bg-[#1a2c3d] hover:border-[#00f0ff]/40 hover:text-white text-slate-200 backdrop-blur-sm shadow-sm",
-                secondary: "bg-[#1a2c3d] text-slate-100 shadow-sm hover:bg-[#22394f] border border-white/5",
-                ghost: "hover:bg-white/5 hover:text-white text-slate-400",
-                link: "text-[#00f0ff] underline-offset-4 hover:underline",
+                    "border border-zinc-200 dark:border-white/10 bg-white/80 dark:bg-white/5 hover:bg-zinc-100 dark:hover:bg-white/10 text-zinc-900 dark:text-zinc-100 backdrop-blur-sm shadow-sm",
+                secondary:
+                    "bg-zinc-100 dark:bg-zinc-800/80 hover:bg-zinc-200 dark:hover:bg-zinc-700/80 text-zinc-900 dark:text-zinc-100 border border-zinc-200/60 dark:border-white/5 shadow-sm",
+                destructive:
+                    "bg-rose-600 hover:bg-rose-500 text-white shadow-sm",
+                ghost:
+                    "hover:bg-zinc-100 dark:hover:bg-white/5 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white",
+                link:
+                    "text-indigo-600 dark:text-indigo-400 underline-offset-4 hover:underline",
             },
             size: {
                 default: "h-10 px-4 py-2",
                 sm: "h-8 rounded-lg px-3 text-xs",
-                lg: "h-12 rounded-xl px-8 text-base font-bold",
-                icon: "h-10 w-10",
+                lg: "h-12 rounded-xl px-7 text-sm font-bold",
+                icon: "h-9 w-9",
             },
         },
         defaultVariants: {

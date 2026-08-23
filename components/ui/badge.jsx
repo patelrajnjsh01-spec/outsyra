@@ -3,19 +3,22 @@ import { cva } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
-    "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold tracking-wide transition-colors focus:outline-none focus:ring-2 focus:ring-[#00f0ff] focus:ring-offset-2",
+    "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold tracking-wide transition-colors",
     {
         variants: {
             variant: {
                 default:
-                    "border-[#00f0ff]/30 bg-[#00f0ff]/10 text-[#00f0ff] shadow-[0_0_12px_rgba(0,240,255,0.15)]",
-                secondary: "border-white/10 bg-[#162331] text-slate-300",
-                destructive: "border-rose-500/20 bg-rose-500/10 text-rose-400",
-                success: "border-emerald-500/30 bg-emerald-500/10 text-emerald-400 shadow-[0_0_12px_rgba(0,230,118,0.15)]",
-                gold: "border-amber-500/30 bg-amber-500/10 text-amber-400 shadow-[0_0_12px_rgba(251,191,36,0.15)]",
-                outline: "border-white/10 text-slate-300 bg-transparent",
+                    "border-indigo-500/30 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400",
+                secondary:
+                    "border-zinc-200 dark:border-white/10 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300",
+                success:
+                    "border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+                destructive:
+                    "border-rose-500/30 bg-rose-500/10 text-rose-600 dark:text-rose-400",
+                outline:
+                    "border-zinc-300 dark:border-white/10 text-zinc-700 dark:text-zinc-300",
                 gradient:
-                    "border-[#00f0ff]/40 bg-gradient-to-r from-[#00f0ff]/15 via-[#3b82f6]/15 to-[#8b5cf6]/15 text-[#00f0ff] shadow-[0_0_14px_rgba(0,240,255,0.2)]",
+                    "border-indigo-500/40 bg-gradient-to-r from-indigo-500/15 via-purple-500/15 to-pink-500/15 text-indigo-600 dark:text-indigo-300",
             },
         },
         defaultVariants: {

@@ -4,119 +4,121 @@
 
 @layer base {
   :root {
-    --background: 215 40% 6%;      /* #090e15 - Clutch Deep Void */
-    --foreground: 210 40% 98%;     /* #f8fafc */
-    --card: 212 38% 14%;           /* #162331 - Clutch Panel */
-    --card-foreground: 210 40% 98%;
-    --popover: 215 40% 10%;        /* #0f1923 - Clutch Navy */
-    --popover-foreground: 210 40% 98%;
-    --primary: 184 100% 50%;       /* #00f0ff - Electric Cyan */
-    --primary-foreground: 215 40% 6%;
-    --secondary: 214 32% 17%;      /* #1a2c3d - Elevated Navy */
-    --secondary-foreground: 210 40% 98%;
-    --muted: 214 32% 17%;
-    --muted-foreground: 215 20% 65%; /* #94a3b8 */
-    --accent: 184 100% 50%;
-    --accent-foreground: 215 40% 6%;
+    /* Light Theme (Warm Pearl / High-Contrast Slate) */
+    --background: 210 40% 98%;          /* #f8fafc */
+    --foreground: 222 47% 11%;          /* #0f172a */
+    --card: 0 0% 100%;                  /* #ffffff */
+    --card-foreground: 222 47% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    --primary: 239 84% 67%;             /* #6366f1 Indigo Accent */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 40% 96.1%;         /* #f1f5f9 */
+    --secondary-foreground: 222 47% 11%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215 16% 47%;    /* #64748b */
+    --accent: 239 84% 67%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 215 25% 20%;
-    --input: 214 32% 17%;
-    --ring: 184 100% 50%;
+    --border: 214 32% 91%;              /* #e2e8f0 */
+    --input: 214 32% 91%;
+    --ring: 239 84% 67%;
     --radius: 0.875rem;
   }
 
   .dark {
-    --background: 215 40% 6%;
-    --foreground: 210 40% 98%;
-    --card: 212 38% 14%;
+    /* Dark Theme (Deep Charcoal Obsidian) */
+    --background: 225 25% 6%;           /* #08090d */
+    --foreground: 210 40% 98%;          /* #f8fafc */
+    --card: 224 22% 10%;                /* #0f1117 */
     --card-foreground: 210 40% 98%;
-    --popover: 215 40% 10%;
+    --popover: 224 22% 10%;
     --popover-foreground: 210 40% 98%;
-    --primary: 184 100% 50%;
-    --primary-foreground: 215 40% 6%;
-    --secondary: 214 32% 17%;
+    --primary: 239 84% 67%;             /* #6366f1 Indigo Accent */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 224 18% 14%;           /* #161922 */
     --secondary-foreground: 210 40% 98%;
-    --muted: 214 32% 17%;
-    --muted-foreground: 215 20% 65%;
-    --accent: 184 100% 50%;
-    --accent-foreground: 215 40% 6%;
+    --muted: 224 18% 14%;
+    --muted-foreground: 215 20% 65%;    /* #94a3b8 */
+    --accent: 239 84% 67%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 215 25% 20%;
-    --input: 214 32% 17%;
-    --ring: 184 100% 50%;
+    --border: 225 15% 18%;              /* rgba(255,255,255,0.08) */
+    --input: 224 18% 14%;
+    --ring: 239 84% 67%;
   }
 }
 
 * {
-  border-color: rgba(255, 255, 255, 0.08);
+  border-color: hsl(var(--border));
 }
 
 body {
-  background-color: #090e15;
-  color: #f1f5f9;
-  font-family: 'Rubik', -apple-system, BlinkMacSystemFont, sans-serif;
-  letter-spacing: -0.01em;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: -0.015em;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Clutch Glassmorphism & Cyber Card Styling */
-.glass-panel {
-  background: rgba(22, 35, 49, 0.75);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+/* Glassmorphic Surfaces */
+.glass-card {
+  background-color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+.dark .glass-card {
+  background-color: rgba(15, 17, 23, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.07);
 }
 
-.glass-panel-elevated {
-  background: rgba(26, 44, 61, 0.85);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(0, 240, 255, 0.15);
-  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
-}
-
-.glass-panel-hover {
+.glass-card-hover {
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.glass-panel-hover:hover {
-  background: rgba(26, 44, 61, 0.95);
-  border-color: rgba(0, 240, 255, 0.35);
-  box-shadow: 0 12px 36px -8px rgba(0, 240, 255, 0.18), 0 0 20px 0 rgba(0, 240, 255, 0.08);
+.glass-card-hover:hover {
   transform: translateY(-2px);
+  border-color: rgba(99, 102, 241, 0.35);
+  box-shadow: 0 12px 30px -10px rgba(99, 102, 241, 0.15);
 }
 
-/* Clutch Electric Cyan & Sunset Gradients */
-.gradient-text {
-  background: linear-gradient(135deg, #00f0ff 0%, #3b82f6 50%, #8b5cf6 100%);
+/* Subtle Gradient Text */
+.gradient-text-primary {
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.gradient-text-emerald {
-  background: linear-gradient(135deg, #00e676 0%, #10b981 50%, #00f0ff 100%);
+.gradient-text-cyan {
+  background: linear-gradient(135deg, #00d2ff 0%, #3b82f6 50%, #6366f1 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.grid-bg {
-  background-image: radial-gradient(rgba(0, 240, 255, 0.08) 1px, transparent 1px);
-  background-size: 32px 32px;
+/* Cyber Matrix Background Grid */
+.grid-pattern {
+  background-image: radial-gradient(rgba(99, 102, 241, 0.12) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+.dark .grid-pattern {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px);
 }
 
+/* Modern Scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #090e15;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1a2c3d;
+  background: rgba(148, 163, 184, 0.3);
   border-radius: 9999px;
-  border: 1px solid rgba(0, 240, 255, 0.1);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #00f0ff;
+  background: rgba(99, 102, 241, 0.6);
 }

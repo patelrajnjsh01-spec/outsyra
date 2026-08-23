@@ -1,108 +1,158 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { Zap, Menu, X, ArrowRight, Sparkles } from "lucide-react";
+import { Sparkles, Menu, X, ArrowRight, Zap, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 export function Navbar() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 20);
+        };
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
 
     return (
-        <header className="sticky top-0 z-50 w-full border-b border-white/[0.08] bg-[#0f1923]/90 backdrop-blur-2xl">
+        <header
+            className={`sticky top-0 z-50 w-full transition-all duration-200 ${
+                scrolled
+                    ? "bg-white/80 dark:bg-[#08090d]/85 backdrop-blur-xl border-b border-zinc-200/80 dark:border-white/[0.08] shadow-sm"
+                    : "bg-transparent border-b border-transparent"
+            }`}
+        >
             <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3.5">
+                {/* Brand Logo */}
                 <Link href="/" className="flex items-center gap-2.5 group">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-[#00c6ff] via-[#0072ff] to-[#00f0ff] p-0.5 shadow-[0_0_15px_rgba(0,198,255,0.35)] group-hover:scale-105 transition-transform">
-                        <div className="w-full h-full bg-[#0f1923] rounded-[10px] flex items-center justify-center">
-                            <Zap className="h-4 w-4 text-[#00f0ff] stroke-[2.5]" />
-                        </div>
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-purple-600 shadow-md shadow-indigo-500/20 group-hover:scale-105 transition-transform">
+                        <Sparkles className="h-4 w-4 text-white" />
                     </div>
-                    <span className="text-xl font-extrabold tracking-tight text-white flex items-center gap-1.5 uppercase font-sans">
-                        OUTSYRA
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#00f0ff]/15 text-[#00f0ff] border border-[#00f0ff]/30 tracking-wider">
-                            STUDIO
+                    <div className="flex items-center gap-2">
+                        <span className="text-xl font-bold tracking-tight text-zinc-900 dark:text-white">
+                            Outsyra
                         </span>
-                    </span>
+                        <span className="hidden sm:inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20">
+                            Creator OS
+                        </span>
+                    </div>
                 </Link>
 
-                <nav className="hidden md:flex items-center gap-8 text-xs font-bold uppercase tracking-wider text-slate-400">
-                    <Link href="/landing" className="hover:text-white transition-colors">
-                        Platform
+                {/* Desktop Nav Links */}
+                <nav className="hidden md:flex items-center gap-7 text-xs font-semibold text-zinc-600 dark:text-zinc-400">
+                    <Link href="/#features" className="hover:text-zinc-900 dark:hover:text-white transition-colors">
+                        Features
                     </Link>
-                    <Link href="/pricing" className="hover:text-white transition-colors">
+                    <Link href="/#ecosystem" className="hover:text-zinc-900 dark:hover:text-white transition-colors">
+                        Ecosystem
+                    </Link>
+                    <Link href="/#demo" className="hover:text-zinc-900 dark:hover:text-white transition-colors">
+                        Interactive Demo
+                    </Link>
+                    <Link href="/#pricing" className="hover:text-zinc-900 dark:hover:text-white transition-colors">
                         Pricing
                     </Link>
-                    <Link href="/templates" className="hover:text-white transition-colors">
-                        Templates
+                    <Link href="/#faq" className="hover:text-zinc-900 dark:hover:text-white transition-colors">
+                        FAQ
                     </Link>
                     <Link
                         href="/public/rajnish"
-                        className="hover:text-[#00f0ff] text-[#00f0ff]/90 transition-colors flex items-center gap-1.5"
+                        target="_blank"
+                        className="flex items-center gap-1.5 text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 font-bold"
                     >
-                        <span className="h-2 w-2 rounded-full bg-[#00e676] animate-pulse" />
-                        Live Demo Store
+                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        Live Store
+                        <ExternalLink className="h-3 w-3 opacity-70" />
                     </Link>
                 </nav>
 
+                {/* Right Side: Theme Switcher + Auth CTAs */}
                 <div className="hidden md:flex items-center gap-3">
+                    <ThemeToggle />
                     <Link href="/login">
-                        <Button variant="ghost" className="text-xs font-bold text-slate-300 hover:text-white">
+                        <Button variant="ghost" size="sm" className="text-xs font-semibold">
                             Log in
                         </Button>
                     </Link>
                     <Link href="/dashboard">
-                        <Button variant="gradient" size="sm" className="gap-2 text-xs">
-                            Launch Studio <ArrowRight className="h-4 w-4" />
+                        <Button variant="gradient" size="sm" className="gap-1.5 text-xs font-bold shadow-md">
+                            <span>Start Building Free</span>
+                            <ArrowRight className="h-3.5 w-3.5" />
                         </Button>
                     </Link>
                 </div>
 
-                <button
-                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                    className="md:hidden text-slate-400 hover:text-white"
-                >
-                    {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-                </button>
+                {/* Mobile Menu & Theme Toggle Trigger */}
+                <div className="flex md:hidden items-center gap-2">
+                    <ThemeToggle />
+                    <button
+                        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                        className="p-2 rounded-lg text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-white/5 transition-colors"
+                        aria-label="Toggle menu"
+                    >
+                        {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                    </button>
+                </div>
             </div>
 
+            {/* Mobile Dropdown Drawer */}
             {mobileMenuOpen && (
-                <div className="md:hidden border-b border-white/5 bg-[#0f1923]/95 px-6 py-6 space-y-4">
+                <div className="md:hidden border-b border-zinc-200 dark:border-white/[0.08] bg-white/95 dark:bg-[#08090d]/95 backdrop-blur-2xl px-6 py-5 space-y-3 animate-in fade-in slide-in-from-top-4">
                     <Link
-                        href="/landing"
+                        href="/#features"
                         onClick={() => setMobileMenuOpen(false)}
-                        className="block text-slate-300 hover:text-white py-2 text-sm font-semibold"
+                        className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 py-1.5 hover:text-indigo-600"
                     >
-                        Platform
+                        Features
                     </Link>
                     <Link
-                        href="/pricing"
+                        href="/#ecosystem"
                         onClick={() => setMobileMenuOpen(false)}
-                        className="block text-slate-300 hover:text-white py-2 text-sm font-semibold"
+                        className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 py-1.5 hover:text-indigo-600"
+                    >
+                        Ecosystem
+                    </Link>
+                    <Link
+                        href="/#demo"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 py-1.5 hover:text-indigo-600"
+                    >
+                        Interactive Demo
+                    </Link>
+                    <Link
+                        href="/#pricing"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 py-1.5 hover:text-indigo-600"
                     >
                         Pricing
                     </Link>
                     <Link
-                        href="/templates"
+                        href="/#faq"
                         onClick={() => setMobileMenuOpen(false)}
-                        className="block text-slate-300 hover:text-white py-2 text-sm font-semibold"
+                        className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 py-1.5 hover:text-indigo-600"
                     >
-                        Templates
+                        FAQ
                     </Link>
                     <Link
                         href="/public/rajnish"
+                        target="_blank"
                         onClick={() => setMobileMenuOpen(false)}
-                        className="block text-[#00f0ff] py-2 text-sm font-semibold"
+                        className="block text-sm font-bold text-indigo-600 dark:text-indigo-400 py-1.5"
                     >
                         Live Demo Store (@rajnish)
                     </Link>
-                    <div className="pt-4 flex flex-col gap-3">
+                    <div className="pt-3 flex flex-col gap-2.5 border-t border-zinc-200 dark:border-white/5">
                         <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
-                            <Button variant="outline" className="w-full">
+                            <Button variant="outline" className="w-full text-xs font-bold">
                                 Log in
                             </Button>
                         </Link>
                         <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)}>
-                            <Button variant="gradient" className="w-full">
-                                Launch Creator Studio
+                            <Button variant="gradient" className="w-full text-xs font-bold">
+                                Start Building Free
                             </Button>
                         </Link>
                     </div>
