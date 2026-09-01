@@ -1,9 +1,9 @@
-import { PaymentService } from "../lib/services/payments";
-import { EmailService } from "../lib/services/email";
-import { CalendarService } from "../lib/services/calendar";
-import { VideoService } from "../lib/services/video";
-import { InstagramService } from "../lib/services/instagram";
-import { UsageMonitorService } from "../lib/services/usage";
+import { PaymentService } from "../lib/services/payments/index.js";
+import { EmailService } from "../lib/services/email/index.js";
+import { CalendarService } from "../lib/services/calendar/index.js";
+import { VideoService } from "../lib/services/video/index.js";
+import { InstagramService } from "../lib/services/instagram/index.js";
+import { UsageMonitorService } from "../lib/services/usage/index.js";
 async function runSystemVerification() {
     console.log("==================================================");
     console.log("OUTSYRA: Comprehensive Platform Verification Test");

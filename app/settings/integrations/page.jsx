@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState } from "react";
 import Link from "next/link";
 import {
@@ -8,9 +9,6 @@ import {
     CreditCard,
     BarChart3,
     Video,
-    Sparkles,
-    CheckCircle2,
-    ExternalLink,
     Clock,
 } from "lucide-react";
 import { DashboardHeader } from "@/components/layout/DashboardHeader";
@@ -120,7 +118,7 @@ export default function IntegrationsPage() {
     ];
 
     return (
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col bg-background text-foreground transition-colors duration-200">
             <DashboardHeader
                 title="Integrations & Free APIs Center"
                 subtitle="Manage Google Meet, Google Analytics (GA4), Calendly, Google Calendar, and payment gateways."
@@ -128,8 +126,8 @@ export default function IntegrationsPage() {
             <main className="p-6 md:p-8 space-y-8 max-w-7xl">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h3 className="text-base font-bold text-white">Connected & Free API Services</h3>
-                        <p className="text-xs text-zinc-400">
+                        <h3 className="text-base font-bold text-zinc-900 dark:text-white">Connected & Free API Services</h3>
+                        <p className="text-xs text-zinc-600 dark:text-zinc-400">
                             All Google free APIs, Calendly embeds, and fallback engines are activated and ready to use.
                         </p>
                     </div>
@@ -146,30 +144,30 @@ export default function IntegrationsPage() {
                         return (
                             <Card
                                 key={item.id}
-                                className="glass-panel border-white/5 p-6 flex flex-col justify-between space-y-5 hover:border-indigo-500/30 transition-all"
+                                className="glass-card border-zinc-200 dark:border-white/10 p-6 flex flex-col justify-between space-y-5 hover:border-indigo-500/30 transition-all shadow-sm"
                             >
                                 <div className="space-y-3">
                                     <div className="flex items-center justify-between">
-                                        <div className="h-11 w-11 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
+                                        <div className="h-11 w-11 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
                                             <Icon className="h-5 w-5" />
                                         </div>
                                         <div className="flex flex-col items-end gap-1">
                                             <Badge variant={item.isConnected ? "success" : "secondary"} className="text-[10px]">
                                                 {item.status}
                                             </Badge>
-                                            <span className="text-[10px] text-emerald-400 font-semibold">{item.freeTier}</span>
+                                            <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">{item.freeTier}</span>
                                         </div>
                                     </div>
                                     <div>
-                                        <h4 className="text-base font-bold text-white">{item.name}</h4>
-                                        <p className="text-xs text-zinc-400 mt-1 leading-relaxed">{item.description}</p>
+                                        <h4 className="text-base font-bold text-zinc-900 dark:text-white">{item.name}</h4>
+                                        <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1 leading-relaxed">{item.description}</p>
                                     </div>
                                 </div>
-                                <div className="pt-4 border-t border-white/5">
+                                <div className="pt-4 border-t border-zinc-200/60 dark:border-white/5">
                                     <Button
                                         variant="outline"
                                         size="sm"
-                                        className="w-full text-xs text-indigo-300 border-indigo-500/20 hover:bg-indigo-500/10"
+                                        className="w-full text-xs text-indigo-600 dark:text-indigo-300 border-indigo-500/20 hover:bg-indigo-500/10"
                                         onClick={() => setSelectedIntegration(item)}
                                     >
                                         Configure & Setup Guide
@@ -182,27 +180,27 @@ export default function IntegrationsPage() {
             </main>
 
             {selectedIntegration && (
-                <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-                    <div className="glass-panel p-6 md:p-8 rounded-3xl border border-white/10 max-w-lg w-full space-y-5 animate-in fade-in zoom-in-95">
-                        <div className="flex items-center justify-between border-b border-white/5 pb-3">
-                            <h3 className="text-lg font-bold text-white">
+                <div className="fixed inset-0 bg-black/60 dark:bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div className="glass-card p-6 md:p-8 rounded-3xl border border-zinc-200 dark:border-white/10 max-w-lg w-full space-y-5 animate-in fade-in zoom-in-95 shadow-2xl">
+                        <div className="flex items-center justify-between border-b border-zinc-200 dark:border-white/5 pb-3">
+                            <h3 className="text-lg font-bold text-zinc-900 dark:text-white">
                                 {selectedIntegration.name}
                             </h3>
                             <Badge variant="success" className="text-xs">{selectedIntegration.freeTier}</Badge>
                         </div>
                         <div className="space-y-4 text-xs">
                             <div>
-                                <span className="font-semibold text-zinc-300">Environment Keys / Config:</span>
+                                <span className="font-semibold text-zinc-700 dark:text-zinc-300">Environment Keys / Config:</span>
                                 <div className="mt-1.5 space-y-1">
                                     {selectedIntegration.envKeys.map((k) => (
-                                        <div key={k} className="p-2 rounded-lg bg-zinc-900 border border-white/5 font-mono text-indigo-300 text-[11px]">
+                                        <div key={k} className="p-2 rounded-lg bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-white/5 font-mono text-indigo-600 dark:text-indigo-300 text-[11px]">
                                             {k}=...
                                         </div>
                                     ))}
                                 </div>
                             </div>
-                            <div className="p-4 rounded-2xl bg-indigo-950/30 border border-indigo-500/20 text-zinc-300 leading-relaxed">
-                                <span className="font-bold text-indigo-300 block mb-1">Step-by-Step Setup:</span>
+                            <div className="p-4 rounded-2xl bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-500/20 text-zinc-700 dark:text-zinc-300 leading-relaxed">
+                                <span className="font-bold text-indigo-700 dark:text-indigo-300 block mb-1">Step-by-Step Setup:</span>
                                 {selectedIntegration.instructions}
                             </div>
                         </div>

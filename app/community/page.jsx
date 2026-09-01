@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
 import { MessageSquare, Heart, Pin, Plus, Hash } from "lucide-react";
 import { DashboardHeader } from "@/components/layout/DashboardHeader";
@@ -10,13 +11,12 @@ import { getCommunityPosts, createCommunityPost, toggleLikeCommunityPost } from 
 import { initialCommunities } from "@/lib/supabase/mock-db";
 
 export default function CommunityPage() {
-    const [channels, setChannels] = useState(initialCommunities);
+    const [channels] = useState(initialCommunities);
     const [activeChannelId, setActiveChannelId] = useState("chan-3");
     const [posts, setPosts] = useState([]);
     const [postTitle, setPostTitle] = useState("");
     const [postContent, setPostContent] = useState("");
     const [composerOpen, setComposerOpen] = useState(false);
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function fetchPosts() {
@@ -25,8 +25,6 @@ export default function CommunityPage() {
                 setPosts(data || []);
             } catch (err) {
                 console.error("Failed to load community posts", err);
-            } finally {
-                setLoading(false);
             }
         }
         fetchPosts();
@@ -55,16 +53,16 @@ export default function CommunityPage() {
     };
 
     return (
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col bg-background text-foreground transition-colors duration-200">
             <DashboardHeader
                 title="Creator Community (Supabase Database)"
                 subtitle="Host an exclusive community space for your students, clients, and VIP members."
             />
             <div className="flex-1 flex flex-col lg:flex-row min-h-0">
                 {/* Channels sidebar */}
-                <div className="w-full lg:w-64 border-r border-white/5 bg-zinc-950/80 p-5 space-y-4">
-                    <div className="flex items-center justify-between pb-3 border-b border-white/5">
-                        <span className="text-xs font-bold text-white uppercase tracking-wider">Channels</span>
+                <div className="w-full lg:w-64 border-r border-zinc-200 dark:border-white/5 bg-zinc-50 dark:bg-zinc-950/80 p-5 space-y-4">
+                    <div className="flex items-center justify-between pb-3 border-b border-zinc-200 dark:border-white/5">
+                        <span className="text-xs font-bold text-zinc-900 dark:text-white uppercase tracking-wider">Channels</span>
                         <Badge variant="gradient" className="text-[10px]">
                             420 Members
                         </Badge>
@@ -73,14 +71,15 @@ export default function CommunityPage() {
                         {channels.map((chan) => (
                             <button
                                 key={chan.id}
+                                type="button"
                                 onClick={() => setActiveChannelId(chan.id)}
-                                className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium transition-all ${
+                                className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium transition-all cursor-pointer ${
                                     activeChannelId === chan.id
-                                        ? "bg-indigo-600/20 text-white border border-indigo-500/30"
-                                        : "text-zinc-400 hover:text-zinc-200 hover:bg-white/5"
+                                        ? "bg-indigo-600/10 dark:bg-indigo-600/20 text-indigo-700 dark:text-white border border-indigo-500/30 font-bold"
+                                        : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-white/5"
                                 }`}
                             >
-                                <Hash className="h-4 w-4 text-indigo-400" />
+                                <Hash className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
                                 <span>{chan.name}</span>
                             </button>
                         ))}
@@ -91,10 +90,11 @@ export default function CommunityPage() {
                 <div className="flex-1 p-6 md:p-8 space-y-6 overflow-y-auto max-w-4xl">
                     <div className="flex items-center justify-between">
                         <div>
-                            <h3 className="text-base font-bold text-white flex items-center gap-2">
-                                <Hash className="h-5 w-5 text-indigo-400" /> #{activeChannel?.name}
+                            <h3 className="text-base font-bold text-zinc-900 dark:text-white flex items-center gap-2">
+                                <Hash className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+                                <span>#{activeChannel?.name}</span>
                             </h3>
-                            <p className="text-xs text-zinc-400 mt-0.5">{activeChannel?.description}</p>
+                            <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">{activeChannel?.description}</p>
                         </div>
                         <Button
                             variant="gradient"
@@ -103,22 +103,22 @@ export default function CommunityPage() {
                             className="gap-1.5 text-xs"
                         >
                             <Plus className="h-4 w-4" />
-                            New Post
+                            <span>New Post</span>
                         </Button>
                     </div>
 
                     <div className="space-y-4">
                         {channelPosts.map((post) => (
-                            <Card key={post.id} className="glass-panel border-white/5 p-6 space-y-4">
+                            <Card key={post.id} className="glass-card border-zinc-200 dark:border-white/10 p-6 space-y-4 shadow-sm">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-3">
                                         <img
                                             src={post.author_avatar}
                                             alt={post.author_name}
-                                            className="h-9 w-9 rounded-full object-cover ring-1 ring-white/10"
+                                            className="h-9 w-9 rounded-full object-cover ring-1 ring-zinc-200 dark:ring-white/10"
                                         />
                                         <div>
-                                            <span className="text-xs font-bold text-white">{post.author_name}</span>
+                                            <span className="text-xs font-bold text-zinc-900 dark:text-white">{post.author_name}</span>
                                             <p className="text-[10px] text-zinc-500">
                                                 {new Date(post.created_at).toLocaleDateString()}
                                             </p>
@@ -131,16 +131,17 @@ export default function CommunityPage() {
                                     )}
                                 </div>
                                 <div>
-                                    <h4 className="text-base font-bold text-white">{post.title}</h4>
-                                    <p className="text-xs text-zinc-300 mt-2 leading-relaxed whitespace-pre-line">
+                                    <h4 className="text-base font-bold text-zinc-900 dark:text-white">{post.title}</h4>
+                                    <p className="text-xs text-zinc-700 dark:text-zinc-300 mt-2 leading-relaxed whitespace-pre-line">
                                         {post.content}
                                     </p>
                                 </div>
-                                <div className="pt-3 border-t border-white/5 flex items-center gap-4 text-xs text-zinc-400">
+                                <div className="pt-3 border-t border-zinc-200/60 dark:border-white/5 flex items-center gap-4 text-xs text-zinc-500 dark:text-zinc-400">
                                     <button
+                                        type="button"
                                         onClick={() => handleLike(post.id)}
-                                        className={`flex items-center gap-1.5 transition-colors ${
-                                            post.is_liked ? "text-rose-400 font-bold" : "hover:text-rose-400"
+                                        className={`flex items-center gap-1.5 transition-colors cursor-pointer ${
+                                            post.is_liked ? "text-rose-500 font-bold" : "hover:text-rose-500"
                                         }`}
                                     >
                                         <Heart
@@ -151,7 +152,7 @@ export default function CommunityPage() {
                                         <span>{post.likes_count || 0}</span>
                                     </button>
                                     <span className="flex items-center gap-1.5">
-                                        <MessageSquare className="h-4 w-4 text-indigo-400" />
+                                        <MessageSquare className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
                                         <span>{post.comments_count || 0} comments</span>
                                     </span>
                                 </div>
@@ -162,12 +163,12 @@ export default function CommunityPage() {
             </div>
 
             {composerOpen && (
-                <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-                    <div className="glass-panel p-6 md:p-8 rounded-3xl border border-white/10 max-w-lg w-full space-y-4 animate-in fade-in zoom-in-95">
-                        <h3 className="text-base font-bold text-white">Post to #{activeChannel?.name}</h3>
+                <div className="fixed inset-0 bg-black/60 dark:bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div className="glass-card p-6 md:p-8 rounded-3xl border border-zinc-200 dark:border-white/10 max-w-lg w-full space-y-4 animate-in fade-in zoom-in-95 shadow-2xl">
+                        <h3 className="text-base font-bold text-zinc-900 dark:text-white">Post to #{activeChannel?.name}</h3>
                         <form onSubmit={handleCreatePost} className="space-y-4">
                             <div>
-                                <label className="block text-xs font-medium text-zinc-300 mb-1.5">Post Title</label>
+                                <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">Post Title</label>
                                 <Input
                                     required
                                     placeholder="e.g. My top takeaway from Module 2"
@@ -176,11 +177,11 @@ export default function CommunityPage() {
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-medium text-zinc-300 mb-1.5">Discussion Content</label>
+                                <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">Discussion Content</label>
                                 <textarea
                                     rows={4}
                                     required
-                                    className="w-full rounded-xl border border-white/10 bg-zinc-900/60 p-3 text-xs text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                    className="w-full rounded-xl border border-zinc-200 dark:border-white/10 bg-white/80 dark:bg-zinc-900/60 p-3 text-xs text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                     placeholder="Share details, questions, or celebrate your milestones..."
                                     value={postContent}
                                     onChange={(e) => setPostContent(e.target.value)}

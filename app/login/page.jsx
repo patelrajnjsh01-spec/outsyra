@@ -3,7 +3,7 @@
 import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ArrowRight, Sparkles, Lock, Mail, Eye, EyeOff, AlertCircle } from "lucide-react";
+import { ArrowRight, Sparkles, Lock, Mail, Eye, EyeOff, AlertCircle, Zap, KeyRound, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
@@ -18,6 +18,7 @@ function LoginForm() {
     const [loading, setLoading] = useState(false);
     const [googleLoading, setGoogleLoading] = useState(false);
     const [error, setError] = useState("");
+    const [copiedDemo, setCopiedDemo] = useState(false);
 
     useEffect(() => {
         const errorParam = searchParams.get("error");
@@ -27,6 +28,14 @@ function LoginForm() {
             setError("Google sign-in failed. Please try again or use email login.");
         }
     }, [searchParams]);
+
+    function fillDemoCredentials(demoEmail = "rajnish@outsyra.com", demoPass = "outsyra2026") {
+        setEmail(demoEmail);
+        setPassword(demoPass);
+        setError("");
+        setCopiedDemo(true);
+        setTimeout(() => setCopiedDemo(false), 2500);
+    }
 
     async function handleLogin(e) {
         e.preventDefault();
@@ -62,6 +71,40 @@ function LoginForm() {
 
     return (
         <div className="glass-card p-6 sm:p-8 rounded-3xl border border-zinc-200 dark:border-white/10 shadow-2xl space-y-5">
+            {/* Demo Credentials Quick-Fill Banner */}
+            <div className="p-3.5 rounded-2xl bg-indigo-500/10 dark:bg-indigo-500/15 border border-indigo-500/25 space-y-2">
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-600 dark:text-indigo-400">
+                        <Zap className="h-3.5 w-3.5 fill-current" />
+                        <span>Demo Creator Account</span>
+                    </div>
+                    <button
+                        type="button"
+                        onClick={() => fillDemoCredentials("rajnish@outsyra.com", "outsyra2026")}
+                        className="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1 cursor-pointer"
+                    >
+                        {copiedDemo ? (
+                            <>
+                                <Check className="h-3 w-3 text-emerald-500" />
+                                <span className="text-emerald-500">Filled!</span>
+                            </>
+                        ) : (
+                            <span>1-Click Auto Fill</span>
+                        )}
+                    </button>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-[11px] text-zinc-600 dark:text-zinc-300 font-mono bg-white/60 dark:bg-black/40 p-2 rounded-xl border border-indigo-500/10">
+                    <div>
+                        <span className="text-zinc-400">Email: </span>
+                        <span className="font-semibold text-zinc-900 dark:text-white">rajnish@outsyra.com</span>
+                    </div>
+                    <div>
+                        <span className="text-zinc-400">Password: </span>
+                        <span className="font-semibold text-zinc-900 dark:text-white">outsyra2026</span>
+                    </div>
+                </div>
+            </div>
+
             {/* Google OAuth Button */}
             <Button
                 type="button"

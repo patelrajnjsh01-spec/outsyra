@@ -65,23 +65,29 @@ body {
 }
 
 /* Glassmorphic Surfaces */
-.glass-card {
-  background-color: rgba(255, 255, 255, 0.7);
+.glass-card,
+.glass-panel {
+  background-color: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(226, 232, 240, 0.8);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  color: hsl(var(--foreground));
 }
-.dark .glass-card {
+.dark .glass-card,
+.dark .glass-panel {
   background-color: rgba(15, 17, 23, 0.75);
   border: 1px solid rgba(255, 255, 255, 0.07);
+  color: hsl(var(--foreground));
 }
 
-.glass-card-hover {
+.glass-card-hover,
+.glass-panel-hover {
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.glass-card-hover:hover {
+.glass-card-hover:hover,
+.glass-panel-hover:hover {
   transform: translateY(-2px);
-  border-color: rgba(99, 102, 241, 0.35);
+  border-color: rgba(99, 102, 241, 0.4);
   box-shadow: 0 12px 30px -10px rgba(99, 102, 241, 0.15);
 }
 
@@ -99,11 +105,13 @@ body {
 }
 
 /* Cyber Matrix Background Grid */
-.grid-pattern {
+.grid-pattern,
+.grid-bg {
   background-image: radial-gradient(rgba(99, 102, 241, 0.12) 1px, transparent 1px);
   background-size: 28px 28px;
 }
-.dark .grid-pattern {
+.dark .grid-pattern,
+.dark .grid-bg {
   background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px);
 }
 

@@ -43,14 +43,15 @@ export function Navbar() {
 
                 {/* Desktop Nav Links */}
                 <nav className="hidden md:flex items-center gap-7 text-xs font-semibold text-zinc-600 dark:text-zinc-400">
+                    <Link href="/templates" className="hover:text-zinc-900 dark:hover:text-white transition-colors flex items-center gap-1 text-indigo-600 dark:text-indigo-400 font-bold">
+                        <Sparkles className="h-3 w-3" />
+                        Templates
+                    </Link>
                     <Link href="/#features" className="hover:text-zinc-900 dark:hover:text-white transition-colors">
                         Features
                     </Link>
                     <Link href="/#ecosystem" className="hover:text-zinc-900 dark:hover:text-white transition-colors">
                         Ecosystem
-                    </Link>
-                    <Link href="/#demo" className="hover:text-zinc-900 dark:hover:text-white transition-colors">
-                        Interactive Demo
                     </Link>
                     <Link href="/#pricing" className="hover:text-zinc-900 dark:hover:text-white transition-colors">
                         Pricing
