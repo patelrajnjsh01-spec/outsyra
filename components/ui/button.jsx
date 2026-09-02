@@ -10,7 +10,7 @@ const buttonVariants = cva(
                 default:
                     "bg-indigo-600 hover:bg-indigo-500 text-white shadow-md shadow-indigo-600/25 hover:shadow-indigo-600/35",
                 gradient:
-                    "bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:opacity-95 text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/35",
+                    "relative overflow-hidden text-white border-none transition-[background] duration-300 ease-in-out [box-shadow:inset_0_2px_1px_#ffffff40,inset_0_-4px_2px_#00000040!important] [background:radial-gradient(50%_50%_at_50%_50%,#54b8ff_0%,#1090ea_100%)] hover:shadow-indigo-500/35",
                 outline:
                     "border border-zinc-200 dark:border-white/10 bg-white/80 dark:bg-white/5 hover:bg-zinc-100 dark:hover:bg-white/10 text-zinc-900 dark:text-zinc-100 backdrop-blur-sm shadow-sm",
                 secondary:

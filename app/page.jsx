@@ -48,6 +48,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Navbar } from "@/components/layout/Navbar";
+import HomeServiceCard from "./HomeServiceCard";
+import TemplateShowcase from "./TemplateShowcase";
 
 export default function LandingPage() {
     const router = useRouter();
@@ -225,7 +227,11 @@ export default function LandingPage() {
             <Navbar />
 
             {/* 1. HERO SECTION */}
-            <section className="relative pt-12 lg:pt-20 pb-20 px-6 max-w-7xl mx-auto overflow-hidden">
+            
+            <section className="bg-[#673de6]">
+                <div className="relative pt-12 lg:pt-20 pb-20 px-6 max-w-7xl mx-auto overflow-hidden">
+
+                
                 <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[380px] bg-indigo-500/15 dark:bg-indigo-600/10 blur-[160px] rounded-full pointer-events-none" />
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
@@ -236,19 +242,21 @@ export default function LandingPage() {
                             Next-Gen Link-in-Bio Platform
                         </div>
 
-                        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.06] text-zinc-900 dark:text-white">
+                        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.06] text-white dark:text-white">
                             Everything you are. <br />
-                            <span className="gradient-text-primary">In one simple link.</span>
+      <span className="">
+  In one simple link.
+</span>
                         </h1>
 
-                        <p className="text-base sm:text-xl text-zinc-600 dark:text-zinc-300 leading-relaxed max-w-xl mx-auto lg:mx-0">
+                        <p className="text-base sm:text-xl text-white dark:text-zinc-300 leading-relaxed max-w-xl mx-auto lg:mx-0">
                             Join 50,000+ creators using Outsyra for their link in bio. One link to help you share everything you create, curate, and sell across social channels.
                         </p>
 
                         {/* Claim Handle Input Form */}
                         <form
                             onSubmit={handleClaimSubmit}
-                            className="p-2 rounded-2xl sm:rounded-full bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-white/15 shadow-xl flex flex-col sm:flex-row items-center gap-2 max-w-lg mx-auto lg:mx-0 focus-within:ring-2 focus-within:ring-indigo-500 transition-all"
+                            className="p-2 rounded-lg  bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-white/15 shadow-xl flex flex-col sm:flex-row items-center gap-2 max-w-lg mx-auto lg:mx-0 focus-within:ring-2 focus-within:ring-indigo-500 transition-all"
                         >
                             <div className="flex items-center px-4 w-full sm:w-auto flex-1">
                                 <span className="text-xs sm:text-sm font-mono text-zinc-500 font-bold">
@@ -272,7 +280,7 @@ export default function LandingPage() {
                             </Button>
                         </form>
 
-                        <div className="flex items-center justify-center lg:justify-start gap-6 pt-2 text-xs font-semibold text-zinc-500 dark:text-zinc-400">
+                        <div className="flex items-center justify-center lg:justify-start gap-6 pt-2 text-xs font-semibold text-white dark:text-zinc-400">
                             <span className="flex items-center gap-1.5">
                                 <CheckCircle2 className="h-4 w-4 text-emerald-500" /> Free Forever
                             </span>
@@ -413,82 +421,14 @@ export default function LandingPage() {
                         </div>
                     </div>
                 </div>
-            </section>
-
-            {/* 2. TEMPLATE MARKETPLACE SHOWCASE */}
-            <section className="py-20 px-6 max-w-7xl mx-auto border-t border-zinc-200 dark:border-white/10">
-                <div className="text-center space-y-4 max-w-3xl mx-auto mb-14">
-                    <Badge variant="outline" className="text-xs font-bold uppercase tracking-wider px-3 py-1">
-                        🎨 20+ Aesthetic Presets
-                    </Badge>
-                    <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-zinc-900 dark:text-white">
-                        Jumpstart your design with trending templates
-                    </h2>
-                    <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400">
-                        Choose from 20+ curated design archetypes or photographic 4K image backgrounds. Every single font, color, and button shape is fully customizable.
-                    </p>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {templatesShowcase.map((t, i) => (
-                        <div
-                            key={i}
-                            className="glass-card rounded-3xl border border-zinc-200 dark:border-white/10 overflow-hidden group shadow-sm hover:border-indigo-500/40 hover:shadow-xl transition-all duration-300"
-                        >
-                            <div className="h-56 w-full relative overflow-hidden bg-black">
-                                <img
-                                    src={t.img}
-                                    alt={t.name}
-                                    className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-700"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent p-5 flex flex-col justify-between">
-                                    <Badge variant="outline" className="self-start text-[9px] uppercase font-bold bg-black/60 text-white border-white/20">
-                                        {t.cat}
-                                    </Badge>
-                                    <div>
-                                        <h4 className="text-base font-bold text-white">{t.name}</h4>
-                                        <p className="text-xs text-zinc-300 mt-0.5">1-Click Apply to Storefront</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="p-4 bg-zinc-50 dark:bg-zinc-950/60 flex items-center justify-between border-t border-zinc-200/60 dark:border-white/5">
-                                <span className="text-xs font-semibold text-zinc-500">Free & Pro Presets</span>
-                                <Link href="/templates">
-                                    <Button variant="gradient" size="sm" className="text-xs gap-1">
-                                        <span>Use Template</span>
-                                        <ArrowRight className="h-3 w-3" />
-                                    </Button>
-                                </Link>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-
-                <div className="text-center pt-10">
-                    <Link href="/templates">
-                        <Button variant="outline" size="lg" className="h-12 px-8 text-xs font-bold gap-2">
-                            <Palette className="h-4 w-4 text-indigo-500" />
-                            <span>Explore all 20+ Templates & 4K Free Images</span>
-                        </Button>
-                    </Link>
                 </div>
             </section>
+               {/* 3. CORE FEATURES GRID: "CREATE YOUR WAY" */}
+            <section className="bg-[#d2e823]">
+                    <div className="py-20 max-sm:px-4 max-w-7xl mx-auto ">
+                 
 
-            {/* 3. CORE FEATURES GRID: "CREATE YOUR WAY" */}
-            <section className="py-20 px-6 max-w-7xl mx-auto border-t border-zinc-200 dark:border-white/10">
-                <div className="text-center space-y-4 max-w-3xl mx-auto mb-14">
-                    <Badge variant="gradient" className="text-xs font-bold uppercase tracking-wider px-3 py-1">
-                        ⚡️ Unlimited Possibilities
-                    </Badge>
-                    <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-zinc-900 dark:text-white">
-                        Create, monetize, and own your audience
-                    </h2>
-                    <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400">
-                        Everything you need to turn your social media followers into paying clients, subscribers, and community members.
-                    </p>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {[
                         {
                             icon: Store,
@@ -550,194 +490,874 @@ export default function LandingPage() {
                             </div>
                         );
                     })}
-                </div>
+                </div> */}
+<HomeServiceCard />
+                    </div>
+                
             </section>
 
-            {/* 4. PRICING SECTION */}
-            <section className="py-20 px-6 max-w-7xl mx-auto border-t border-zinc-200 dark:border-white/10">
-                <div className="text-center space-y-4 max-w-3xl mx-auto mb-10">
+            {/* 2. TEMPLATE MARKETPLACE SHOWCASE */}
+            <TemplateShowcase />
+            {/* <section  className="bg-[#e548d9] dark:bg-white">
+            <div className="py-20 px-6 max-w-7xl mx-auto border-t border-zinc-200 ">
+                <div className="text-center space-y-4 max-w-3xl mx-auto mb-14">
                     <Badge variant="outline" className="text-xs font-bold uppercase tracking-wider px-3 py-1">
-                        💰 Transparent Pricing
+                        🎨 20+ Aesthetic Presets
                     </Badge>
                     <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-zinc-900 dark:text-white">
-                        One simple plan for every stage of growth
+                        Jumpstart your design with trending templates
                     </h2>
                     <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400">
-                        Start for free, upgrade when you scale. 0% platform commission on all plans.
+                        Choose from 20+ curated design archetypes or photographic 4K image backgrounds. Every single font, color, and button shape is fully customizable.
                     </p>
-
-                    {/* Billing Toggle */}
-                    <div className="inline-flex items-center bg-zinc-100 dark:bg-zinc-900 p-1 rounded-xl border border-zinc-200 dark:border-white/10 mt-4">
-                        <button
-                            type="button"
-                            onClick={() => setBillingCycle("monthly")}
-                            className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all ${
-                                billingCycle === "monthly"
-                                    ? "bg-white dark:bg-zinc-800 text-indigo-600 dark:text-white shadow-xs"
-                                    : "text-zinc-500"
-                            }`}
-                        >
-                            Monthly Billing
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => setBillingCycle("yearly")}
-                            className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 ${
-                                billingCycle === "yearly"
-                                    ? "bg-white dark:bg-zinc-800 text-indigo-600 dark:text-white shadow-xs"
-                                    : "text-zinc-500"
-                            }`}
-                        >
-                            <span>Yearly Billing</span>
-                            <span className="text-[9px] font-black uppercase px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400">
-                                20% OFF
-                            </span>
-                        </button>
-                    </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {pricingPlans.map((plan, i) => (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {templatesShowcase.map((t, i) => (
                         <div
                             key={i}
-                            className={`rounded-3xl p-8 border flex flex-col justify-between relative transition-all ${
-                                plan.highlighted
-                                    ? "glass-card border-indigo-500 ring-2 ring-indigo-500/30 shadow-2xl scale-105"
-                                    : "glass-card border-zinc-200 dark:border-white/10"
-                            }`}
+                            className="glass-card rounded-3xl border border-zinc-200 dark:border-white/10 overflow-hidden group shadow-sm hover:border-indigo-500/40 hover:shadow-xl transition-all duration-300"
                         >
-                            {plan.highlighted && (
-                                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                                    <Badge variant="gradient" className="text-[10px] uppercase font-bold px-3 py-1 shadow-md">
-                                        Most Popular
+                            <div className="h-56 w-full relative overflow-hidden bg-black">
+                                <img
+                                    src={t.img}
+                                    alt={t.name}
+                                    className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent p-5 flex flex-col justify-between">
+                                    <Badge variant="outline" className="self-start text-[9px] uppercase font-bold bg-black/60 text-white border-white/20">
+                                        {t.cat}
                                     </Badge>
+                                    <div>
+                                        <h4 className="text-base font-bold text-white">{t.name}</h4>
+                                        <p className="text-xs text-zinc-300 mt-0.5">1-Click Apply to Storefront</p>
+                                    </div>
                                 </div>
-                            )}
-
-                            <div className="space-y-6">
-                                <div>
-                                    <h3 className="text-xl font-bold text-zinc-900 dark:text-white">
-                                        {plan.name}
-                                    </h3>
-                                    <p className="text-xs text-zinc-500 mt-1">{plan.desc}</p>
-                                </div>
-
-                                <div className="flex items-baseline gap-1">
-                                    <span className="text-4xl font-extrabold text-zinc-900 dark:text-white">
-                                        {plan.price}
-                                    </span>
-                                    <span className="text-xs text-zinc-500 font-medium">/{plan.period}</span>
-                                </div>
-
-                                <ul className="space-y-3 text-xs text-zinc-600 dark:text-zinc-300">
-                                    {plan.features.map((feat, idx) => (
-                                        <li key={idx} className="flex items-center gap-2.5">
-                                            <Check className="h-4 w-4 text-emerald-500 shrink-0" />
-                                            <span>{feat}</span>
-                                        </li>
-                                    ))}
-                                </ul>
                             </div>
-
-                            <div className="pt-8">
-                                <Link href={plan.href}>
-                                    <Button
-                                        variant={plan.highlighted ? "gradient" : "outline"}
-                                        className="w-full text-xs font-bold h-11"
-                                    >
-                                        {plan.cta}
+                            <div className="p-4 bg-zinc-50 dark:bg-zinc-950/60 flex items-center justify-between border-t border-zinc-200/60 dark:border-white/5">
+                                <span className="text-xs font-semibold text-zinc-500">Free & Pro Presets</span>
+                                <Link href="/templates">
+                                    <Button variant="gradient" size="sm" className="text-xs gap-1">
+                                        <span>Use Template</span>
+                                        <ArrowRight className="h-3 w-3" />
                                     </Button>
                                 </Link>
                             </div>
                         </div>
                     ))}
                 </div>
-            </section>
+
+                <div className="text-center pt-10">
+                    <Link href="/templates">
+                        <Button variant="outline" size="lg" className="h-12 px-8 text-xs font-bold gap-2">
+                            <Palette className="h-4 w-4 text-indigo-500" />
+                            <span>Explore all 20+ Templates & 4K Free Images</span>
+                        </Button>
+                    </Link>
+                </div>
+                </div>
+            </section> */}
+
+         
+
+            {/* 4. PRICING SECTION */}
+         {/* 4. PRICING SECTION */}
+<section className="relative overflow-hidden border-t border-zinc-200 bg-white px-6 py-20 dark:border-white/10 dark:bg-zinc-950 sm:py-24 lg:py-28">
+
+    {/* Background Decorations */}
+    <div className="pointer-events-none absolute -left-32 top-20 h-72 w-72 rounded-full bg-fuchsia-500/10 blur-[100px]" />
+    <div className="pointer-events-none absolute right-[-100px] top-1/3 h-80 w-80 rounded-full bg-indigo-500/10 blur-[110px]" />
+    <div className="pointer-events-none absolute bottom-0 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-purple-500/10 blur-[100px]" />
+
+    <div className="relative mx-auto max-w-7xl">
+
+        {/* HEADER */}
+        <div className="mx-auto mb-14 max-w-3xl text-center">
+
+            <div className="mb-5 inline-flex rotate-[-2deg] items-center gap-2 rounded-full border border-zinc-200 bg-white px-4 py-2 text-[10px] font-black uppercase tracking-[0.16em] text-zinc-700 shadow-sm dark:border-white/10 dark:bg-zinc-900 dark:text-zinc-300">
+                <span className="text-base">💰</span>
+                Transparent Pricing
+            </div>
+
+            <h2 className="text-3xl font-black tracking-[-0.04em] text-zinc-900 sm:text-5xl lg:text-6xl dark:text-white">
+                One simple plan for
+                <br />
+
+                <span className="bg-gradient-to-r from-fuchsia-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent">
+                    every stage of growth.
+                </span>
+            </h2>
+
+            <p className="mx-auto mt-5 max-w-2xl text-sm leading-6 text-zinc-500 sm:text-base dark:text-zinc-400">
+                Start for free, upgrade when you scale.
+                <span className="font-bold text-zinc-800 dark:text-zinc-200">
+                    {" "}0% platform commission
+                </span>
+                {" "}on all plans.
+            </p>
+
+            {/* BILLING TOGGLE */}
+
+            <div className="mt-8 inline-flex rounded-2xl border border-zinc-200 bg-zinc-100 p-1.5 shadow-sm dark:border-white/10 dark:bg-zinc-900">
+
+                {/* Monthly */}
+
+                <button
+                    type="button"
+                    onClick={() => setBillingCycle("monthly")}
+                    className={`
+                        rounded-xl px-5 py-2.5
+                        text-[11px] font-black
+                        transition-all duration-300
+                        ${
+                            billingCycle === "monthly"
+                                ? "bg-white text-indigo-600 shadow-md dark:bg-zinc-800 dark:text-white"
+                                : "text-zinc-500 hover:text-zinc-900 dark:hover:text-white"
+                        }
+                    `}
+                >
+                    Monthly Billing
+                </button>
+
+                {/* Yearly */}
+
+                <button
+                    type="button"
+                    onClick={() => setBillingCycle("yearly")}
+                    className={`
+                        flex items-center gap-2
+                        rounded-xl px-5 py-2.5
+                        text-[11px] font-black
+                        transition-all duration-300
+                        ${
+                            billingCycle === "yearly"
+                                ? "bg-white text-indigo-600 shadow-md dark:bg-zinc-800 dark:text-white"
+                                : "text-zinc-500 hover:text-zinc-900 dark:hover:text-white"
+                        }
+                    `}
+                >
+                    <span>Yearly Billing</span>
+
+                    <span className="rounded-full bg-emerald-500/15 px-2 py-0.5 text-[8px] font-black uppercase tracking-wide text-emerald-600 dark:text-emerald-400">
+                        20% OFF
+                    </span>
+                </button>
+
+            </div>
+
+        </div>
+
+        {/* PRICING GRID */}
+
+        <div className="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-3 lg:gap-7">
+
+            {pricingPlans.map((plan, i) => (
+
+                <div
+                    key={i}
+                    className={`
+                        group relative flex flex-col
+                        rounded-[2rem]
+                        border
+                        p-7
+                        transition-all duration-500
+                        hover:-translate-y-2
+                        sm:p-8
+
+                        ${
+                            plan.highlighted
+                                ? `
+                                    border-indigo-500/50
+                                    bg-zinc-950
+                                    text-white
+                                    shadow-[0_30px_80px_rgba(79,70,229,0.22)]
+                                    lg:scale-[1.045]
+                                    lg:-translate-y-3
+                                `
+                                : `
+                                    border-zinc-200
+                                    bg-white
+                                    shadow-[0_15px_50px_rgba(0,0,0,0.05)]
+                                    hover:border-indigo-300
+                                    hover:shadow-[0_25px_60px_rgba(79,70,229,0.10)]
+                                    dark:border-white/10
+                                    dark:bg-zinc-900/70
+                                    dark:hover:border-indigo-500/40
+                                `
+                        }
+                    `}
+                >
+
+                    {/* POPULAR PLAN GLOW */}
+
+                    {plan.highlighted && (
+                        <>
+                            <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[2rem]">
+                                <div className="absolute -right-20 -top-20 h-52 w-52 rounded-full bg-indigo-500/20 blur-[70px]" />
+                                <div className="absolute -bottom-20 -left-20 h-52 w-52 rounded-full bg-fuchsia-500/15 blur-[70px]" />
+                            </div>
+
+                            {/* Popular Badge */}
+
+                            <div className="absolute -top-4 left-1/2 z-20 -translate-x-1/2">
+                                <div className="relative">
+
+                                    <div className="absolute inset-0 rounded-full bg-indigo-500 blur-md opacity-40" />
+
+                                    <div className="relative flex items-center gap-1.5 rounded-full border border-white/20 bg-gradient-to-r from-fuchsia-500 via-purple-500 to-indigo-500 px-4 py-2 text-[9px] font-black uppercase tracking-[0.12em] text-white shadow-lg">
+                                        <Sparkles className="h-3 w-3" />
+                                        Most Popular
+                                    </div>
+
+                                </div>
+                            </div>
+                        </>
+                    )}
+
+                    {/* PLAN CONTENT */}
+
+                    <div className="relative z-10 flex flex-1 flex-col">
+
+                        {/* Plan Header */}
+
+                        <div className="mb-7">
+
+                            <div className="mb-3 flex items-center justify-between">
+
+                                <h3
+                                    className={`
+                                        text-xl font-black tracking-tight
+                                        ${
+                                            plan.highlighted
+                                                ? "text-white"
+                                                : "text-zinc-900 dark:text-white"
+                                        }
+                                    `}
+                                >
+                                    {plan.name}
+                                </h3>
+
+                                {/* Decorative Dot */}
+
+                                <span
+                                    className={`
+                                        h-2.5 w-2.5 rounded-full
+                                        transition-transform duration-300
+                                        group-hover:scale-150
+                                        ${
+                                            plan.highlighted
+                                                ? "bg-fuchsia-400 shadow-[0_0_15px_rgba(232,121,249,0.8)]"
+                                                : "bg-indigo-500"
+                                        }
+                                    `}
+                                />
+
+                            </div>
+
+                            <p
+                                className={`
+                                    text-xs leading-5
+                                    ${
+                                        plan.highlighted
+                                            ? "text-zinc-400"
+                                            : "text-zinc-500 dark:text-zinc-400"
+                                    }
+                                `}
+                            >
+                                {plan.desc}
+                            </p>
+
+                        </div>
+
+                        {/* PRICE */}
+
+                        <div className="mb-8">
+
+                            <div className="flex items-end gap-1">
+
+                                <span
+                                    className={`
+                                        text-5xl font-black tracking-[-0.06em]
+                                        ${
+                                            plan.highlighted
+                                                ? "text-white"
+                                                : "text-zinc-950 dark:text-white"
+                                        }
+                                    `}
+                                >
+                                    {plan.price}
+                                </span>
+
+                                <span
+                                    className={`
+                                        mb-2 text-xs font-bold
+                                        ${
+                                            plan.highlighted
+                                                ? "text-zinc-500"
+                                                : "text-zinc-400"
+                                        }
+                                    `}
+                                >
+                                    /{plan.period}
+                                </span>
+
+                            </div>
+
+                            {/* Small pricing indicator */}
+
+                            <div
+                                className={`
+                                    mt-3 h-1 w-12 rounded-full
+                                    transition-all duration-500
+                                    group-hover:w-20
+                                    ${
+                                        plan.highlighted
+                                            ? "bg-gradient-to-r from-fuchsia-500 to-indigo-500"
+                                            : "bg-zinc-200 dark:bg-zinc-700"
+                                    }
+                                `}
+                            />
+
+                        </div>
+
+                        {/* FEATURES */}
+
+                        <div className="flex-1">
+
+                            <div
+                                className={`
+                                    mb-4 text-[9px] font-black uppercase tracking-[0.18em]
+                                    ${
+                                        plan.highlighted
+                                            ? "text-zinc-500"
+                                            : "text-zinc-400"
+                                    }
+                                `}
+                            >
+                                What's included
+                            </div>
+
+                            <ul className="space-y-3">
+
+                                {plan.features.map((feat, idx) => (
+
+                                    <li
+                                        key={idx}
+                                        className={`
+                                            flex items-center gap-3
+                                            text-xs
+                                            ${
+                                                plan.highlighted
+                                                    ? "text-zinc-300"
+                                                    : "text-zinc-600 dark:text-zinc-300"
+                                            }
+                                        `}
+                                    >
+
+                                        <span
+                                            className={`
+                                                flex h-6 w-6 shrink-0
+                                                items-center justify-center
+                                                rounded-full
+                                                transition-all duration-300
+                                                group-hover:scale-110
+                                                ${
+                                                    plan.highlighted
+                                                        ? "bg-emerald-500/15"
+                                                        : "bg-emerald-500/10"
+                                                }
+                                            `}
+                                        >
+                                            <Check className="h-3.5 w-3.5 text-emerald-500" />
+                                        </span>
+
+                                        <span className="leading-5">
+                                            {feat}
+                                        </span>
+
+                                    </li>
+
+                                ))}
+
+                            </ul>
+
+                        </div>
+
+                        {/* CTA */}
+
+                        <div className="mt-8 pt-2">
+
+                            <Link href={plan.href} className="block">
+
+                                <Button
+                                    variant={
+                                        plan.highlighted
+                                            ? "gradient"
+                                            : "outline"
+                                    }
+                                    className={`
+                                        h-12 w-full
+                                        rounded-xl
+                                        text-xs font-black
+                                        transition-all duration-300
+                                        group-hover:shadow-lg
+
+                                        ${
+                                            plan.highlighted
+                                                ? "shadow-[0_10px_30px_rgba(99,102,241,0.25)]"
+                                                : "hover:border-indigo-400 hover:text-indigo-600 dark:hover:text-indigo-400"
+                                        }
+                                    `}
+                                >
+                                    {plan.cta}
+
+                                    <ArrowRight
+                                        className="
+                                            ml-2 h-4 w-4
+                                            transition-transform duration-300
+                                            group-hover:translate-x-1
+                                        "
+                                    />
+
+                                </Button>
+
+                            </Link>
+
+                        </div>
+
+                    </div>
+
+                    {/* BOTTOM DECORATIVE NUMBER */}
+
+                    <div
+                        className={`
+                            pointer-events-none absolute
+                            bottom-3 right-5
+                            text-7xl font-black
+                            tracking-[-0.08em]
+                            transition-all duration-500
+                            group-hover:scale-110
+                            ${
+                                plan.highlighted
+                                    ? "text-white/[0.025]"
+                                    : "text-zinc-900/[0.025] dark:text-white/[0.025]"
+                            }
+                        `}
+                    >
+                        {String(i + 1).padStart(2, "0")}
+                    </div>
+
+                </div>
+
+            ))}
+
+        </div>
+
+        {/* BOTTOM NOTE */}
+
+        <div className="mt-10 text-center">
+
+            <p className="text-[10px] font-medium text-zinc-400 dark:text-zinc-500">
+                No hidden fees • Cancel anytime • Upgrade or downgrade whenever you want
+            </p>
+
+        </div>
+
+    </div>
+</section>
 
             {/* 5. FAQ SECTION */}
-            <section className="py-20 px-6 max-w-4xl mx-auto border-t border-zinc-200 dark:border-white/10">
-                <div className="text-center space-y-4 mb-12">
-                    <Badge variant="outline" className="text-xs font-bold uppercase tracking-wider px-3 py-1">
-                        Frequently Asked Questions
-                    </Badge>
-                    <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-900 dark:text-white">
-                        Got questions? We've got answers.
-                    </h2>
-                </div>
+         <section className="relative overflow-hidden border-t border-white/10 bg-gradient-to-br from-fuchsia-600 via-purple-600 to-indigo-700 px-6 py-20 sm:py-24">
 
-                <div className="space-y-4">
-                    {faqs.map((faq, idx) => {
-                        const isOpen = activeFaq === idx;
-                        return (
-                            <div
-                                key={idx}
-                                className="glass-card rounded-2xl border border-zinc-200 dark:border-white/10 overflow-hidden transition-all"
-                            >
-                                <button
-                                    type="button"
-                                    onClick={() => setActiveFaq(isOpen ? null : idx)}
-                                    className="w-full p-5 text-left flex items-center justify-between gap-4 cursor-pointer"
-                                >
-                                    <span className="font-bold text-sm text-zinc-900 dark:text-white">
-                                        {faq.q}
-                                    </span>
-                                    <ChevronDown
-                                        className={`h-4 w-4 text-zinc-400 transition-transform ${
-                                            isOpen ? "rotate-180 text-indigo-500" : ""
-                                        }`}
-                                    />
-                                </button>
-                                {isOpen && (
-                                    <div className="px-5 pb-5 text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed border-t border-zinc-200/50 dark:border-white/5 pt-3">
-                                        {faq.a}
-                                    </div>
-                                )}
-                            </div>
-                        );
-                    })}
-                </div>
-            </section>
+    {/* Background Glow */}
+    <div className="pointer-events-none absolute -left-32 top-20 h-80 w-80 rounded-full bg-pink-400/30 blur-[100px]" />
 
-            {/* 6. FINAL CTA BANNER */}
-            <section className="py-20 px-6 max-w-7xl mx-auto">
-                <div className="glass-card rounded-[40px] border border-indigo-500/30 p-8 sm:p-14 text-center space-y-6 relative overflow-hidden bg-gradient-to-tr from-indigo-900/30 via-purple-900/20 to-black">
-                    <div className="absolute -top-24 -right-24 w-96 h-96 bg-indigo-500/20 rounded-full blur-[100px] pointer-events-none" />
+    <div className="pointer-events-none absolute -right-32 top-40 h-96 w-96 rounded-full bg-indigo-400/30 blur-[120px]" />
 
-                    <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white max-w-2xl mx-auto leading-tight">
-                        Jumpstart your corner of the internet today
-                    </h2>
+    <div className="pointer-events-none absolute bottom-0 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-fuchsia-300/20 blur-[100px]" />
 
-                    <p className="text-sm sm:text-base text-zinc-300 max-w-xl mx-auto">
-                        Claim your free Outsyra link in bio, pick a trendy template, and start sharing your world with your audience.
-                    </p>
+    {/* Subtle Grid */}
+    <div
+        className="pointer-events-none absolute inset-0 opacity-[0.08]"
+        style={{
+            backgroundImage:
+                "linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)",
+            backgroundSize: "40px 40px",
+        }}
+    />
 
-                    <form
-                        onSubmit={handleClaimSubmit}
-                        className="p-2 rounded-2xl sm:rounded-full bg-white dark:bg-zinc-900 border border-white/20 shadow-2xl flex flex-col sm:flex-row items-center gap-2 max-w-lg mx-auto focus-within:ring-2 focus-within:ring-indigo-500 transition-all"
+    <div className="relative mx-auto max-w-4xl">
+
+        {/* =========================================================
+            HEADER
+        ========================================================== */}
+
+        <div className="mb-12 text-center">
+
+            {/* Badge */}
+
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white shadow-lg backdrop-blur-xl">
+
+                <span className="flex h-2 w-2 rounded-full bg-fuchsia-300 shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
+
+                Frequently Asked Questions
+
+            </div>
+
+
+            {/* Heading */}
+
+            <h2 className="mx-auto max-w-2xl text-3xl font-black tracking-tight text-white sm:text-4xl lg:text-5xl">
+
+                Everything you need
+                <br className="hidden sm:block" />
+
+                <span className="text-fuchsia-200">
+                    to know.
+                </span>
+
+            </h2>
+
+
+            {/* Description */}
+
+            <p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-white/75 sm:text-base">
+
+                Still have questions? Find quick answers about your bio link,
+                customization, templates, and everything else.
+
+            </p>
+
+        </div>
+
+
+        {/* =========================================================
+            FAQ LIST
+        ========================================================== */}
+
+        <div className="space-y-3">
+
+            {faqs.map((faq, idx) => {
+
+                const isOpen = activeFaq === idx;
+
+                return (
+
+                    <div
+                        key={idx}
+                        className={`
+                            group overflow-hidden rounded-2xl
+                            border backdrop-blur-xl
+                            transition-all duration-300
+                            ${
+                                isOpen
+                                    ? "border-white/30 bg-white/[0.16] shadow-[0_15px_50px_rgba(0,0,0,0.15)]"
+                                    : "border-white/10 bg-white/[0.08] hover:border-white/20 hover:bg-white/[0.12]"
+                            }
+                        `}
                     >
-                        <div className="flex items-center px-4 w-full sm:w-auto flex-1">
-                            <span className="text-xs sm:text-sm font-mono text-zinc-500 font-bold">
-                                outsyra.com/
-                            </span>
-                            <input
-                                type="text"
-                                placeholder="yourname"
-                                value={claimHandle}
-                                onChange={(e) => setClaimHandle(e.target.value)}
-                                className="bg-transparent text-sm sm:text-base font-bold text-zinc-900 dark:text-white outline-none pl-1 w-full"
-                            />
-                        </div>
-                        <Button
-                            type="submit"
-                            variant="gradient"
-                            className="w-full sm:w-auto h-11 px-6 text-xs sm:text-sm font-bold rounded-xl sm:rounded-full shadow-md gap-1.5 shrink-0"
+
+                        {/* =================================================
+                            QUESTION
+                        ================================================== */}
+
+                        <button
+                            type="button"
+                            onClick={() =>
+                                setActiveFaq(isOpen ? null : idx)
+                            }
+                            className="flex w-full cursor-pointer items-center gap-4 p-5 text-left sm:p-6"
                         >
-                            <span>Get started for free</span>
-                            <ArrowRight className="h-4 w-4" />
-                        </Button>
-                    </form>
+
+                            {/* Number */}
+
+                            <span
+                                className={`
+                                    flex h-9 w-9 shrink-0
+                                    items-center justify-center
+                                    rounded-xl
+                                    text-[10px] font-black
+                                    transition-all duration-300
+                                    ${
+                                        isOpen
+                                            ? "bg-white text-purple-600 shadow-lg"
+                                            : "bg-white/10 text-white/60 group-hover:bg-white/15 group-hover:text-white"
+                                    }
+                                `}
+                            >
+                                {String(idx + 1).padStart(2, "0")}
+                            </span>
+
+
+                            {/* Question */}
+
+                            <span className="flex-1 text-sm font-bold leading-5 text-white sm:text-base">
+                                {faq.q}
+                            </span>
+
+
+                            {/* Chevron */}
+
+                            <span
+                                className={`
+                                    flex h-9 w-9 shrink-0
+                                    items-center justify-center
+                                    rounded-full
+                                    border
+                                    transition-all duration-300
+                                    ${
+                                        isOpen
+                                            ? "rotate-180 border-white/30 bg-white text-purple-600"
+                                            : "border-white/10 bg-white/5 text-white/60"
+                                    }
+                                `}
+                            >
+
+                                <ChevronDown className="h-4 w-4" />
+
+                            </span>
+
+                        </button>
+
+
+                        {/* =================================================
+                            ANSWER
+                        ================================================== */}
+
+                        <div
+                            className={`
+                                grid transition-all duration-300 ease-out
+                                ${
+                                    isOpen
+                                        ? "grid-rows-[1fr] opacity-100"
+                                        : "grid-rows-[0fr] opacity-0"
+                                }
+                            `}
+                        >
+
+                            <div className="min-h-0 overflow-hidden">
+
+                                <div className="mx-5 border-t border-white/10 pb-6 pt-4 sm:mx-6">
+
+                                    <div className="pl-[52px] pr-8 text-xs leading-6 text-white/70 sm:text-sm">
+
+                                        {faq.a}
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                );
+            })}
+
+        </div>
+
+
+        {/* =========================================================
+            BOTTOM CTA
+        ========================================================== */}
+
+        <div className="mt-10 text-center">
+
+            <p className="text-xs text-white/60">
+                Still can't find what you're looking for?
+            </p>
+
+            <button
+                type="button"
+                className="
+                    mt-3 inline-flex items-center gap-2
+                    rounded-xl
+                    border border-white/20
+                    bg-white/10
+                    px-5 py-2.5
+                    text-xs font-bold
+                    text-white
+                    backdrop-blur-xl
+                    transition-all duration-300
+                    hover:-translate-y-0.5
+                    hover:bg-white
+                    hover:text-purple-600
+                    hover:shadow-xl
+                "
+            >
+                Get in touch
+                <ArrowRight className="h-3.5 w-3.5" />
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+{/* 6. FINAL CTA BANNER */}
+
+<section className="relative overflow-hidden bg-[#f0abfc] px-6 py-16 sm:py-20">
+
+{/* Funky colorful background */}
+<div className="pointer-events-none absolute inset-0 overflow-hidden">
+    <div className="absolute -left-32 top-10 h-72 w-72 rounded-full bg-fuchsia-300/40 blur-[90px]" />
+    <div className="absolute right-[-80px] top-0 h-80 w-80 rounded-full bg-indigo-300/40 blur-[100px]" />
+    <div className="absolute bottom-[-120px] left-1/3 h-80 w-80 rounded-full bg-cyan-300/30 blur-[100px]" />
+    <div className="absolute bottom-0 right-1/4 h-52 w-52 rounded-full bg-yellow-200/40 blur-[80px]" />
+</div>
+
+{/* Small decorative shapes */}
+<div className="pointer-events-none absolute left-[8%] top-20 hidden sm:block">
+    <div className="h-4 w-4 rotate-12 rounded-md bg-fuchsia-400" />
+</div>
+
+<div className="pointer-events-none absolute right-[12%] bottom-16 hidden sm:block">
+    <div className="h-3 w-3 rounded-full bg-indigo-500" />
+</div>
+
+<div className="pointer-events-none absolute left-[18%] bottom-10 hidden lg:block">
+    <div className="h-2 w-8 -rotate-45 rounded-full bg-cyan-400" />
+</div>
+
+{/* CTA Card */}
+<div className="relative mx-auto max-w-7xl">
+
+    <div className="relative overflow-hidden rounded-[30px] border border-zinc-200 bg-white px-6 py-10 shadow-[0_25px_80px_rgba(79,70,229,0.12)] sm:px-10 sm:py-12 lg:px-14">
+
+        {/* Soft color accents inside card */}
+        <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-indigo-100 blur-[70px]" />
+        <div className="pointer-events-none absolute -bottom-24 left-1/3 h-56 w-56 rounded-full bg-fuchsia-100 blur-[70px]" />
+
+        <div className="relative z-10 flex flex-col items-center gap-10 lg:flex-row lg:justify-between">
+
+            {/* LEFT CONTENT */}
+            <div className="max-w-2xl text-center lg:text-left">
+
+                {/* Label */}
+                <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1.5">
+                    <span className="h-2 w-2 rounded-full bg-fuchsia-500" />
+                    <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-zinc-500">
+                        Start for free
+                    </span>
                 </div>
-            </section>
+
+                {/* Heading */}
+                <h2 className="text-3xl font-black tracking-[-0.04em] leading-tight text-zinc-950 sm:text-4xl lg:text-5xl">
+                    Everything you create.
+                    <span className="block">
+                        One simple link.
+                    </span>
+                </h2>
+
+                <p className="mt-4 max-w-xl text-sm leading-6 text-zinc-500 sm:text-base">
+                    Create your Outsyra page, share your content,
+                    grow your audience, and give everything you do
+                    one beautiful home.
+                </p>
+
+                {/* Claim form */}
+                <form
+                    onSubmit={handleClaimSubmit}
+                    className="mt-7 flex w-full max-w-xl flex-col gap-2 rounded-2xl border border-zinc-200 bg-zinc-50 p-2 shadow-sm sm:flex-row sm:rounded-full"
+                >
+                    <div className="flex h-11 min-w-0 flex-1 items-center px-3 sm:px-4">
+                        <span className="shrink-0 text-xs font-mono font-semibold text-zinc-400 sm:text-sm">
+                            outsyra.com/
+                        </span>
+
+                        <input
+                            type="text"
+                            placeholder="yourname"
+                            value={claimHandle}
+                            onChange={(e) => setClaimHandle(e.target.value)}
+                            className="min-w-0 w-full bg-transparent pl-1 text-sm font-bold text-zinc-900 outline-none placeholder:text-zinc-400 sm:text-base"
+                        />
+                    </div>
+
+                    <Button
+                        type="submit"
+                        variant="gradient"
+                        className="h-11 rounded-xl px-6 text-xs font-bold shadow-md sm:rounded-full sm:text-sm"
+                    >
+                        Get started
+                        <ArrowRight className="ml-1.5 h-4 w-4" />
+                    </Button>
+                </form>
+
+                {/* Trust */}
+                <div className="mt-4 flex flex-wrap justify-center gap-x-5 gap-y-1.5 text-[11px] font-medium text-zinc-400 lg:justify-start">
+                    <span>✓ Free to start</span>
+                    <span>✓ No credit card</span>
+                    <span>✓ Setup in minutes</span>
+                </div>
+            </div>
+
+            {/* RIGHT GRAPHIC */}
+            <div className="relative hidden h-[240px] w-[280px] shrink-0 sm:block lg:h-[260px] lg:w-[320px]">
+
+                {/* Color blobs */}
+                <div className="absolute right-0 top-5 h-40 w-40 rounded-full bg-indigo-100" />
+                <div className="absolute bottom-2 left-4 h-32 w-32 rounded-full bg-fuchsia-100" />
+
+                {/* Decorative star */}
+                <div className="absolute right-5 top-2 text-3xl text-fuchsia-400">
+                    ✦
+                </div>
+
+                {/* Main profile card */}
+                <div className="absolute left-8 top-8 w-[190px] rotate-[-4deg] rounded-2xl border border-zinc-200 bg-white p-4 shadow-[0_20px_40px_rgba(0,0,0,0.10)]">
+
+                    <div className="flex items-center gap-3">
+                        <div className="h-11 w-11 rounded-full bg-gradient-to-br from-fuchsia-400 via-purple-500 to-indigo-500" />
+
+                        <div>
+                            <div className="h-2.5 w-20 rounded-full bg-zinc-900" />
+                            <div className="mt-2 h-2 w-14 rounded-full bg-zinc-200" />
+                        </div>
+                    </div>
+
+                    <div className="mt-5 space-y-2">
+                        <div className="h-7 w-full rounded-lg bg-zinc-100" />
+                        <div className="h-7 w-full rounded-lg bg-zinc-100" />
+                        <div className="h-7 w-3/4 rounded-lg bg-zinc-100" />
+                    </div>
+                </div>
+
+                {/* Floating analytics card */}
+                <div className="absolute bottom-7 right-0 w-[145px] rotate-[5deg] rounded-2xl border border-zinc-200 bg-white p-4 shadow-[0_15px_35px_rgba(0,0,0,0.10)]">
+
+                    <div className="flex items-end gap-1.5 h-12">
+                        <div className="w-3 rounded-t bg-fuchsia-300 h-5" />
+                        <div className="w-3 rounded-t bg-purple-400 h-8" />
+                        <div className="w-3 rounded-t bg-indigo-400 h-6" />
+                        <div className="w-3 rounded-t bg-cyan-400 h-10" />
+                        <div className="w-3 rounded-t bg-fuchsia-400 h-12" />
+                    </div>
+
+                    <div className="mt-3 flex items-center justify-between">
+                        <span className="text-[9px] font-semibold text-zinc-400">
+                            Growth
+                        </span>
+                        <span className="text-[10px] font-bold text-indigo-500">
+                            +28%
+                        </span>
+                    </div>
+                </div>
+
+                {/* Floating small badge */}
+                <div className="absolute left-0 bottom-12 flex h-11 w-11 items-center justify-center rounded-xl border border-zinc-200 bg-white text-lg shadow-lg">
+                    ✨
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</section>
+
 
             {/* 7. FOOTER */}
             <footer className="border-t border-zinc-200 dark:border-white/10 py-12 px-6 max-w-7xl mx-auto">

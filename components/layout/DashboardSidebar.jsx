@@ -52,7 +52,7 @@ const navGroups = [
     {
         group: "Grow & Automate",
         items: [
-            { title: "Instagram Auto-DM", href: "/instagram", icon: Instagram, badge: "Meta" },
+            // { title: "Instagram Auto-DM", href: "/instagram", icon: Instagram, badge: "Meta" },
             { title: "Email & Newsletter", href: "/email", icon: Mail },
             { title: "Audience Analytics", href: "/analytics", icon: BarChart3 },
         ],
@@ -61,7 +61,7 @@ const navGroups = [
         group: "Community & Assets",
         items: [
             { title: "Template Library", href: "/templates", icon: Palette },
-            { title: "Creator Community", href: "/community", icon: Users },
+            // { title: "Creator Community", href: "/community", icon: Users },
         ],
     },
     {

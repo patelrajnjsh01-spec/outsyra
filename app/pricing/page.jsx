@@ -150,10 +150,10 @@ export default function StandalonePricingPage() {
                                     <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                                     <span>Unlimited Courses & LMS</span>
                                 </li>
-                                <li className="flex items-center gap-2">
+                                {/* <li className="flex items-center gap-2">
                                     <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                                     <span>Meta Instagram Auto-DMs</span>
-                                </li>
+                                </li> */}
                                 <li className="flex items-center gap-2">
                                     <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                                     <span>Google Calendar OAuth</span>

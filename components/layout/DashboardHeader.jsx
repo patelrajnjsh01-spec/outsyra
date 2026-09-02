@@ -78,14 +78,14 @@ export function DashboardHeader({ title, subtitle }) {
                                 <div className="h-2 w-2 rounded-full bg-pink-500" />
                                 <span>Email Broadcast</span>
                             </Link>
-                            <Link
+                            {/* <Link
                                 href="/instagram"
                                 onClick={() => setQuickMenuOpen(false)}
                                 className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-white/5 rounded-xl transition-colors"
                             >
                                 <div className="h-2 w-2 rounded-full bg-pink-400" />
                                 <span>Instagram Auto-DM</span>
-                            </Link>
+                            </Link> */}
                             <Link
                                 href="/store"
                                 onClick={() => setQuickMenuOpen(false)}
