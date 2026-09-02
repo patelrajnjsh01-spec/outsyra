@@ -223,13 +223,13 @@ export default function LandingPage() {
     ];
 
     return (
-        <div className="min-h-screen bg-background text-foreground font-sans antialiased selection:bg-indigo-500 selection:text-white">
+        <div className="min-h-screen bg-background pt-[4.5rem] text-foreground font-sans antialiased selection:bg-indigo-500 selection:text-white">
             <Navbar />
 
             {/* 1. HERO SECTION */}
             
-            <section className="bg-[#673de6]">
-                <div className="relative pt-12 lg:pt-20 pb-20 px-6 max-w-7xl mx-auto overflow-hidden">
+            <section className="min-h-[100svh] bg-[#673de6]">
+                <div className="relative flex min-h-[100svh] items-center pt-12 lg:pt-20 pb-20 px-6 max-w-7xl mx-auto overflow-hidden">
 
                 
                 <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[380px] bg-indigo-500/15 dark:bg-indigo-600/10 blur-[160px] rounded-full pointer-events-none" />
