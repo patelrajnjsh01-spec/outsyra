@@ -2,7 +2,8 @@
 
 import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { useAuth } from "./AuthProvider";
-import { getAllWorkspaces, getWorkspace, initialWorkspace } from "@/lib/supabase/db";
+import { getAllWorkspaces, getWorkspace } from "@/lib/supabase/db";
+import { initialWorkspace } from "@/lib/supabase/mock-db";
 
 const WorkspaceContext = createContext({
     workspace: initialWorkspace,
