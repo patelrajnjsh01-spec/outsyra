@@ -74,8 +74,13 @@ import {
     updateWorkspace,
 } from "@/lib/supabase/db";
 import { TRENDY_TEMPLATES, AI_CREATOR_NICHES } from "@/data/trendy-templates";
+import { useWorkspace } from "@/components/providers/WorkspaceProvider";
 
 export default function VisualPageBuilderPage() {
+    const { workspace: activeWs } = useWorkspace();
+    const activeWsId = activeWs?.id || "ws-rajnish-001";
+    const activeWsUsername = activeWs?.username || "rajnish";
+
     // Workspace & Page state
     const [workspace, setWorkspace] = useState(null);
     const [blocks, setBlocks] = useState([]);
@@ -137,8 +142,8 @@ export default function VisualPageBuilderPage() {
         async function loadStoreData() {
             try {
                 const [blocksData, wsData] = await Promise.all([
-                    getStoreBlocks("ws-rajnish-001"),
-                    getWorkspace("rajnish"),
+                    getStoreBlocks(activeWsId),
+                    getWorkspace(activeWsUsername),
                 ]);
                 if (blocksData && blocksData.length > 0) {
                     setBlocks(blocksData);
@@ -149,11 +154,12 @@ export default function VisualPageBuilderPage() {
                         setTheme((prev) => ({ ...prev, ...wsData.theme_config }));
                     }
                     setProfile({
-                        displayName: wsData.display_name || "Rajnish Sharma",
-                        username: wsData.username || "rajnish",
-                        bio: wsData.bio || "Creator & Growth Strategist",
+                        displayName: wsData.display_name || activeWs?.display_name || "Creator",
+                        username: wsData.username || activeWsUsername,
+                        bio: wsData.bio || activeWs?.bio || "Creator & Strategist",
                         avatarUrl:
                             wsData.avatar_url ||
+                            activeWs?.avatar_url ||
                             "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80",
                         followersCount: wsData.theme_config?.followersCount || "125K+",
                         verifiedBadge: wsData.theme_config?.verifiedBadge !== false,
@@ -165,7 +171,7 @@ export default function VisualPageBuilderPage() {
             }
         }
         loadStoreData();
-    }, []);
+    }, [activeWsId, activeWsUsername]);
 
     // 2. Block CRUD & Reordering Operations
     const toggleBlockVisibility = async (id) => {
@@ -198,7 +204,7 @@ export default function VisualPageBuilderPage() {
             image_url: block.image_url || "",
             config: block.config || {},
         };
-        const created = await addStoreBlock("ws-rajnish-001", duplicatedData);
+        const created = await addStoreBlock(activeWsId, duplicatedData);
         setBlocks([...blocks, created]);
     };
 
@@ -210,7 +216,7 @@ export default function VisualPageBuilderPage() {
         newBlocks[index] = newBlocks[targetIndex];
         newBlocks[targetIndex] = temp;
         setBlocks(newBlocks);
-        await reorderStoreBlocks("ws-rajnish-001", newBlocks);
+        await reorderStoreBlocks(activeWsId, newBlocks);
     };
 
     const handleAddBlock = async (blockType, defaultTitle, defaultSubtitle, extraConfig = {}) => {
@@ -226,7 +232,7 @@ export default function VisualPageBuilderPage() {
             image_url: extraConfig.image_url || "",
             config: extraConfig,
         };
-        const created = await addStoreBlock("ws-rajnish-001", newBlockData);
+        const created = await addStoreBlock(activeWsId, newBlockData);
         setBlocks([...blocks, created]);
         setNewBlockModal(false);
     };
@@ -248,7 +254,7 @@ export default function VisualPageBuilderPage() {
             backgroundImage: template.config?.backgroundImage || template.backgroundImage || "",
         };
         setTheme(newTheme);
-        await updateWorkspace("ws-rajnish-001", {
+        await updateWorkspace(activeWsId, {
             theme_config: newTheme,
         });
         setSavedNotice(true);
@@ -289,8 +295,8 @@ export default function VisualPageBuilderPage() {
             setProfile(updatedProfile);
 
             setBlocks(niche.blocks);
-            await replaceStoreBlocks("ws-rajnish-001", niche.blocks);
-            await updateWorkspace("ws-rajnish-001", {
+            await replaceStoreBlocks(activeWsId, niche.blocks);
+            await updateWorkspace(activeWsId, {
                 display_name: updatedProfile.displayName,
                 username: updatedProfile.username,
                 bio: updatedProfile.bio,
@@ -313,7 +319,7 @@ export default function VisualPageBuilderPage() {
         setIsSaving(true);
         try {
             await Promise.all([
-                updateWorkspace("ws-rajnish-001", {
+                updateWorkspace(activeWsId, {
                     display_name: profile.displayName,
                     username: profile.username,
                     bio: profile.bio,
@@ -325,7 +331,7 @@ export default function VisualPageBuilderPage() {
                         alignment: profile.alignment,
                     },
                 }),
-                reorderStoreBlocks("ws-rajnish-001", blocks),
+                reorderStoreBlocks(activeWsId, blocks),
             ]);
             setSavedNotice(true);
             setTimeout(() => setSavedNotice(false), 3000);

@@ -8,8 +8,11 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { getEmailSubscribers, getEmailCampaigns, createEmailCampaign } from "@/lib/supabase/db";
+import { useWorkspace } from "@/components/providers/WorkspaceProvider";
 
 export default function EmailMarketingPage() {
+    const { workspace } = useWorkspace();
+    const activeWsId = workspace?.id || "ws-rajnish-001";
     const [subscribers, setSubscribers] = useState([]);
     const [campaigns, setCampaigns] = useState([]);
     const [composerOpen, setComposerOpen] = useState(false);
@@ -23,8 +26,8 @@ export default function EmailMarketingPage() {
         async function fetchEmailData() {
             try {
                 const [subsData, campsData] = await Promise.all([
-                    getEmailSubscribers("ws-rajnish-001"),
-                    getEmailCampaigns("ws-rajnish-001"),
+                    getEmailSubscribers(activeWsId),
+                    getEmailCampaigns(activeWsId),
                 ]);
                 setSubscribers(subsData || []);
                 setCampaigns(campsData || []);
@@ -33,7 +36,7 @@ export default function EmailMarketingPage() {
             }
         }
         fetchEmailData();
-    }, []);
+    }, [activeWsId]);
 
     const monthlyUsage = 1240;
     const monthlyLimit = 3000;
@@ -41,7 +44,7 @@ export default function EmailMarketingPage() {
 
     const handleSendBroadcast = async (e) => {
         e.preventDefault();
-        const newCamp = await createEmailCampaign("ws-rajnish-001", {
+        const newCamp = await createEmailCampaign(activeWsId, {
             subject,
             preview_text: previewText,
             content,

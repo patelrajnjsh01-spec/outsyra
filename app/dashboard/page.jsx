@@ -45,18 +45,24 @@ const chartData = [
     { day: "Aug 23", revenue: 3100, orders: 48 },
 ];
 
+import { useWorkspace } from "@/components/providers/WorkspaceProvider";
+
 export default function DashboardOverviewPage() {
+    const { workspace } = useWorkspace();
     const [timeRange, setTimeRange] = useState("30d");
     const [orders, setOrders] = useState([]);
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    const activeWorkspaceId = workspace?.id || "ws-rajnish-001";
+
     useEffect(() => {
         async function fetchDashboardData() {
             try {
+                setLoading(true);
                 const [ordersData, prodsData] = await Promise.all([
-                    getOrders("ws-rajnish-001"),
-                    getProducts("ws-rajnish-001"),
+                    getOrders(activeWorkspaceId),
+                    getProducts(activeWorkspaceId),
                 ]);
                 setOrders(ordersData || []);
                 setProducts(prodsData || []);
@@ -67,7 +73,7 @@ export default function DashboardOverviewPage() {
             }
         }
         fetchDashboardData();
-    }, []);
+    }, [activeWorkspaceId]);
 
     const totalRevenue = orders.reduce((acc, o) => acc + (Number(o.total_amount) || 0), 0) || 18420;
 

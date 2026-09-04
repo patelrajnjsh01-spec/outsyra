@@ -24,7 +24,11 @@ import { Card, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
+import { useWorkspace } from "@/components/providers/WorkspaceProvider";
+
 export default function AnalyticsDashboardPage() {
+    const { workspace } = useWorkspace();
+    const activeWsId = workspace?.id || "ws-rajnish-001";
     const [timeRange, setTimeRange] = useState("30d");
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -33,7 +37,7 @@ export default function AnalyticsDashboardPage() {
         async function fetchAnalytics() {
             setLoading(true);
             try {
-                const res = await fetch("/api/analytics/track?workspace_id=ws-rajnish-001");
+                const res = await fetch(`/api/analytics/track?workspace_id=${encodeURIComponent(activeWsId)}`);
                 if (res.ok) {
                     const data = await res.json();
                     if (data.events) {
@@ -47,7 +51,7 @@ export default function AnalyticsDashboardPage() {
             }
         }
         fetchAnalytics();
-    }, [timeRange]);
+    }, [timeRange, activeWsId]);
 
     const topLinks = [
         { title: "Creator Monetization Master Ebook", type: "Digital Product", clicks: 1842, ctr: "24.6%", trend: "+18%" },

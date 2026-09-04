@@ -19,8 +19,11 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { getCourses, addCourse } from "@/lib/supabase/db";
+import { useWorkspace } from "@/components/providers/WorkspaceProvider";
 
 export default function CoursesPage() {
+    const { workspace } = useWorkspace();
+    const activeWsId = workspace?.id || "ws-rajnish-001";
     const [courses, setCourses] = useState([]);
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [activeLesson, setActiveLesson] = useState(null);
@@ -34,7 +37,7 @@ export default function CoursesPage() {
     useEffect(() => {
         async function fetchCourses() {
             try {
-                const data = await getCourses("ws-rajnish-001");
+                const data = await getCourses(activeWsId);
                 setCourses(data || []);
                 if (data && data.length > 0) {
                     setSelectedCourse(data[0]);
@@ -45,7 +48,7 @@ export default function CoursesPage() {
             }
         }
         fetchCourses();
-    }, []);
+    }, [activeWsId]);
 
     const toggleLessonCompletion = (lessonId) => {
         if (completedLessons.includes(lessonId)) {
@@ -57,7 +60,7 @@ export default function CoursesPage() {
 
     const handleCreateCourse = async (e) => {
         e.preventDefault();
-        const newCourse = await addCourse("ws-rajnish-001", {
+        const newCourse = await addCourse(activeWsId, {
             title,
             slug: title.toLowerCase().replace(/[^a-z0-9]/g, "-"),
             subtitle: "Complete in-depth video training with worksheets & certificates.",

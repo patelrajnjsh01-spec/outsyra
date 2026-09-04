@@ -84,7 +84,11 @@ const COVER_PRESETS = [
     },
 ];
 
+import { useWorkspace } from "@/components/providers/WorkspaceProvider";
+
 export default function ProductsPage() {
+    const { workspace } = useWorkspace();
+    const activeWorkspaceId = workspace?.id || "ws-rajnish-001";
     const [products, setProducts] = useState([]);
     const [search, setSearch] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("all");
@@ -134,7 +138,8 @@ export default function ProductsPage() {
 
     const fetchProducts = async () => {
         try {
-            const data = await getProducts("ws-rajnish-001");
+            setLoading(true);
+            const data = await getProducts(activeWorkspaceId);
             setProducts(data || []);
         } catch (err) {
             console.error("Failed to fetch products", err);
@@ -147,7 +152,7 @@ export default function ProductsPage() {
 
     useEffect(() => {
         fetchProducts();
-    }, []);
+    }, [activeWorkspaceId]);
 
     const handleRefresh = () => {
         setRefreshing(true);
@@ -286,7 +291,7 @@ export default function ProductsPage() {
                 showToast(`"${name}" updated successfully in PostgreSQL database!`);
             } else {
                 // Create Product in DB
-                const newProd = await addProduct("ws-rajnish-001", {
+                const newProd = await addProduct(activeWorkspaceId, {
                     ...payload,
                     total_sales: 0,
                 });

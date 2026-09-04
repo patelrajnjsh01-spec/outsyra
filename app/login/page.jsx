@@ -54,8 +54,18 @@ function LoginForm() {
                 throw new Error(data.error || "Invalid email or password.");
             }
 
-            const nextUrl = searchParams.get("next") || "/dashboard";
-            router.push(nextUrl);
+            const userRole = data?.user?.role;
+            const hasDashboardAccess = data?.user?.dashboard_access !== false;
+
+            if (userRole === "superadmin" || userRole === "admin") {
+                const nextUrl = searchParams.get("next") || "/admin";
+                router.push(nextUrl);
+            } else if (!hasDashboardAccess) {
+                router.push("/access-restricted");
+            } else {
+                const nextUrl = searchParams.get("next") || "/dashboard";
+                router.push(nextUrl);
+            }
             router.refresh();
         } catch (err) {
             setError(err.message);
@@ -72,36 +82,52 @@ function LoginForm() {
     return (
         <div className="glass-card p-6 sm:p-8 rounded-3xl border border-zinc-200 dark:border-white/10 shadow-2xl space-y-5">
             {/* Demo Credentials Quick-Fill Banner */}
-            <div className="p-3.5 rounded-2xl bg-indigo-500/10 dark:bg-indigo-500/15 border border-indigo-500/25 space-y-2">
+            <div className="p-3.5 rounded-2xl bg-indigo-500/10 dark:bg-indigo-500/15 border border-indigo-500/25 space-y-2.5">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-600 dark:text-indigo-400">
                         <Zap className="h-3.5 w-3.5 fill-current" />
-                        <span>Demo Creator Account</span>
+                        <span>Quick-Fill Demo Roles</span>
                     </div>
+                    {copiedDemo && (
+                        <span className="text-[11px] font-bold text-emerald-500 flex items-center gap-1">
+                            <Check className="h-3 w-3" /> Filled!
+                        </span>
+                    )}
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5 text-[11px]">
+                    <button
+                        type="button"
+                        onClick={() => fillDemoCredentials("admin@outsyra.com", "outsyra2026")}
+                        className="p-2 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-left transition-colors cursor-pointer"
+                    >
+                        <p className="font-bold text-amber-600 dark:text-amber-400 flex items-center gap-1">
+                            👑 Superadmin
+                        </p>
+                        <p className="text-[10px] text-zinc-500 font-mono truncate">admin@outsyra.com</p>
+                    </button>
+
                     <button
                         type="button"
                         onClick={() => fillDemoCredentials("rajnish@outsyra.com", "outsyra2026")}
-                        className="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1 cursor-pointer"
+                        className="p-2 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/30 text-left transition-colors cursor-pointer"
                     >
-                        {copiedDemo ? (
-                            <>
-                                <Check className="h-3 w-3 text-emerald-500" />
-                                <span className="text-emerald-500">Filled!</span>
-                            </>
-                        ) : (
-                            <span>1-Click Auto Fill</span>
-                        )}
+                        <p className="font-bold text-indigo-600 dark:text-indigo-400 flex items-center gap-1">
+                            🎨 Live Creator
+                        </p>
+                        <p className="text-[10px] text-zinc-500 font-mono truncate">rajnish@outsyra.com</p>
                     </button>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-[11px] text-zinc-600 dark:text-zinc-300 font-mono bg-white/60 dark:bg-black/40 p-2 rounded-xl border border-indigo-500/10">
-                    <div>
-                        <span className="text-zinc-400">Email: </span>
-                        <span className="font-semibold text-zinc-900 dark:text-white">rajnish@outsyra.com</span>
-                    </div>
-                    <div>
-                        <span className="text-zinc-400">Password: </span>
-                        <span className="font-semibold text-zinc-900 dark:text-white">outsyra2026</span>
-                    </div>
+
+                    <button
+                        type="button"
+                        onClick={() => fillDemoCredentials("alex@outsyra.com", "outsyra2026")}
+                        className="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-left transition-colors cursor-pointer"
+                    >
+                        <p className="font-bold text-rose-600 dark:text-rose-400 flex items-center gap-1">
+                            ⏳ Restricted
+                        </p>
+                        <p className="text-[10px] text-zinc-500 font-mono truncate">alex@outsyra.com</p>
+                    </button>
                 </div>
             </div>
 

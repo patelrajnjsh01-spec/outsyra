@@ -77,14 +77,16 @@ export default function PublicCreatorBioPage() {
     useEffect(() => {
         async function fetchStorefront() {
             try {
-                const [ws, blks, prods, crs, bks] = await Promise.all([
-                    getWorkspace(username),
-                    getStoreBlocks("ws-rajnish-001"),
-                    getProducts("ws-rajnish-001"),
-                    getCourses("ws-rajnish-001"),
-                    getBookingServices("ws-rajnish-001"),
-                ]);
+                const ws = await getWorkspace(username);
                 if (ws) setWorkspace(ws);
+                const targetWsId = ws?.id || "ws-rajnish-001";
+
+                const [blks, prods, crs, bks] = await Promise.all([
+                    getStoreBlocks(targetWsId),
+                    getProducts(targetWsId),
+                    getCourses(targetWsId),
+                    getBookingServices(targetWsId),
+                ]);
                 if (blks && blks.length > 0) setBlocks(blks);
                 if (prods) setProducts(prods);
                 if (crs) setCourses(crs);
@@ -136,7 +138,7 @@ export default function PublicCreatorBioPage() {
         e.preventDefault();
         if (!newsletterEmail) return;
         try {
-            await addEmailSubscriber("ws-rajnish-001", {
+            await addEmailSubscriber(ws?.id || "ws-rajnish-001", {
                 email: newsletterEmail,
                 source: "store_bio",
                 tags: ["bio-lead"],
@@ -152,7 +154,7 @@ export default function PublicCreatorBioPage() {
     const handleCompleteOrder = async () => {
         if (selectedProductModal) {
             await createOrder({
-                workspace_id: "ws-rajnish-001",
+                workspace_id: ws?.id || "ws-rajnish-001",
                 customer_email: "customer@gmail.com",
                 customer_name: "Valued Customer",
                 total_amount: selectedProductModal.price || 0,

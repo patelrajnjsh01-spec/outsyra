@@ -31,6 +31,9 @@ export async function GET(request) {
                 phone_verified: user.phone_verified,
                 avatar: user.avatar,
                 role: user.role || "creator",
+                dashboard_access: user.dashboard_access !== false,
+                workspace_id: user.workspace_id || `ws-${user.email.split("@")[0]}`,
+                status: user.status || "active",
             },
         });
     } catch (err) {

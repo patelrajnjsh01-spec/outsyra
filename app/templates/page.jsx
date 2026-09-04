@@ -37,6 +37,7 @@ import { Card } from "@/components/ui/card";
 import { TEMPLATE_CATEGORIES, MARKETPLACE_TEMPLATES } from "@/data/marketplace-templates";
 import { TRENDY_IMAGE_CATEGORIES, TRENDY_FREE_IMAGES } from "@/data/trendy-images";
 import { updateWorkspace, replaceStoreBlocks } from "@/lib/supabase/db";
+import { useWorkspace } from "@/components/providers/WorkspaceProvider";
 
 export default function TemplateMarketplacePage() {
     const router = useRouter();
@@ -103,11 +104,14 @@ export default function TemplateMarketplacePage() {
         });
     }, [searchQuery, selectedImageCategory]);
 
+    const { workspace } = useWorkspace();
+    const activeWsId = workspace?.id || "ws-rajnish-001";
+
     // Handle "Use This Template" -> Clones configuration into user's Supabase workspace
     const handleUseTemplate = async (template) => {
         setApplyingTemplateId(template.id);
         try {
-            await updateWorkspace("ws-rajnish-001", {
+            await updateWorkspace(activeWsId, {
                 theme_config: {
                     ...template.config,
                     templateId: template.slug,
@@ -118,7 +122,7 @@ export default function TemplateMarketplacePage() {
             if (template.sampleBlocks && template.sampleBlocks.length > 0) {
                 const newBlocks = template.sampleBlocks.map((b, i) => ({
                     id: `block-${Date.now()}-${i}`,
-                    workspace_id: "ws-rajnish-001",
+                    workspace_id: activeWsId,
                     type: b.type,
                     title: b.title,
                     subtitle: b.subtitle || "",
@@ -130,7 +134,7 @@ export default function TemplateMarketplacePage() {
                     order_index: i,
                     is_visible: true,
                 }));
-                await replaceStoreBlocks("ws-rajnish-001", newBlocks);
+                await replaceStoreBlocks(activeWsId, newBlocks);
             }
 
             setAppliedNotice(true);
@@ -149,7 +153,7 @@ export default function TemplateMarketplacePage() {
     const handleApplyFreeImage = async (img) => {
         setApplyingTemplateId(img.id);
         try {
-            await updateWorkspace("ws-rajnish-001", {
+            await updateWorkspace(activeWsId, {
                 theme_config: {
                     backgroundImage: img.url,
                     backgroundStyle: "image",

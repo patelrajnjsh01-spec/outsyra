@@ -228,201 +228,325 @@ export default function LandingPage() {
 
             {/* 1. HERO SECTION */}
             
-            <section className="min-h-[100svh] bg-[#673de6]">
-                <div className="relative flex min-h-[100svh] items-center pt-12 lg:pt-20 pb-20 px-6 max-w-7xl mx-auto overflow-hidden">
+            <section className="min-h-[100dvh] h-[100dvh] bg-[#673de6] overflow-hidden">
+    <div className="relative h-full max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 flex items-center">
+        
+        {/* Background Glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+            w-[500px] sm:w-[700px] h-[300px] sm:h-[380px]
+            bg-indigo-400/20 blur-[140px] rounded-full
+            pointer-events-none"
+        />
 
-                
-                <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[380px] bg-indigo-500/15 dark:bg-indigo-600/10 blur-[160px] rounded-full pointer-events-none" />
+        <div className="relative z-10 w-full grid grid-cols-1 lg:grid-cols-12
+            gap-8 lg:gap-12 items-center">
 
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
-                    {/* Left Column: Headline, Subheadline & Claim Bar */}
-                    <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-                        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 dark:bg-indigo-500/15 border border-indigo-500/25 text-indigo-600 dark:text-indigo-400 text-xs font-bold uppercase tracking-wider shadow-sm">
-                            <Sparkles className="h-3.5 w-3.5" />
-                            Next-Gen Link-in-Bio Platform
-                        </div>
+            {/* LEFT */}
+            <div className="lg:col-span-7 text-center lg:text-left">
 
-                        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.06] text-white dark:text-white">
-                            Everything you are. <br />
-      <span className="">
-  In one simple link.
-</span>
-                        </h1>
+                {/* Badge */}
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5
+                    rounded-full bg-white/10 border border-white/20
+                    text-white text-[11px] sm:text-xs font-bold
+                    uppercase tracking-wider backdrop-blur-md">
+                    <Sparkles className="h-3.5 w-3.5" />
+                    Next-Gen Link-in-Bio Platform
+                </div>
 
-                        <p className="text-base sm:text-xl text-white dark:text-zinc-300 leading-relaxed max-w-xl mx-auto lg:mx-0">
-                            Join 50,000+ creators using Outsyra for their link in bio. One link to help you share everything you create, curate, and sell across social channels.
-                        </p>
+                {/* Heading */}
+                <h1 className="mt-5 text-4xl sm:text-5xl md:text-6xl lg:text-7xl
+                    font-extrabold tracking-tight leading-[1.02] text-white">
+                    Everything you are.
+                    <br />
+                    <span className="text-white/90">
+                        In one simple link.
+                    </span>
+                </h1>
 
-                        {/* Claim Handle Input Form */}
-                        <form
-                            onSubmit={handleClaimSubmit}
-                            className="p-2 rounded-lg  bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-white/15 shadow-xl flex flex-col sm:flex-row items-center gap-2 max-w-lg mx-auto lg:mx-0 focus-within:ring-2 focus-within:ring-indigo-500 transition-all"
+                {/* Description */}
+                <p className="mt-5 text-sm sm:text-lg lg:text-xl
+                    text-white/80 leading-relaxed max-w-xl
+                    mx-auto lg:mx-0">
+                    Join 50,000+ creators using Outsyra for their link in bio.
+                    One link to share everything you create, curate, and sell
+                    across social channels.
+                </p>
+
+                {/* Claim Form */}
+                <form
+                    onSubmit={handleClaimSubmit}
+                    className="mt-6 p-1.5 sm:p-2 rounded-xl
+                        bg-white border border-white/30
+                        shadow-2xl flex flex-col sm:flex-row
+                        items-center gap-2 max-w-lg
+                        mx-auto lg:mx-0
+                        focus-within:ring-4 focus-within:ring-white/20
+                        transition-all"
+                >
+                    <div className="flex items-center px-3 sm:px-4
+                        w-full flex-1 min-w-0">
+
+                        <span className="text-[11px] sm:text-sm
+                            font-mono text-zinc-500 font-bold whitespace-nowrap">
+                            outsyra.com/
+                        </span>
+
+                        <input
+                            type="text"
+                            placeholder="yourname"
+                            value={claimHandle}
+                            onChange={(e) => setClaimHandle(e.target.value)}
+                            className="bg-transparent text-sm sm:text-base
+                                font-bold text-zinc-900 outline-none
+                                pl-1.5 w-full min-w-0"
+                        />
+                    </div>
+
+                    <Button
+                        type="submit"
+                        variant="gradient"
+                        className="w-full sm:w-auto h-11 px-6
+                            text-xs sm:text-sm font-bold
+                            rounded-lg sm:rounded-full
+                            shadow-md gap-1.5 shrink-0"
+                    >
+                        Claim your Link
+                        <ArrowRight className="h-4 w-4" />
+                    </Button>
+                </form>
+
+                {/* Benefits */}
+                <div className="mt-4 flex flex-wrap items-center
+                    justify-center lg:justify-start gap-x-5 gap-y-2
+                    text-[11px] sm:text-xs font-semibold text-white/80">
+
+                    <span className="flex items-center gap-1.5">
+                        <CheckCircle2 className="h-4 w-4 text-emerald-300" />
+                        Free Forever
+                    </span>
+
+                    <span className="flex items-center gap-1.5">
+                        <CheckCircle2 className="h-4 w-4 text-emerald-300" />
+                        0% Platform Fees
+                    </span>
+
+                    <span className="flex items-center gap-1.5">
+                        <CheckCircle2 className="h-4 w-4 text-emerald-300" />
+                        Instant Setup
+                    </span>
+                </div>
+            </div>
+
+            {/* RIGHT */}
+            <div className="lg:col-span-5 flex flex-col items-center
+                justify-center">
+
+                {/* Persona Tabs */}
+                <div className="mb-3 flex items-center
+                    bg-black/20 backdrop-blur-md
+                    p-1 rounded-xl border border-white/15
+                    shadow-lg overflow-x-auto max-w-full
+                    scrollbar-none gap-1">
+
+                    {[
+                        { id: "creator", label: "Tech Creator" },
+                        { id: "fashion", label: "Fashion" },
+                        { id: "music", label: "Musician" },
+                        { id: "fitness", label: "Fitness" },
+                    ].map((tab) => (
+                        <button
+                            key={tab.id}
+                            type="button"
+                            onClick={() => setActivePersonaTab(tab.id)}
+                            className={`px-3 py-1.5 text-[11px]
+                                font-bold rounded-lg transition-all
+                                cursor-pointer whitespace-nowrap ${
+                                activePersonaTab === tab.id
+                                    ? "bg-white text-indigo-600 shadow-sm"
+                                    : "text-white/70 hover:text-white"
+                            }`}
                         >
-                            <div className="flex items-center px-4 w-full sm:w-auto flex-1">
-                                <span className="text-xs sm:text-sm font-mono text-zinc-500 font-bold">
-                                    outsyra.com/
-                                </span>
-                                <input
-                                    type="text"
-                                    placeholder="yourname"
-                                    value={claimHandle}
-                                    onChange={(e) => setClaimHandle(e.target.value)}
-                                    className="bg-transparent text-sm sm:text-base font-bold text-zinc-900 dark:text-white outline-none pl-1 w-full"
-                                />
-                            </div>
-                            <Button
-                                type="submit"
-                                variant="gradient"
-                                className="w-full sm:w-auto h-11 px-6 text-xs sm:text-sm font-bold rounded-xl sm:rounded-full shadow-md gap-1.5 shrink-0"
-                            >
-                                <span>Claim your Link</span>
-                                <ArrowRight className="h-4 w-4" />
-                            </Button>
-                        </form>
+                            {tab.label}
+                        </button>
+                    ))}
+                </div>
 
-                        <div className="flex items-center justify-center lg:justify-start gap-6 pt-2 text-xs font-semibold text-white dark:text-zinc-400">
-                            <span className="flex items-center gap-1.5">
-                                <CheckCircle2 className="h-4 w-4 text-emerald-500" /> Free Forever
-                            </span>
-                            <span className="flex items-center gap-1.5">
-                                <CheckCircle2 className="h-4 w-4 text-emerald-500" /> 0% Platform Fees
-                            </span>
-                            <span className="flex items-center gap-1.5">
-                                <CheckCircle2 className="h-4 w-4 text-emerald-500" /> Instant Setup
-                            </span>
+                {/* Phone */}
+                <div
+                    className={`
+                        w-[280px] sm:w-[310px] lg:w-[320px]
+                        h-[540px] sm:h-[590px] lg:h-[610px]
+                        rounded-[40px] sm:rounded-[46px]
+                        border-[8px] sm:border-[9px]
+                        border-zinc-950
+                        shadow-[0_25px_80px_rgba(0,0,0,0.35)]
+                        p-4 sm:p-5
+                        flex flex-col justify-between
+                        relative overflow-hidden
+                        bg-gradient-to-b ${currentPersona.bg}
+                        transition-all duration-500
+                    `}
+                >
+                    {/* Dynamic Island */}
+                    <div className="pt-1 pb-2 flex justify-center
+                        items-center relative z-20">
+
+                        <div className="h-3 w-20 bg-black rounded-full
+                            flex items-center justify-between px-2">
+
+                            <div className="h-1.5 w-1.5 rounded-full bg-zinc-700" />
+                            <div className="h-1 w-1 rounded-full bg-indigo-500" />
                         </div>
                     </div>
 
-                    {/* Right Column: Interactive Animated Phone Mockup */}
-                    <div className="lg:col-span-5 flex flex-col items-center justify-center">
-                        {/* Persona Selector Tabs */}
-                        <div className="mb-4 flex items-center bg-zinc-200/80 dark:bg-zinc-900/90 p-1 rounded-2xl border border-zinc-300/80 dark:border-white/10 shadow-inner overflow-x-auto max-w-full scrollbar-none gap-1">
-                            {[
-                                { id: "creator", label: "Tech Creator" },
-                                { id: "fashion", label: "Fashion" },
-                                { id: "music", label: "Musician" },
-                                { id: "fitness", label: "Fitness" },
-                            ].map((tab) => (
-                                <button
-                                    key={tab.id}
-                                    type="button"
-                                    onClick={() => setActivePersonaTab(tab.id)}
-                                    className={`px-3 py-1.5 text-xs font-bold rounded-xl transition-all cursor-pointer whitespace-nowrap ${
-                                        activePersonaTab === tab.id
-                                            ? "bg-white dark:bg-zinc-800 text-indigo-600 dark:text-white shadow-sm"
-                                            : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white"
-                                    }`}
-                                >
-                                    {tab.label}
-                                </button>
-                            ))}
+                    {/* Bio Content */}
+                    <div className="flex-1 overflow-y-auto
+                        space-y-3 scrollbar-none pt-1
+                        text-center relative z-10">
+
+                        {/* Avatar */}
+                        <div className="relative inline-block">
+                            <img
+                                src={currentPersona.avatar}
+                                alt={currentPersona.name}
+                                className="h-16 w-16 sm:h-18 sm:w-18
+                                    rounded-full object-cover mx-auto
+                                    ring-4 shadow-xl"
+                                style={{
+                                    ringColor: currentPersona.accent
+                                }}
+                            />
+
+                            <span
+                                className="absolute bottom-0 right-0
+                                    h-5 w-5 rounded-full
+                                    flex items-center justify-center
+                                    text-white text-[10px] shadow-md"
+                                style={{
+                                    backgroundColor: currentPersona.accent
+                                }}
+                            >
+                                ✓
+                            </span>
                         </div>
 
-                        {/* Interactive Phone Frame */}
-                        <div
-                            className={`w-[320px] sm:w-[350px] h-[640px] rounded-[48px] border-[10px] border-zinc-900 shadow-2xl p-5 flex flex-col justify-between relative overflow-hidden bg-gradient-to-b ${currentPersona.bg} transition-all duration-500`}
-                        >
-                            {/* Dynamic Island */}
-                            <div className="pt-1 pb-2 flex justify-center items-center relative z-20">
-                                <div className="h-3.5 w-24 bg-black rounded-full flex items-center justify-between px-2">
-                                    <div className="h-1.5 w-1.5 rounded-full bg-zinc-700" />
-                                    <div className="h-1 w-1 rounded-full bg-indigo-500" />
-                                </div>
-                            </div>
+                        {/* Profile */}
+                        <div className="space-y-0.5">
+                            <h4 className="text-sm font-extrabold
+                                text-white tracking-tight">
+                                {currentPersona.name}
+                            </h4>
 
-                            {/* Bio Content */}
-                            <div className="flex-1 overflow-y-auto space-y-3.5 scrollbar-none pt-2 text-center relative z-10">
-                                <div className="relative inline-block">
-                                    <img
-                                        src={currentPersona.avatar}
-                                        alt={currentPersona.name}
-                                        className="h-20 w-20 rounded-full object-cover mx-auto ring-4 shadow-xl"
-                                        style={{ ringColor: currentPersona.accent }}
-                                    />
-                                    <span
-                                        className="absolute bottom-0 right-0 h-5 w-5 rounded-full flex items-center justify-center text-white text-[10px] shadow-md"
-                                        style={{ backgroundColor: currentPersona.accent }}
+                            <p
+                                className="text-[10px] font-bold"
+                                style={{
+                                    color: currentPersona.accent
+                                }}
+                            >
+                                {currentPersona.handle} • {currentPersona.followers}
+                            </p>
+
+                            <p className="text-[10px] text-zinc-300
+                                max-w-xs mx-auto leading-relaxed pt-1">
+                                {currentPersona.tagline}
+                            </p>
+                        </div>
+
+                        {/* Social Icons */}
+                        <div className="flex items-center justify-center
+                            gap-2 pt-1">
+
+                            {[Instagram, Youtube, Twitter, MessageCircle].map(
+                                (Icon, idx) => (
+                                    <div
+                                        key={idx}
+                                        className="h-7 w-7 rounded-xl
+                                            bg-white/10 backdrop-blur-md
+                                            border border-white/15
+                                            flex items-center justify-center
+                                            text-white"
                                     >
-                                        ✓
-                                    </span>
-                                </div>
+                                        <Icon className="h-3.5 w-3.5" />
+                                    </div>
+                                )
+                            )}
+                        </div>
 
-                                <div className="space-y-0.5">
-                                    <h4 className="text-base font-extrabold text-white tracking-tight">
-                                        {currentPersona.name}
-                                    </h4>
-                                    <p className="text-[11px] font-bold" style={{ color: currentPersona.accent }}>
-                                        {currentPersona.handle} • {currentPersona.followers}
-                                    </p>
-                                    <p className="text-[11px] text-zinc-300 max-w-xs mx-auto leading-relaxed pt-1">
-                                        {currentPersona.tagline}
-                                    </p>
-                                </div>
+                        {/* Links */}
+                        <div className="space-y-2 pt-2">
+                            {currentPersona.links.map((link, idx) => (
+                                <div
+                                    key={idx}
+                                    className="p-2.5 rounded-xl
+                                        bg-black/60 backdrop-blur-xl
+                                        border border-white/15
+                                        text-left flex items-center
+                                        justify-between shadow-lg
+                                        hover:scale-[1.02]
+                                        transition-transform
+                                        cursor-pointer"
+                                >
+                                    <div className="min-w-0 flex-1 pr-2">
 
-                                {/* Social Links Icons */}
-                                <div className="flex items-center justify-center gap-2 pt-1">
-                                    {[Instagram, Youtube, Twitter, MessageCircle].map((Icon, idx) => (
-                                        <div
-                                            key={idx}
-                                            className="h-7 w-7 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 flex items-center justify-center text-white"
-                                        >
-                                            <Icon className="h-3.5 w-3.5" />
-                                        </div>
-                                    ))}
-                                </div>
+                                        <div className="flex items-center gap-1.5">
+                                            <p className="text-[11px]
+                                                font-bold text-white truncate">
+                                                {link.title}
+                                            </p>
 
-                                {/* Dynamic Links */}
-                                <div className="space-y-2.5 pt-2">
-                                    {currentPersona.links.map((link, idx) => (
-                                        <div
-                                            key={idx}
-                                            className="p-3 rounded-2xl bg-black/60 backdrop-blur-xl border border-white/15 text-left flex items-center justify-between shadow-lg hover:scale-[1.02] transition-transform cursor-pointer"
-                                        >
-                                            <div className="min-w-0 flex-1 pr-2">
-                                                <div className="flex items-center gap-1.5">
-                                                    <p className="text-xs font-bold text-white truncate">
-                                                        {link.title}
-                                                    </p>
-                                                    {link.badge && (
-                                                        <span
-                                                            className="px-1.5 py-0.2 rounded text-[8px] font-extrabold uppercase shrink-0"
-                                                            style={{
-                                                                backgroundColor: currentPersona.accent,
-                                                                color: "#000000",
-                                                            }}
-                                                        >
-                                                            {link.badge}
-                                                        </span>
-                                                    )}
-                                                </div>
-                                                <p className="text-[10px] text-zinc-400 truncate mt-0.5">
-                                                    {link.subtitle}
-                                                </p>
-                                            </div>
-                                            {link.price && (
+                                            {link.badge && (
                                                 <span
-                                                    className="text-xs font-black shrink-0 font-mono"
-                                                    style={{ color: currentPersona.accent }}
+                                                    className="px-1.5 py-0.5
+                                                        rounded text-[7px]
+                                                        font-extrabold
+                                                        uppercase shrink-0"
+                                                    style={{
+                                                        backgroundColor:
+                                                            currentPersona.accent,
+                                                        color: "#000000",
+                                                    }}
                                                 >
-                                                    {link.price}
+                                                    {link.badge}
                                                 </span>
                                             )}
                                         </div>
-                                    ))}
-                                </div>
-                            </div>
 
-                            {/* Phone Footer */}
-                            <div className="pt-2 text-center">
-                                <span className="text-[9px] text-zinc-500 font-medium">
-                                    Powered by <strong className="text-white">Outsyra</strong>
-                                </span>
-                            </div>
+                                        <p className="text-[9px] text-zinc-400
+                                            truncate mt-0.5">
+                                            {link.subtitle}
+                                        </p>
+                                    </div>
+
+                                    {link.price && (
+                                        <span
+                                            className="text-[11px]
+                                                font-black shrink-0 font-mono"
+                                            style={{
+                                                color: currentPersona.accent
+                                            }}
+                                        >
+                                            {link.price}
+                                        </span>
+                                    )}
+                                </div>
+                            ))}
                         </div>
                     </div>
+
+                    {/* Footer */}
+                    <div className="pt-2 text-center">
+                        <span className="text-[8px] text-zinc-500 font-medium">
+                            Powered by{" "}
+                            <strong className="text-white">
+                                Outsyra
+                            </strong>
+                        </span>
+                    </div>
                 </div>
-                </div>
-            </section>
+            </div>
+        </div>
+    </div>
+</section>
                {/* 3. CORE FEATURES GRID: "CREATE YOUR WAY" */}
             <section className="bg-[#d2e823]">
                     <div className="py-20 max-sm:px-4 max-w-7xl mx-auto ">
